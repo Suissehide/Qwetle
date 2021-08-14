@@ -1,0 +1,406 @@
+/*STYLE
+   v1.0
+   License: none (public domain)
+*/
+
+:root {
+   --charcoal: #2F4157;
+   --paradise-pink: #E94767;
+   --cherry-blossom-pink: #F5ACBA;
+   --baby-powder: #fffdf9;
+}
+
+@font-face {
+   font-family: "Comfortaa Regular";
+   src: url("../assets/fonts/Comfortaa/Comfortaa-Regular.ttf") format("truetype")
+}
+
+@font-face {
+   font-family: "Comfortaa Bold";
+   src: url("../assets/fonts/Comfortaa/Comfortaa-Bold.ttf") format("truetype")
+}
+
+@font-face {
+   font-family: "Staatliches Regular";
+   src: url("../assets/fonts/Staatliches/Staatliches-Regular.ttf") format("truetype")
+}
+
+body {
+   font-family: "Comfortaa Regular", serif;
+}
+
+.nav {
+   z-index: 10 !important;
+   user-select: none;
+   position: absolute;
+   width: 100%;
+}
+
+.nav .nav-content {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   padding: 0 50px;
+   height: 70px;
+}
+
+.nav .navbar {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.nav .logo {
+   padding: 10px 0;
+   margin-right: 50px;
+}
+
+.nav .logo a {
+   position: relative;
+   display: block;
+}
+
+.nav .logo span {
+   content: "";
+   position: absolute;
+   top: 0px;
+   left: 0px;
+   width: 100%;
+   height: 100%;
+   max-width: 0;
+   background: #fff;
+   opacity: 0.4;
+   filter: alpha(opacity=40);
+   transition: none;
+}
+
+.nav .logo a:hover span {
+   max-width: 150%;
+   background: #fff;
+   opacity: 0;
+   filter: alpha(opacity=0);
+   transition: all 0.5s ease-out;
+}
+
+.nav .logo img {
+   width: 100px;
+}
+
+.nav ul {
+   display: flex;
+}
+
+.nav ul li a, .nav ul li button {
+   position: relative;
+   margin-left: 50px;
+   font-family: "Staatliches Regular", serif;
+   font-size: 32px;
+   color: var(--charcoal);
+   transition: color .35s ease;
+}
+
+.nav ul li button {
+   border: none;
+   background-color: transparent;
+}
+
+.nav-links a:after, .nav-links a:before {
+   content: "";
+   position: absolute;
+   bottom: 0px;
+   right: 0;
+   left: auto;
+   width: 0;
+   height: 3px;
+   z-index: 2;
+}
+
+.nav-links a:before {
+   background-color: var(--charcoal);
+   transition: all .25s cubic-bezier(.694, .048, .335, 1) .15s;
+}
+
+.nav-links a:after {
+   background-color: var(--paradise-pink);
+   transition: all .25s cubic-bezier(.694, .048, .335, 1);
+}
+
+.nav-links a:hover:after, .nav-links a:hover:before {
+   width: 100%;
+   left: 0;
+}
+
+.viewport {
+   background: url("../assets/background/background-ROSE.png") no-repeat;
+   background-position: bottom;
+   background-size: 100% 100%;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Heading
+|--------------------------------------------------------------------------
+*/
+
+.heading {
+   position: relative;
+   height: 100vh;
+   /* overflow: hidden; */
+}
+
+.heading-container {
+   position: absolute;
+   user-select: none;
+   margin: 0;
+   top: 50%;
+   left: 250px;
+   transform: translateY(-50%);
+}
+
+.heading-container.front {
+   z-index: 5 !important;
+}
+
+.heading-container .blursed-cube {
+   position: absolute;
+}
+
+.heading-container .blursed-cube:first-of-type {
+   top: -300px;
+   right: -450px;
+   height: 200px;
+   width: 200px;
+}
+
+.heading-container .blursed-cube:last-of-type {
+   top: -100px;
+   left: -75px;
+   height: 75px;
+   width: 75px;
+}
+
+.title-container .logo {
+   height: 100px;
+   margin-bottom: 20px;
+}
+
+.title-container .title {
+   font-size: 18px;
+   color: var(--charcoal);
+   font-family: "Comfortaa Bold", serif;
+}
+
+.heading--intro {
+   z-index: 5 !important;
+   position: absolute;
+   user-select: none;
+   margin: 0;
+   bottom: 125px;
+   left: 250px;
+   font-size: 32px;
+   color: #fff;
+   font-family: "Staatliches Regular", serif;
+}
+
+.btn-next {
+   cursor: pointer;
+   z-index: 15 !important;
+   position: absolute;
+   user-select: none;
+   bottom: 25px;
+   padding: 0;
+   margin-left: auto;
+   margin-right: auto;
+   left: 0;
+   right: 0;
+   height: 50px;
+   width: 50px;
+   border: none;
+   background-color: transparent;
+}
+
+.btn-next span.cube {
+   position: absolute;
+   left: 0;
+   top: 0;
+   display: block;
+   height: 100%;
+   width: 100%;
+   background: url("../assets/button/background-button-rose.svg") no-repeat center;
+}
+
+.btn-next span.arrow {
+   position: absolute;
+   left: 0;
+   top: 0;
+   display: block;
+   height: 100%;
+   width: 100%;
+   background: url(../assets/button/fleche_down.svg) no-repeat;
+   background-position: center 95%;
+   background-size: 85%;
+}
+
+.btn-next:hover span.cube {
+   animation: 1.5s ease-in 0s infinite alternate move_down;
+}
+
+@keyframes move_down {
+   0% {
+      transform: scale(1) rotate(0deg);
+   }
+   40% {
+      transform: scale(1) rotate(0deg);
+   }
+   100% {
+      transform: scale(1.5) rotate(360deg);
+   }
+}
+
+/*
+|--------------------------------------------------------------------------
+| Project
+|--------------------------------------------------------------------------
+*/
+
+.project {
+   height: 130vh;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Cube
+|--------------------------------------------------------------------------
+*/
+
+.blue-cube {
+   position: absolute;
+   top: calc(100vh - 240px);
+   left: -200px;
+   height: 140vh;
+   width: auto;
+}
+
+.blue-cube img {
+   height: 100%;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Game
+|--------------------------------------------------------------------------
+*/
+
+canvas {
+   background-color: transparent;
+}
+
+.game {
+   position: absolute;
+   top: 0;
+   left: 0;
+}
+
+#stageCubeSlash {
+   z-index: -5;
+   height: 100vh;
+}
+
+#stageTrail {
+   z-index: 9;
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+}
+
+/*
+|--------------------------------------------------------------------------
+| HUD
+|--------------------------------------------------------------------------
+*/
+
+.hud {
+   display: none;
+   color: black;
+}
+
+.hud__score, .pause-btn {
+   position: fixed;
+   font-size: 30px;
+}
+
+.hud__score {
+   top: 0.65em;
+   left: 0.65em;
+   pointer-events: none;
+   user-select: none;
+}
+
+.cube-count-lbl {
+   font-size: 0.46em;
+}
+
+.pause-btn {
+   display: none;
+   position: fixed;
+   top: 0;
+   right: 0;
+   padding: 0.8em 0.65em;
+}
+
+.pause-btn>div {
+   position: relative;
+   width: 0.8em;
+   height: 0.8em;
+   opacity: 0.75;
+}
+
+.pause-btn>div::before, .pause-btn>div::after {
+   content: '';
+   display: block;
+   width: 34%;
+   height: 100%;
+   position: absolute;
+   background-color: #fff;
+}
+
+.pause-btn>div::after {
+   right: 0;
+}
+
+.slowmo {
+   position: fixed;
+   bottom: 0;
+   width: 100%;
+   pointer-events: none;
+   opacity: 0;
+   transition: opacity 0.4s;
+   will-change: opacity;
+}
+
+.slowmo::before {
+   content: 'SLOW-MO';
+   display: block;
+   font-size: calc(8px + 1vw + 0.5vh);
+   margin-left: 0.5em;
+   margin-bottom: 8px;
+}
+
+.slowmo::after {
+   content: '';
+   display: block;
+   position: fixed;
+   bottom: 0;
+   width: 100%;
+   height: 1.5vh;
+   background-color: rgba(0, 0, 0, 0.25);
+   z-index: -1;
+}
+
+.slowmo__bar {
+   height: 1.5vh;
+   background-color: rgba(255, 255, 255, 0.75);
+   transform-origin: 0 0;
+}
