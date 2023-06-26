@@ -778,7 +778,7 @@ const setupCubeSlashScene = () => {
 
     let spawnTime = 0;
     let spawnExtra = 0;
-    const spawnExtraDelay = 300;
+    const spawnExtraDelay = 600;
 
     let lastTimestamp = 0;
     shuffle(cubeColor);
