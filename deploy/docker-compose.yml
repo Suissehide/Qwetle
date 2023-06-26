@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  qwetle:
+    container_name: qwetle
+    build:
+      context: .
+      dockerfile: ./app/Dockerfile
+    image: dceoy/nginx-autoindex:latest
+    restart: unless-stopped
+    network_mode: bridge
+    volumes:
+      - $USERDIR/projects/Qwetle/src:/var/lib/nginx/html:ro
+    entrypoint:
+      - /usr/sbin/nginx
+    command:
+      - -g
+      - daemon off;
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.qwetle-rtr.entrypoints=https"
+      - "traefik.http.routers.qwetle-rtr.rule=Host(`qwetle.$DOMAIN_NAME`)"
+      ## HTTP Services
+      - "traefik.http.routers.qwetle-rtr.service=qwetle-svc"
+      - "traefik.http.services.qwetle-svc.loadbalancer.server.port=80"
