@@ -20,7 +20,7 @@ services:
       - "traefik.enable=true"
       ## HTTP Routers
       - "traefik.http.routers.qwetle-rtr.entrypoints=https"
-      - "traefik.http.routers.qwetle-rtr.rule=Host(`qwetle.$DOMAIN_NAME`)"
+      - "traefik.http.routers.qwetle-rtr.rule=Host(`$DOMAIN_NAME`,`www.$DOMAIN_NAME`)"
       ## HTTP Services
       - "traefik.http.routers.qwetle-rtr.service=qwetle-svc"
       - "traefik.http.services.qwetle-svc.loadbalancer.server.port=80"
