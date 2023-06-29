@@ -13,8 +13,8 @@ const cubeColor = ["#2F4157", "#E94767", "#EF8096"];
 
 // Gameplay
 const getSpawnDelay = () => {
-    const spawnDelayMax = 1400;
-    const spawnDelayMin = 550;
+    const spawnDelayMax = 2800;
+    const spawnDelayMin = 1100;
     const spawnDelay = spawnDelayMax - state.game.cubeCount * 3.1;
     return Math.max(spawnDelay, spawnDelayMin);
 }
