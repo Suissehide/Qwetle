@@ -1,4 +1,3 @@
-FROM alpine:latest
-
+FROM nginx:alpine
 ENTRYPOINT ["/usr/sbin/nginx"]
 CMD ["-g", "daemon off;"]
