@@ -14,9 +14,13 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
+      - "traefik.http.routers.qwetle-http.entrypoints=http"
+      - "traefik.http.routers.qwetle-http.rule=Host(`$DOMAIN_NAME`) || Host(`www.$DOMAIN_NAME`)"
+
       - "traefik.http.routers.qwetle-rtr.entrypoints=https"
       - "traefik.http.routers.qwetle-rtr.rule=Host(`$DOMAIN_NAME`) || Host(`www.$DOMAIN_NAME`)"
       ## Middlewares
+      - "traefik.http.routers.qwetle-http.middlewares=chain-no-auth@file"
       - "traefik.http.routers.qwetle-rtr.middlewares=chain-no-auth@file"
       ## HTTP Services
       - "traefik.http.routers.qwetle-rtr.service=qwetle-svc"
