@@ -10,11 +10,14 @@ services:
     network_mode: bridge
     volumes:
       - $USERDIR/projects/Qwetle/src:/usr/share/nginx/html:ro
+      - $DOCKERDIR/appdata/traefik/rules:/rules
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
       - "traefik.http.routers.qwetle-rtr.entrypoints=https"
-      - "traefik.http.routers.qwetle-rtr.rule=Host(`$DOMAIN_NAME`,`www.$DOMAIN_NAME`)"
+      - "traefik.http.routers.qwetle-rtr.rule=Host(`$DOMAIN_NAME`) || Host(`www.$DOMAIN_NAME`)"
+      ## Middlewares
+      - "traefik.http.routers.qwetle-rtr.middlewares=chain-no-auth@file"
       ## HTTP Services
       - "traefik.http.routers.qwetle-rtr.service=qwetle-svc"
       - "traefik.http.services.qwetle-svc.loadbalancer.server.port=80"
