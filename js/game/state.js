@@ -46,7 +46,7 @@ Q.setCubeCount = count => {
 
 Q.incrementCubeCount = inc => {
     if (Q.isInGame()) {
-        Q.state.game.cubeCount += inc;
+        Q.state.game.cubeCount = Math.max(0, Q.state.game.cubeCount + inc);
         Q.renderScoreHud();
     }
 };
