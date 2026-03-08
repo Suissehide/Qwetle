@@ -6,8 +6,8 @@ Q.random = (a, b) => {
     const alpha = Math.random();
     return a * (1.0 - alpha) + b * alpha;
 };
-Q.randomInt = (min, max) => ((Math.random() * (max - min + 1)) | 0) + min;
-Q.pickOne = arr => arr[Math.random() * arr.length | 0];
+Q.randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+Q.pickOne = arr => arr[Math.floor(Math.random() * arr.length)];
 Q.shuffle = array => {
     let currentIndex = array.length;
     while (currentIndex !== 0) {
@@ -26,6 +26,7 @@ Q.TAU = Math.PI * 2;
 Q.cubeColor = ["#2F4157", "#E94767", "#EF8096"];
 
 // Materials partagés par couleur — MeshLambertMaterial (léger) au lieu de MeshPhysicalMaterial (PBR lourd)
+if (typeof THREE === 'undefined') throw new Error('[Q] Three.js doit être chargé avant config.js');
 Q.materials = new Map();
 Q.cubeColor.forEach(color => {
     Q.materials.set(color, new THREE.MeshLambertMaterial({
@@ -44,6 +45,7 @@ Q.getSpawnDelay = () => {
 // Trail config
 Q.touchTrailThickness = 15;
 Q.touchPointLife = 140;
+// Offsets fixes par session — décalage visuel des 3 couches de trail (style)
 Q.strokeOffset = [
     Q.random(-1, 1) * 10,
     Q.random(-1, 1) * 10,
