@@ -38,19 +38,22 @@ Q.scene.init = () => {
     // Lumière ambiante
     threeScene.add(new THREE.HemisphereLight(0xB1E1FF, 0xF5ACBA, 0.8));
 
-    // Lumière directionnelle avec ombres — mapSize réduit à 1024 (était 4096)
+    // Lumière directionnelle avec ombres
     const shadowLight = new THREE.DirectionalLight(0xFFFFFF, 0.3);
     shadowLight.position.set(0, 20, -5);
+    // Frustum réduit à la zone visible (évite la pixelisation sur grande zone)
     shadowLight.shadow.camera.near = 1;
-    shadowLight.shadow.camera.far = 1000;
-    shadowLight.shadow.camera.left = -500;
-    shadowLight.shadow.camera.bottom = -500;
-    shadowLight.shadow.camera.right = 500;
-    shadowLight.shadow.camera.top = 500;
-    shadowLight.shadow.mapSize.width = 1024;
-    shadowLight.shadow.mapSize.height = 1024;
+    shadowLight.shadow.camera.far = 200;
+    shadowLight.shadow.camera.left = -30;
+    shadowLight.shadow.camera.bottom = -30;
+    shadowLight.shadow.camera.right = 30;
+    shadowLight.shadow.camera.top = 30;
+    shadowLight.shadow.mapSize.width = 2048;
+    shadowLight.shadow.mapSize.height = 2048;
     shadowLight.castShadow = true;
     shadowLight.shadow.radius = 8;
+    // Évite le shadow acne (clignotement)
+    shadowLight.shadow.bias = -0.001;
     threeScene.add(shadowLight);
 
     // Sol recevant les ombres
