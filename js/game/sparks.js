@@ -43,6 +43,10 @@ Q.updateSparks = simTime => {
     }
 };
 
+// Stub — glueShedSparks est appellé quand health > 0 après un hit (chemin non atteint avec health=1)
+// La logique originale dépendait de cloneVertices/projectVertex jamais définis
+Q.glueShedSparks = () => {};
+
 // Dessin sparks + trail sur canvas 2D
 Q.drawSparksAndTrail = ctx => {
     // Sparks

@@ -155,10 +155,9 @@ Q.cubeSlashObject = {
     },
 
     // Fix: [...children] pour éviter la mutation du tableau pendant l'itération
-    // Note: les materials partagés ne sont PAS disposés ici (ils sont réutilisés)
+    // Note: geometry et materials sont partagés — on ne les dispose pas ici
     _delete(cubeGroup) {
         [...cubeGroup.children].forEach(child => {
-            child.geometry.dispose();
             cubeGroup.remove(child);
         });
         this.scene.remove(cubeGroup);
