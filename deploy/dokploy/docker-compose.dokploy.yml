@@ -1,0 +1,7 @@
+services:
+  app:
+    build:
+      context: ../..
+      dockerfile: deploy/app/Dockerfile
+    image: ${APP_IMAGE_NAME:-qwetle}:${VERSION:-latest}
+    restart: unless-stopped
