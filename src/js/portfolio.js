@@ -173,6 +173,9 @@
             return function () {
                 gsap.set([cube, inner, counterBox, outro], { clearProps: 'all' });
                 gsap.set(texts, { clearProps: 'all' });
+                // clearProps ne sait pas restaurer du texte : sans ça, le
+                // compteur resterait figé sur la valeur atteinte au scroll.
+                counter.textContent = '01';
             };
         }
 
