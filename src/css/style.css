@@ -432,7 +432,13 @@ body {
    width: 78%;
    height: 64vh;
    justify-self: center;
+   /* `clip` et non `hidden` : une boîte en overflow:hidden reste défilable
+      par programme, si bien qu'un Tab vers un visuel hors cadre faisait
+      défiler la pile pour le révéler — décalage définitif de la séquence,
+      irrécupérable sans rechargement. `clip` n'est pas un conteneur de
+      défilement. La ligne `hidden` reste comme repli avant Safari 16. */
    overflow: hidden;
+   overflow: clip;
 }
 
 .project__stack-inner {
