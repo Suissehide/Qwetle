@@ -703,18 +703,12 @@ footer {
 
 /* En dessous de 900px, ou si l'utilisateur limite les animations :
    la section retombe sur un empilement vertical, sans épinglage. */
-@media (max-width: 899.98px), (prefers-reduced-motion: reduce) {
+@media (max-width: 899px), (prefers-reduced-motion: reduce) {
    .project {
       height: auto;
    }
-   /* Le carré ne peut pas simplement disparaître : son débordement de 240px
-      vers le haut *est* la forme bleue en bas du hero, qui doit rester
-      présente à toutes les largeurs. On le rogne donc pour ne garder que
-      cette bande haute — la section empilée ne récupère ainsi aucune forme
-      parasite derrière son contenu. Rogner plutôt que dupliquer l'élément
-      évite un second SVG dans le DOM et garde une seule source de vérité. */
    .project__cube {
-      clip-path: inset(0 0 calc(100% - var(--cube-overflow)) 0);
+      display: none;
    }
    .project__inner {
       display: grid;

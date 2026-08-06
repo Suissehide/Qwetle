@@ -97,14 +97,19 @@
             gsap.set(texts, { autoAlpha: 0, y: 20 });
             gsap.set(texts[0], { autoAlpha: 1, y: 0 });
 
-            // 10 → 70 : trois transitions de 20 unités chacune
-            var STEP = 20;
+            // 10 → 70 : N - 1 transitions se partageant les 60 unités de la
+            // phase projets. Tout est déduit du DOM pour qu'ajouter un projet
+            // ne demande aucune retouche ici — voir les points restés manuels,
+            // listés dans style.css au-dessus de .project__stack-inner.
+            var N = texts.length;
+            var STEP = 60 / (N - 1);
 
-            for (var i = 0; i < 3; i++) {
+            for (var i = 0; i < N - 1; i++) {
                 var at = 10 + i * STEP;
 
                 tl.to(inner, {
-                    yPercent: -25 * (i + 1),
+                    // La pile fait N × 100% de haut : un projet = 100 / N.
+                    yPercent: -(100 / N) * (i + 1),
                     ease: 'none',
                     duration: STEP
                 }, at);
@@ -132,7 +137,7 @@
             var count = { value: 1 };
 
             tl.to(count, {
-                value: 4,
+                value: N,
                 ease: 'none',
                 duration: 60,
                 onUpdate: function () {
@@ -145,8 +150,8 @@
             // GSAP a besoin de connaître ce point de départ pour scruber le bouton.
             gsap.set(outro, { autoAlpha: 0, y: 30 });
 
-            // 70 → 85 : le dernier projet sort, le bouton entre
-            tl.to([inner, texts[3], counterBox], {
+            // 70 → 85 : le dernier projet sort (70 → 78), le bouton entre (75 → 85)
+            tl.to([inner, texts[N - 1], counterBox], {
                 autoAlpha: 0,
                 ease: 'power1.in',
                 duration: 8
