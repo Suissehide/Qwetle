@@ -130,10 +130,46 @@ body {
    left: 0;
 }
 
+/* Fond dégradé de la page d'accueil.
+   Étiré sur toute la hauteur de .viewport tant qu'aucun épinglage ne vient
+   gonfler celle-ci. Dès que la section projets est épinglée, ScrollTrigger
+   insère un pin-spacer de 450vh dans .viewport : sa hauteur ne reflète plus
+   son contenu et le dégradé s'y étirerait sur le double. Le repli est alors
+   posé sur .heading et .project — voir le bloc « Fond dégradé, cas épinglé ».
+   L'échelle 326vh est la hauteur qu'avait .viewport avant l'épinglage. */
 .viewport {
    background: url("../assets/background/background-ROSE.png") no-repeat;
    background-position: bottom;
    background-size: 100% 100%;
+}
+
+@media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+
+   /* Fond dégradé, cas épinglé.
+      .heading et .project font exactement 100vh chacun : un fond posé sur eux
+      est insensible au pin-spacer. Les deux partagent la même échelle et la
+      section est décalée d'un écran vers le haut, si bien que les deux moitiés
+      se lisent comme un seul et même dégradé continu, sans raccord visible.
+      Le fond de la section reste donc fixe pendant tout l'épinglage au lieu de
+      dériver vers le rouge, et le coin arrondi du PNG (à 1880px, bien en
+      dessous des 100vh de la section) n'entre jamais dans le cadre. */
+   .viewport {
+      background-image: none;
+   }
+
+   .heading,
+   .project {
+      background: url("../assets/background/background-ROSE.png") no-repeat;
+      background-size: 100% 326vh;
+   }
+
+   .heading {
+      background-position: 0 0;
+   }
+
+   .project {
+      background-position: 0 -100vh;
+   }
 }
 
 /*
