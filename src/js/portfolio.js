@@ -11,6 +11,9 @@
     if (!section) return;
 
     var cube  = section.querySelector('.project__cube');
+    var inner   = section.querySelector('.project__stack-inner');
+    var texts   = section.querySelectorAll('.project__text');
+    var counter = section.querySelector('.project__counter-current');
 
     // Fraction de la largeur de la boîte du SVG réellement peinte à droite.
     // Le fichier grand-cube-bleu.svg a une marge transparente sur son bord droit.
@@ -42,9 +45,57 @@
             // 0 → 10 : le carré s'écarte vers la gauche
             tl.to(cube, { x: cubeShift, ease: 'none', duration: 10 }, 0);
 
-            // 10 → 100 : réservé aux tâches 3 et 4. Un tween vide tient la durée
-            // totale à 100 unités tant que les autres ne sont pas écrits.
-            tl.to({}, { duration: 90 }, 10);
+            // État de départ, en écho au repli CSS du même media query :
+            // GSAP a besoin de connaître ce point de départ pour scruber les fondus.
+            gsap.set(texts, { autoAlpha: 0, y: 20 });
+            gsap.set(texts[0], { autoAlpha: 1, y: 0 });
+
+            // 10 → 70 : trois transitions de 20 unités chacune
+            var STEP = 20;
+
+            for (var i = 0; i < 3; i++) {
+                var at = 10 + i * STEP;
+
+                tl.to(inner, {
+                    yPercent: -25 * (i + 1),
+                    ease: 'none',
+                    duration: STEP
+                }, at);
+
+                tl.to(texts[i], {
+                    autoAlpha: 0,
+                    y: -20,
+                    ease: 'power1.in',
+                    duration: STEP * 0.5
+                }, at);
+
+                tl.fromTo(texts[i + 1], {
+                    autoAlpha: 0,
+                    y: 20
+                }, {
+                    autoAlpha: 1,
+                    y: 0,
+                    ease: 'power1.out',
+                    duration: STEP * 0.5
+                }, at + STEP * 0.5);
+            }
+
+            // Compteur : un objet intermédiaire, pour que le scrub le rejoue
+            // proprement dans les deux sens.
+            var count = { value: 1 };
+
+            tl.to(count, {
+                value: 4,
+                ease: 'none',
+                duration: 60,
+                onUpdate: function () {
+                    var n = Math.round(count.value);
+                    counter.textContent = n < 10 ? '0' + n : String(n);
+                }
+            }, 10);
+
+            // 70 → 100 : réservé à la tâche 4
+            tl.to({}, { duration: 30 }, 70);
         }
 
     });
