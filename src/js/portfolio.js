@@ -158,6 +158,14 @@
 
             // 85 → 100 : temps mort, le bouton reste lisible avant le relâchement
             tl.to({}, { duration: 15 }, 85);
+
+            // Nettoyage au passage sous le seuil : sans ça, les gsap.set() de départ
+            // (textes et bouton masqués, carré et pile à leur position initiale)
+            // laissent des styles inline qui grippent le repli CSS empilé.
+            return function () {
+                gsap.set([cube, inner, counterBox, outro], { clearProps: 'all' });
+                gsap.set(texts, { clearProps: 'all' });
+            };
         }
 
     });
