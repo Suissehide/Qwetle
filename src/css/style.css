@@ -709,6 +709,17 @@ footer {
    }
 }
 
+/* L'état de repos de la séquence : seuls le premier texte et aucun bouton.
+   Posé ici plutôt qu'en JS pour qu'il n'y ait ni superposition ni
+   clignotement entre le chargement de la page et l'initialisation de GSAP. */
+@media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+   .project__text:not(:first-child),
+   .project__outro {
+      opacity: 0;
+      visibility: hidden;
+   }
+}
+
 @media (max-width: 768px) {
    .section-title {
       font-size: 46px;
