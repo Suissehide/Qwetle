@@ -397,12 +397,17 @@ body {
 .project__shot {
    display: block;
    height: 25%;
+   /* L'espacement entre cartes est porté par un padding, pas par une marge
+      sur l'enfant : sans bordure ni padding ici, cette marge s'échapperait
+      par fusion et décalerait la pile de 14px par projet.
+      box-sizing est explicite car reset.css ne le pose pas globalement. */
+   box-sizing: border-box;
+   padding: 14px 0;
 }
 
 .project__shot-media {
    display: block;
-   height: calc(100% - 28px);
-   margin: 14px 0;
+   height: 100%;
    border-radius: 24px;
    background-size: cover;
    background-position: center;
@@ -673,9 +678,6 @@ footer {
    .project__shot:nth-of-type(4) { grid-row: 8; }
    .project__text:nth-of-type(4) { grid-row: 9; }
    .project__shot {
-      /* reset.css ne pose pas box-sizing globalement : sans ça,
-         le padding horizontal déborderait de la colonne. */
-      box-sizing: border-box;
       height: 46vw;
       min-height: 220px;
       padding: 0 24px;
