@@ -14,6 +14,8 @@
     var inner   = section.querySelector('.project__stack-inner');
     var texts   = section.querySelectorAll('.project__text');
     var counter = section.querySelector('.project__counter-current');
+    var counterBox = section.querySelector('.project__counter');
+    var outro      = section.querySelector('.project__outro');
 
     // Fraction de la largeur de la boîte du SVG réellement peinte à droite.
     // Le fichier grand-cube-bleu.svg a une marge transparente sur son bord droit.
@@ -94,8 +96,26 @@
                 }
             }, 10);
 
-            // 70 → 100 : réservé à la tâche 4
-            tl.to({}, { duration: 30 }, 70);
+            // État de départ, en écho au repli CSS du même media query :
+            // GSAP a besoin de connaître ce point de départ pour scruber le bouton.
+            gsap.set(outro, { autoAlpha: 0, y: 30 });
+
+            // 70 → 85 : le dernier projet sort, le bouton entre
+            tl.to([inner, texts[3], counterBox], {
+                autoAlpha: 0,
+                ease: 'power1.in',
+                duration: 8
+            }, 70);
+
+            tl.to(outro, {
+                autoAlpha: 1,
+                y: 0,
+                ease: 'power2.out',
+                duration: 10
+            }, 75);
+
+            // 85 → 100 : temps mort, le bouton reste lisible avant le relâchement
+            tl.to({}, { duration: 15 }, 85);
         }
 
     });
