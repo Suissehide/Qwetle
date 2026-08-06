@@ -29,6 +29,48 @@
         return CUBE_TARGET * window.innerWidth - paintedRight;
     }
 
+    var stack = section.querySelector('.project__stack');
+    var label = document.querySelector('.cursor-label');
+
+    if (label && stack && window.matchMedia('(hover: hover)').matches) {
+
+        gsap.set(label, { xPercent: -50, yPercent: -50, scale: 0.6 });
+
+        var setX  = gsap.quickSetter(label, 'x', 'px');
+        var setY  = gsap.quickSetter(label, 'y', 'px');
+        var mouse = { x: 0, y: 0 };
+        var pos   = { x: 0, y: 0 };
+
+        gsap.ticker.add(function () {
+            // 0.16 = fraction du chemin restant parcourue par image,
+            // corrigée du framerate réel pour rester identique en 60 et 120 Hz.
+            var amount = 1 - Math.pow(1 - 0.16, gsap.ticker.deltaRatio());
+            pos.x += (mouse.x - pos.x) * amount;
+            pos.y += (mouse.y - pos.y) * amount;
+            setX(pos.x);
+            setY(pos.y);
+        });
+
+        stack.addEventListener('mouseenter', function (e) {
+            // On téléporte le label sous le curseur avant de l'afficher,
+            // sinon il traverse l'écran depuis sa dernière position.
+            mouse.x = pos.x = e.clientX;
+            mouse.y = pos.y = e.clientY;
+            setX(pos.x);
+            setY(pos.y);
+            gsap.to(label, { autoAlpha: 1, scale: 1, duration: 0.3, ease: 'power3.out' });
+        });
+
+        stack.addEventListener('mousemove', function (e) {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        stack.addEventListener('mouseleave', function () {
+            gsap.to(label, { autoAlpha: 0, scale: 0.6, duration: 0.25, ease: 'power3.in' });
+        });
+    }
+
     ScrollTrigger.matchMedia({
 
         '(min-width: 900px) and (prefers-reduced-motion: no-preference)': function () {
