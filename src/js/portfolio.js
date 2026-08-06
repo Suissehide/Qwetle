@@ -26,7 +26,10 @@
 
     function cubeShift() {
         var paintedRight = cube.offsetLeft + cube.offsetWidth * CUBE_PAINT_RATIO;
-        return CUBE_TARGET * window.innerWidth - paintedRight;
+        // Jamais de valeur positive : sur une fenêtre large et basse, le bord
+        // peint peut déjà se trouver à gauche de la cible. Glisser vers la
+        // droite y découvrirait le rose sous le texte clair de la colonne.
+        return Math.min(0, CUBE_TARGET * window.innerWidth - paintedRight);
     }
 
     var stack = section.querySelector('.project__stack');

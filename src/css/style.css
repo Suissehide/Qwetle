@@ -307,10 +307,19 @@ body {
 
 /* Carré bleu — prolongement du hero */
 .project__cube {
+   /* Hauteur du débordement vers le haut : cette bande *est* la forme bleue
+      en bas du hero. Nommée pour rester synchronisée avec le rognage du
+      repli empilé, plus bas. */
+   --cube-overflow: 240px;
    position: absolute;
-   top: -240px;
+   top: calc(var(--cube-overflow) * -1);
    left: -200px;
-   height: 140vh;
+   /* Le carré doit couvrir la colonne texte, large de 36% de la fenêtre,
+      mais il est dimensionné par sa hauteur. Sur une fenêtre large et basse
+      (outils de dev ancrés en bas, ultra-large, demi-hauteur), 140vh ne
+      suffit plus et le texte déborderait sur le rose. Le plancher en vw
+      raccroche donc la taille à la largeur. */
+   height: max(140vh, 62vw);
    width: auto;
    z-index: 0;
    pointer-events: none;
