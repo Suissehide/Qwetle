@@ -441,6 +441,16 @@ body {
    overflow: clip;
 }
 
+/* ---------------------------------------------------------------------------
+   Nombre de projets : le JS le déduit du DOM (portfolio.js, `texts.length`),
+   mais ces quatre points-ci restent à ajuster à la main pour passer de 4 à N
+   (avec N >= 2) :
+     - .project__stack-inner  height: 400%      -> N * 100%
+     - .project__shot         height: 25%       -> 100% / N
+     - .project__shot-media--1..4               -> un dégradé de repli par projet
+     - l'échelle des grid-row du repli empilé   -> 2 lignes par projet
+   Voir aussi le compteur « — 04 » dans index.html.
+   --------------------------------------------------------------------------- */
 .project__stack-inner {
    height: 400%;
 }
@@ -693,7 +703,7 @@ footer {
 
 /* En dessous de 900px, ou si l'utilisateur limite les animations :
    la section retombe sur un empilement vertical, sans épinglage. */
-@media (max-width: 899px), (prefers-reduced-motion: reduce) {
+@media (max-width: 899.98px), (prefers-reduced-motion: reduce) {
    .project {
       height: auto;
    }
