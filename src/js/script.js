@@ -7,18 +7,6 @@
 
 gsap.registerPlugin(ScrollTrigger);
 
-gsap.to(".blue-cube", {
-    scrollTrigger: {
-        trigger: ".project",
-        toggleActions: "restart none reverse none",
-        start: "38% center",
-        end: "+=1 center",
-    },
-    x: -500,
-    ease: 'none',
-    duration: 0.5,
-});
-
 function goToProject() {
     $('html, body').css({ overflow: 'auto', height: 'auto' });
     gsap.to(window, {
@@ -28,43 +16,6 @@ function goToProject() {
 }
 
 $('.btn-next').click(goToProject);
-
-// Portfolio section animations
-gsap.from(".project-header > *", {
-    scrollTrigger: {
-        trigger: ".project-header",
-        start: "top 82%",
-    },
-    y: 40,
-    opacity: 0,
-    duration: 0.8,
-    stagger: 0.15,
-    ease: "power3.out",
-});
-
-gsap.from(".card", {
-    scrollTrigger: {
-        trigger: ".bento-grid",
-        start: "top 80%",
-    },
-    y: 60,
-    opacity: 0,
-    duration: 0.7,
-    stagger: 0.1,
-    ease: "power3.out",
-});
-
-gsap.from(".project-cta", {
-    scrollTrigger: {
-        trigger: ".project-cta",
-        start: "top 88%",
-    },
-    y: 40,
-    opacity: 0,
-    duration: 0.7,
-    ease: "power3.out",
-});
-
 
 // Footer — cubes animés en arrière-plan (GSAP DOM)
 (function () {
