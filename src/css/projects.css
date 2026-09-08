@@ -1,0 +1,847 @@
+/* PROJECTS
+   Styles des deux gabarits de réalisations : l'index /projects et les pages
+   /projects/<slug>. Fichier séparé de style.css parce que la page d'accueil
+   n'a rien à faire de ces règles, et qu'elle est la page critique au chargement.
+   Les variables de couleur, les polices, la barre de navigation et le pied de
+   page viennent de style.css, chargé avant celui-ci.
+*/
+
+/*
+|--------------------------------------------------------------------------
+| Communs aux deux gabarits
+|--------------------------------------------------------------------------
+*/
+
+.work,
+.project-page {
+   background-color: var(--baby-powder);
+   color: var(--charcoal);
+}
+
+.work__inner,
+.pj__inner {
+   max-width: 1180px;
+   margin: 0 auto;
+   padding-left: 60px;
+   padding-right: 60px;
+}
+
+/* Intitulé de section. Le trait sous le mot reprend celui des titres de Horus
+   et du reste du site : un souligné court, pas une bordure pleine largeur. */
+.pj-h2 {
+   font-family: "Staatliches Regular", serif;
+   font-size: clamp(30px, 3.6vw, 46px);
+   line-height: 1.1;
+   letter-spacing: -0.3px;
+   margin-bottom: 28px;
+}
+
+.pj-h2 em {
+   font-style: normal;
+   color: var(--paradise-pink);
+}
+
+/* Méta en monospace : même registre que .about__eyebrow sur l'accueil. Pile
+   système, donc aucun fichier de police en plus. */
+.pj-meta dt,
+.pj-fact dt,
+.work-row__meta {
+   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+   font-size: 12px;
+   letter-spacing: 1.6px;
+   text-transform: uppercase;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Index — hero
+|--------------------------------------------------------------------------
+*/
+
+.work-hero {
+   position: relative;
+   /* Le carré déborde des quatre côtés : sans rognage il élargirait la page. */
+   overflow: hidden;
+}
+
+.work-hero__inner {
+   position: relative;
+   z-index: 1;
+   /* 170px : les 70px de barre fixe, plus la respiration retenue sur /contact. */
+   padding-top: 170px;
+   padding-bottom: 110px;
+}
+
+/* Décor du hero : les cubes flous du haut de la page d'accueil, pas le grand
+   carré marine de la section portfolio. C'est le motif de *hero* du site, et
+   c'est un hero. Le carré, lui, poserait un aplat sombre derrière une barre de
+   navigation translucide : le contraste de « Contact » tomberait sous le seuil
+   lisible. */
+.work-hero__cubes {
+   position: absolute;
+   inset: 0;
+   z-index: 0;
+   pointer-events: none;
+}
+
+.work-hero__cubes img {
+   position: absolute;
+   display: block;
+   width: 100%;
+   height: auto;
+}
+
+/* Cantonnés à la moitié droite : la colonne de texte est bornée à 46ch et ne
+   les atteint jamais, quelle que soit la largeur de fenêtre. */
+.work-hero__cube {
+   position: absolute;
+}
+
+.work-hero__cube--1 {
+   width: clamp(150px, 17vw, 250px);
+   top: 20%;
+   right: 12%;
+}
+
+.work-hero__cube--2 {
+   width: clamp(70px, 8vw, 110px);
+   top: 56%;
+   right: 33%;
+}
+
+.work-hero__cube--3 {
+   width: clamp(100px, 11vw, 165px);
+   top: 66%;
+   right: 4%;
+}
+
+.work-hero__title {
+   font-family: "Staatliches Regular", serif;
+   font-size: clamp(38px, 5.6vw, 78px);
+   line-height: 1.06;
+   letter-spacing: -0.5px;
+   max-width: 17ch;
+   margin-bottom: 36px;
+}
+
+.work-hero__title em {
+   font-style: normal;
+   color: var(--paradise-pink);
+}
+
+.work-hero__lead {
+   font-family: "Comfortaa Regular", serif;
+   font-size: 16px;
+   line-height: 1.85;
+   color: rgba(47, 65, 87, 0.72);
+   max-width: 46ch;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Index — la liste
+|--------------------------------------------------------------------------
+| Une ligne par projet. Un seul filet, sous chaque ligne sauf la dernière :
+| un filet au-dessus *et* en dessous doublerait chaque trait et transformerait
+| la liste en tableau.
+*/
+
+.work-list {
+   border-top: 1px solid rgba(47, 65, 87, 0.16);
+   padding-bottom: 20px;
+}
+
+.work-row {
+   border-bottom: 1px solid rgba(47, 65, 87, 0.16);
+}
+
+.work-row__link {
+   position: relative;
+   display: grid;
+   grid-template-columns: 68px minmax(0, 1fr) 250px 40px;
+   align-items: center;
+   gap: 24px;
+   padding: 34px 0;
+   color: inherit;
+}
+
+/* Le filet rose se dessine de la gauche vers la droite au survol : il indique
+   la ligne visée sans avoir à teinter tout son fond. */
+.work-row__link::after {
+   content: "";
+   position: absolute;
+   left: 0;
+   bottom: -1px;
+   height: 1px;
+   width: 0;
+   background: var(--paradise-pink);
+   transition: width 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.work-row__link:hover::after,
+.work-row__link:focus-visible::after {
+   width: 100%;
+}
+
+.work-row__link:focus-visible {
+   outline: 2px solid var(--paradise-pink);
+   outline-offset: 4px;
+}
+
+.work-row__index {
+   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+   font-size: 13px;
+   color: rgba(47, 65, 87, 0.35);
+   transition: color 0.25s ease;
+}
+
+.work-row__link:hover .work-row__index {
+   color: var(--paradise-pink);
+}
+
+/* La cellule titre + résumé. `min-width: 0` sans quoi un résumé long refuse de
+   se replier et pousse la colonne de méta hors du cadre. */
+.work-row__body {
+   min-width: 0;
+}
+
+.work-row__title {
+   font-family: "Staatliches Regular", serif;
+   font-size: clamp(26px, 3vw, 40px);
+   line-height: 1.08;
+   margin-bottom: 8px;
+   transition: color 0.25s ease;
+}
+
+.work-row__link:hover .work-row__title {
+   color: var(--paradise-pink);
+}
+
+.work-row__summary {
+   display: block;
+   font-family: "Comfortaa Regular", serif;
+   font-size: 13px;
+   line-height: 1.65;
+   color: rgba(47, 65, 87, 0.6);
+   max-width: 52ch;
+}
+
+.work-row__meta {
+   text-align: right;
+   color: rgba(47, 65, 87, 0.45);
+   line-height: 1.7;
+}
+
+.work-row__go {
+   justify-self: end;
+   font-size: 22px;
+   color: rgba(47, 65, 87, 0.3);
+   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), color 0.25s ease;
+}
+
+.work-row__link:hover .work-row__go {
+   transform: translateX(7px);
+   color: var(--paradise-pink);
+}
+
+/*
+|--------------------------------------------------------------------------
+| Index — visuel suiveur
+|--------------------------------------------------------------------------
+| Un seul élément fixe, garni par le script d'une image par ligne. Les images
+| sont toutes dans le document dès le départ : les charger au survol ferait
+| apparaître un cadre vide le temps du premier aller-retour réseau.
+*/
+
+.work-cursor {
+   position: fixed;
+   border: 1px solid rgba(47, 65, 87, 0.12);
+   top: 0;
+   left: 0;
+   z-index: 50;
+   width: 340px;
+   aspect-ratio: 1440 / 740;
+   border-radius: 24px;
+   overflow: hidden;
+   pointer-events: none;
+   opacity: 0;
+   visibility: hidden;
+   box-shadow: 0 24px 60px rgba(47, 65, 87, 0.22);
+}
+
+.work-cursor img {
+   position: absolute;
+   inset: 0;
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   opacity: 0;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Index — fin de page
+|--------------------------------------------------------------------------
+*/
+
+.work-outro {
+   padding: 40px 0 140px;
+   border-top: 1px solid rgba(47, 65, 87, 0.16);
+   margin-top: 40px;
+}
+
+.work-outro__title {
+   font-family: "Staatliches Regular", serif;
+   font-size: clamp(30px, 4.4vw, 58px);
+   line-height: 1.08;
+   letter-spacing: -0.3px;
+   max-width: 17ch;
+   margin: 44px 0 32px;
+}
+
+.work-outro__title em {
+   font-style: normal;
+   color: var(--paradise-pink);
+}
+
+.work-outro__btn {
+   display: inline-block;
+   padding: 18px 44px;
+   background: var(--paradise-pink);
+   color: #fff;
+   font-family: "Staatliches Regular", serif;
+   font-size: 22px;
+   letter-spacing: 2px;
+   white-space: nowrap;
+   border-radius: 50px;
+   box-shadow: 0 12px 32px rgba(233, 71, 103, 0.28);
+   transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.work-outro__btn:hover {
+   transform: translateY(-3px);
+   box-shadow: 0 18px 44px rgba(233, 71, 103, 0.38);
+}
+
+.work-outro__btn:active {
+   transform: translateY(-1px);
+}
+
+/*
+|--------------------------------------------------------------------------
+| Page projet — en-tête
+|--------------------------------------------------------------------------
+*/
+
+.pj-hero__inner {
+   padding-top: 150px;
+   padding-bottom: 60px;
+}
+
+.pj-back {
+   display: inline-flex;
+   align-items: center;
+   gap: 10px;
+   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+   font-size: 12px;
+   letter-spacing: 2px;
+   text-transform: uppercase;
+   color: rgba(47, 65, 87, 0.5);
+   margin-bottom: 44px;
+   transition: color 0.25s ease;
+}
+
+.pj-back span {
+   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pj-back:hover {
+   color: var(--paradise-pink);
+}
+
+.pj-back:hover span {
+   transform: translateX(-6px);
+}
+
+.pj-title {
+   font-family: "Staatliches Regular", serif;
+   font-size: clamp(46px, 7.4vw, 108px);
+   line-height: 0.98;
+   letter-spacing: -1px;
+   margin-bottom: 26px;
+}
+
+.pj-lead {
+   font-family: "Comfortaa Regular", serif;
+   font-size: clamp(16px, 1.5vw, 20px);
+   line-height: 1.7;
+   color: rgba(47, 65, 87, 0.72);
+   max-width: 52ch;
+   margin-bottom: 56px;
+}
+
+.pj-meta {
+   display: grid;
+   grid-template-columns: repeat(4, minmax(0, 1fr));
+   gap: 30px;
+   padding-top: 26px;
+   border-top: 1px solid rgba(47, 65, 87, 0.16);
+}
+
+.pj-meta dt {
+   color: rgba(47, 65, 87, 0.4);
+   margin-bottom: 8px;
+}
+
+.pj-meta dd {
+   font-family: "Comfortaa Regular", serif;
+   font-size: 14px;
+   line-height: 1.6;
+   color: var(--charcoal);
+}
+
+.pj-meta dd a {
+   color: var(--paradise-pink);
+   border-bottom: 1px solid rgba(233, 71, 103, 0.35);
+   transition: border-color 0.25s ease;
+}
+
+.pj-meta dd a:hover {
+   border-color: var(--paradise-pink);
+}
+
+/* Visuel principal. Le rognage laisse la place à la parallaxe : l'image est
+   plus haute que son cadre, et se déplace à l'intérieur au défilement. */
+.pj-cover {
+   max-width: 1400px;
+   margin: 0 auto;
+   padding: 0 60px;
+}
+
+/* Le cadre épouse l'image, sans hauteur imposée. Une capture d'interface a un
+   cadrage qui est son contenu : la rogner pour ménager une course de parallaxe
+   la faisait paraître mal cadrée, et le décalage au défilement se lisait comme
+   un défaut plutôt que comme de la profondeur. */
+.pj-cover__frame {
+   overflow: hidden;
+   border-radius: 24px;
+   border: 1px solid rgba(47, 65, 87, 0.1);
+   background: rgba(47, 65, 87, 0.06);
+}
+
+.pj-cover__frame img {
+   display: block;
+   width: 100%;
+   height: auto;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Page projet — le point de départ
+|--------------------------------------------------------------------------
+| Titre puis texte empilés, la colonne de texte décalée vers la droite. Le
+| décalage tient lieu de composition : pas de colonne d'appoint à remplir.
+*/
+
+.pj-brief {
+   padding: 120px 0 100px;
+}
+
+.pj-prose {
+   margin-left: 12%;
+   max-width: 58ch;
+}
+
+.pj-prose p {
+   font-family: "Comfortaa Regular", serif;
+   font-size: 16px;
+   line-height: 1.9;
+   color: rgba(47, 65, 87, 0.72);
+}
+
+.pj-prose p + p {
+   margin-top: 22px;
+}
+
+.pj-prose strong {
+   font-family: "Comfortaa Bold", serif;
+   font-weight: normal;
+   color: var(--charcoal);
+}
+
+/*
+|--------------------------------------------------------------------------
+| Page projet — les faits
+|--------------------------------------------------------------------------
+| Un seul filet au-dessus de la bande, aucun encadré. Trois faits vérifiés,
+| relevés sur le projet en ligne ou dans son dépôt.
+*/
+
+.pj-facts {
+   display: grid;
+   grid-template-columns: repeat(3, minmax(0, 1fr));
+   gap: 40px;
+   padding-top: 34px;
+   padding-bottom: 120px;
+   border-top: 1px solid rgba(47, 65, 87, 0.16);
+}
+
+.pj-fact dt {
+   color: rgba(47, 65, 87, 0.4);
+   margin-bottom: 14px;
+}
+
+.pj-fact dd {
+   font-family: "Staatliches Regular", serif;
+   font-size: clamp(22px, 2.4vw, 32px);
+   line-height: 1.15;
+   color: var(--charcoal);
+}
+
+.pj-fact dd em {
+   font-style: normal;
+   color: var(--paradise-pink);
+}
+
+/*
+|--------------------------------------------------------------------------
+| Page projet — galerie
+|--------------------------------------------------------------------------
+| Trois formes, appliquées selon le nombre de visuels : pleine largeur, deux
+| de front, ou un seul décalé. Les pages qui n'ont qu'un visuel de galerie
+| prennent la forme pleine largeur.
+*/
+
+.pj-gallery {
+   padding-bottom: 40px;
+}
+
+.pj-shot {
+   margin-bottom: 40px;
+}
+
+.pj-shot img {
+   display: block;
+   width: 100%;
+   height: auto;
+   border-radius: 24px;
+   border: 1px solid rgba(47, 65, 87, 0.1);
+   background: rgba(47, 65, 87, 0.06);
+}
+
+.pj-shots-2 {
+   display: grid;
+   grid-template-columns: repeat(2, minmax(0, 1fr));
+   gap: 40px;
+}
+
+.pj-shots-2 .pj-shot {
+   margin-bottom: 40px;
+}
+
+/* Visuel décalé : borné à 72% et poussé à droite. C'est la respiration de la
+   galerie, elle ne revient qu'une fois par page. */
+.pj-shot--offset {
+   width: 72%;
+   margin-left: auto;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Page projet — ce que ça a demandé
+|--------------------------------------------------------------------------
+| Miroir du bloc « point de départ » : le texte passe à gauche, le titre reste
+| en tête. Deux blocs de prose, deux calages différents.
+*/
+
+.pj-detail {
+   padding: 80px 0 120px;
+}
+
+.pj-detail .pj-prose {
+   margin-left: 0;
+   margin-right: 12%;
+}
+
+.pj-link {
+   display: inline-flex;
+   align-items: center;
+   gap: 10px;
+   margin-top: 36px;
+   padding: 14px 32px;
+   border: 2px solid var(--charcoal);
+   border-radius: 50px;
+   font-family: "Staatliches Regular", serif;
+   font-size: 17px;
+   letter-spacing: 1.6px;
+   white-space: nowrap;
+   color: var(--charcoal);
+   transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+.pj-link span {
+   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pj-link:hover {
+   background: var(--charcoal);
+   color: var(--baby-powder);
+}
+
+.pj-link:hover span {
+   transform: translateX(6px);
+}
+
+.pj-link:active {
+   transform: translateY(1px);
+}
+
+/*
+|--------------------------------------------------------------------------
+| Page projet — projet suivant
+|--------------------------------------------------------------------------
+*/
+
+.pj-next {
+   border-top: 1px solid rgba(47, 65, 87, 0.16);
+}
+
+.pj-next__link {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr) 380px;
+   align-items: center;
+   gap: 60px;
+   padding: 80px 0 120px;
+   color: inherit;
+}
+
+.pj-next__body {
+   min-width: 0;
+}
+
+.pj-next__label {
+   display: block;
+   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+   font-size: 12px;
+   letter-spacing: 2px;
+   text-transform: uppercase;
+   color: rgba(47, 65, 87, 0.4);
+   margin-bottom: 18px;
+}
+
+.pj-next__title {
+   display: block;
+   font-family: "Staatliches Regular", serif;
+   font-size: clamp(36px, 5.4vw, 72px);
+   line-height: 1.02;
+   letter-spacing: -0.5px;
+   margin-bottom: 14px;
+   transition: color 0.25s ease;
+}
+
+.pj-next__link:hover .pj-next__title {
+   color: var(--paradise-pink);
+}
+
+.pj-next__summary {
+   display: block;
+   font-family: "Comfortaa Regular", serif;
+   font-size: 14px;
+   line-height: 1.7;
+   color: rgba(47, 65, 87, 0.6);
+   max-width: 44ch;
+}
+
+.pj-next__media {
+   overflow: hidden;
+   border-radius: 24px;
+   border: 1px solid rgba(47, 65, 87, 0.1);
+   background: rgba(47, 65, 87, 0.06);
+}
+
+.pj-next__media img {
+   display: block;
+   width: 100%;
+   height: auto;
+   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pj-next__link:hover .pj-next__media img {
+   transform: scale(1.04);
+}
+
+.pj-next__link:focus-visible {
+   outline: 2px solid var(--paradise-pink);
+   outline-offset: 6px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Repli — tablette
+|--------------------------------------------------------------------------
+*/
+
+@media (max-width: 1024px) {
+
+   .work__inner,
+   .pj__inner,
+   .pj-cover {
+      padding-left: 40px;
+      padding-right: 40px;
+   }
+
+   .work-row__link {
+      grid-template-columns: 52px minmax(0, 1fr) 200px 32px;
+      gap: 18px;
+   }
+
+   .pj-meta {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 26px;
+   }
+
+   .pj-prose,
+   .pj-detail .pj-prose {
+      margin-left: 0;
+      margin-right: 0;
+   }
+
+   .pj-next__link {
+      grid-template-columns: minmax(0, 1fr) 300px;
+      gap: 40px;
+   }
+}
+
+/*
+|--------------------------------------------------------------------------
+| Repli — mobile
+|--------------------------------------------------------------------------
+| Une seule colonne partout. Le visuel suiveur et la parallaxe sont retirés :
+| ni l'un ni l'autre n'a de sens sans souris, et les deux coûtent des images
+| par seconde là où elles sont les plus rares.
+*/
+
+@media (max-width: 767.98px) {
+
+   .work__inner,
+   .pj__inner,
+   .pj-cover {
+      padding-left: 22px;
+      padding-right: 22px;
+   }
+
+   .work-hero__inner {
+      padding-top: 130px;
+      padding-bottom: 70px;
+   }
+
+   .work-hero__cubes {
+      display: none;
+   }
+
+   .work-hero__title {
+      max-width: none;
+   }
+
+   .work-row__link {
+      grid-template-columns: 40px minmax(0, 1fr);
+      gap: 12px;
+      padding: 26px 0;
+   }
+
+   .work-row__meta {
+      grid-column: 2;
+      text-align: left;
+      margin-top: 12px;
+   }
+
+   .work-row__go {
+      display: none;
+   }
+
+   .work-cursor {
+      display: none;
+   }
+
+   .work-outro {
+      padding-bottom: 90px;
+   }
+
+   .pj-hero__inner {
+      padding-top: 120px;
+      padding-bottom: 40px;
+   }
+
+   .pj-meta {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 22px;
+   }
+
+   .pj-brief {
+      padding: 70px 0 60px;
+   }
+
+   .pj-facts {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 28px;
+      padding-bottom: 70px;
+   }
+
+   .pj-shots-2 {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 24px;
+   }
+
+   .pj-shot,
+   .pj-shots-2 .pj-shot {
+      margin-bottom: 24px;
+   }
+
+   .pj-shot--offset {
+      width: 100%;
+      margin-left: 0;
+   }
+
+   .pj-detail {
+      padding: 50px 0 70px;
+   }
+
+   .pj-next__link {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 30px;
+      padding: 50px 0 80px;
+   }
+}
+
+/*
+|--------------------------------------------------------------------------
+| Mouvement réduit
+|--------------------------------------------------------------------------
+| Le script coupe déjà ses propres animations ; ce bloc neutralise ce qui vit
+| en CSS pur, y compris sur les appareils sans souris qui n'ont jamais eu de
+| survol à afficher.
+*/
+
+@media (prefers-reduced-motion: reduce) {
+
+   .work-row__link::after,
+   .work-row__index,
+   .work-row__title,
+   .work-row__go,
+   .work-outro__btn,
+   .pj-back span,
+   .pj-link,
+   .pj-link span,
+   .pj-next__title,
+   .pj-next__media img {
+      transition: none;
+   }
+
+   .pj-next__link:hover .pj-next__media img {
+      transform: none;
+   }
+
+   .work-cursor {
+      display: none;
+   }
+}

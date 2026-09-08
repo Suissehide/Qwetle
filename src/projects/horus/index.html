@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cahier d’observation électronique pour deux protocoles de recherche cardiovasculaire."/>
+    <meta name="robots" content="index,follow"/>
+
+    <meta property="og:title" content="Horus — Qwetle"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://qwetle.fr/projects/horus/"/>
+    <meta property="og:image" content="https://qwetle.com/assets/logo/logo.svg"/>
+
+    <link rel="icon" type="image/png" href="../../assets/favicon.png"/>
+
+    <link rel="stylesheet" href="../../css/reset.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/projects.css">
+
+    <title>Horus — Qwetle</title>
+</head>
+
+<body>
+<header>
+    <nav class="nav" role="navigation">
+        <div class="nav-content">
+
+            <div class="logo">
+                <a href="/">
+                    <span></span>
+                    <img src="../../assets/logo/logo.svg" alt="Qwetle's logo">
+                </a>
+            </div>
+
+            <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu"
+                    aria-label="Ouvrir le menu">
+                <span></span>
+                <span></span>
+            </button>
+
+            <div class="nav-menu" id="nav-menu">
+                <div class="navbar">
+                    <ul class="nav-links">
+                        <li><a href="/">Accueil</a></li>
+                        <li><a href="/about">A propos</a></li>
+                        <li><a href="/projects/" aria-current="page">Projets</a></li>
+                        <li><a href="/work">Expertise</a></li>
+                    </ul>
+                </div>
+                <div class="navbar">
+                    <ul class="nav-links">
+                        <li><a href="/contact/">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </nav>
+</header>
+
+<main class="project-page">
+
+    <section class="pj-hero">
+        <div class="pj-hero__inner pj__inner">
+
+            <a class="pj-back" href="/projects/"><span aria-hidden="true">&larr;</span> Réalisations</a>
+
+            <h1 class="pj-title">Horus</h1>
+            <p class="pj-lead">Cahier d’observation électronique pour deux protocoles de recherche cardiovasculaire.</p>
+
+            <dl class="pj-meta">
+                <div>
+                    <dt>Type</dt>
+                    <dd>Application métier, recherche clinique</dd>
+                </div>
+                <div>
+                    <dt>Rôle</dt>
+                    <dd>Développement, maintenance</dd>
+                </div>
+                <div>
+                    <dt>Technologies</dt>
+                    <dd>PHP, Symfony, Twig</dd>
+                </div>
+                <div>
+                    <dt>En ligne</dt>
+                    <dd>Accès sur demande</dd>
+                </div>
+            </dl>
+
+        </div>
+
+        <figure class="pj-cover">
+            <div class="pj-cover__frame">
+                <img src="../../assets/projects/horus/cover.webp" alt="Liste des patients de Horus, filtrable par protocole" width="1440" height="740" loading="eager" decoding="async">
+            </div>
+        </figure>
+    </section>
+
+    <section class="pj-brief">
+        <div class="pj__inner">
+            <h2 class="pj-h2">Objectif</h2>
+            <div class="pj-prose">
+                <p>Remplacer la saisie sur tableur par un recueil structuré, pour deux protocoles cardiovasculaires. Chaque champ est typé, chaque écriture est datée et attribuée.</p>
+                <p>En recherche clinique, la traçabilité conditionne l’exploitabilité des données&nbsp;: une valeur corrigée plusieurs mois après coup doit rester justifiable.</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="pj__inner">
+            <dl class="pj-facts">
+                    <div class="pj-fact">
+                        <dt>Protocoles</dt>
+                        <dd>CHiEF et CAC stroke</dd>
+                    </div>
+                    <div class="pj-fact">
+                        <dt>Recueil</dt>
+                        <dd>5 volets, <em>6</em> examens par visite</dd>
+                    </div>
+                    <div class="pj-fact">
+                        <dt>Traçabilité</dt>
+                        <dd>Annotation par champ, journal horodaté</dd>
+                    </div>
+            </dl>
+        </div>
+    </section>
+
+    <section class="pj-gallery">
+        <div class="pj__inner">
+                <figure class="pj-shot"><img src="../../assets/projects/horus/01-facteurs.webp" alt="Formulaire des facteurs de risque initiaux de Horus" width="1440" height="740" loading="lazy" decoding="async"></figure>
+                <div class="pj-shots-2">
+                <figure class="pj-shot"><img src="../../assets/projects/horus/02-antecedent.webp" alt="Formulaire des antécédents cardiovasculaires de Horus" width="1440" height="740" loading="lazy" decoding="async"></figure>
+                <figure class="pj-shot"><img src="../../assets/projects/horus/03-evenement.webp" alt="Formulaire de l’événement cardiovasculaire de Horus, avec sa sous-navigation" width="1440" height="740" loading="lazy" decoding="async"></figure>
+                </div>
+                <figure class="pj-shot pj-shot--offset"><img src="../../assets/projects/horus/04-bilan.webp" alt="Bilan biologique d’une visite dans Horus : biométrie, tension artérielle, dyslipidémie" width="1440" height="740" loading="lazy" decoding="async"></figure>
+            </div>
+    </section>
+
+    <section class="pj-detail">
+        <div class="pj__inner">
+            <h2 class="pj-h2">Architecture</h2>
+            <div class="pj-prose">
+                <p>Symfony et Twig, base relationnelle, déploiement conteneurisé. Le dossier se découpe en informations générales, antécédent cardiovasculaire, événement, facteurs de risque initiaux et visites.</p>
+                <p>Chaque visite ouvre six panneaux d’examens&nbsp;: anatomie coronaire, bilan biologique et risque, CHIP, échocardiographie, échographie vasculaire, suivi. La liste des patients se filtre par protocole et s’exporte.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="pj-next">
+        <div class="pj__inner">
+            <a class="pj-next__link" href="/projects/cctv/">
+                <span class="pj-next__body">
+                    <span class="pj-next__label">Projet suivant</span>
+                    <span class="pj-next__title">CCTV</span>
+                    <span class="pj-next__summary">Expérience 3D temps réel&nbsp;: une caméra qui suit le curseur, puis reprend sa ronde.</span>
+                </span>
+                <span class="pj-next__media">
+                    <img src="../../assets/projects/cctv/thumb.webp" alt="Caméra de surveillance 3D de CCTV, mouvement détecté" width="720" height="370" loading="lazy" decoding="async">
+                </span>
+            </a>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <div class="footer-cubes" aria-hidden="true"></div>
+    <div class="footer-glass">
+        <div class="footer-wrapper">
+            <div class="footer-top">
+
+                <div class="footer-brand">
+                    <img src="../../assets/logo/logo.svg" alt="Qwetle">
+                    <p>Étude Marketing &amp; Développement Web</p>
+                </div>
+
+                <nav class="footer-nav" aria-label="Navigation pied de page">
+                    <a href="/">Accueil</a>
+                    <a href="/about">À propos</a>
+                    <a href="/projects/">Projets</a>
+                    <a href="/work">Expertise</a>
+                    <a href="/contact/">Contact</a>
+                </nav>
+
+                <div class="footer-contact">
+                    <a href="mailto:contact@qwetle.fr" class="footer-email">contact@qwetle.fr</a>
+                    <div class="footer-socials">
+                        <a href="#" aria-label="Instagram">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+                        </a>
+                        <a href="#" aria-label="X (Twitter)">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </a>
+                        <a href="mailto:contact@qwetle.fr" aria-label="Email">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+            <div class="footer-bottom">
+                <span>© 2025 Qwetle — Tous droits réservés</span>
+                <span>Fait avec passion</span>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="../../js/jquery.min.js"></script>
+<script src="../../js/gsap/gsap.min.js"></script>
+<script src="../../js/gsap/scrollTrigger.min.js"></script>
+
+<script src="../../js/script.js"></script>
+<script src="../../js/project-page.js"></script>
+</body>
+
+</html>
