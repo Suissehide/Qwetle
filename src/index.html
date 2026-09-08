@@ -27,26 +27,36 @@
 <header>
     <nav class="nav" role="navigation">
         <div class="nav-content">
-            <div class="navbar">
-                <div class="logo">
-                    <a href="#">
-                        <span></span>
-                        <img src="assets/logo/logo.svg" alt="Qwetle's logo">
-                    </a>
+
+            <div class="logo">
+                <a href="/">
+                    <span></span>
+                    <img src="assets/logo/logo.svg" alt="Qwetle's logo">
+                </a>
+            </div>
+
+            <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu"
+                    aria-label="Ouvrir le menu">
+                <span></span>
+                <span></span>
+            </button>
+
+            <div class="nav-menu" id="nav-menu">
+                <div class="navbar">
+                    <ul class="nav-links">
+                        <li><a href="/" aria-current="page">Accueil</a></li>
+                        <li><a href="/about">A propos</a></li>
+                        <li><a href="/projects/">Projets</a></li>
+                        <li><a href="/work">Expertise</a></li>
+                    </ul>
                 </div>
-                <ul class="nav-links">
-                    <li><a href="/">Accueil</a></li>
-                    <li><a href="/about">A propos</a></li>
-                    <li><a href="/work">Expertise</a></li>
-                </ul>
+                <div class="navbar">
+                    <ul class="nav-links">
+                        <li><a href="/contact/">Contact</a></li>
+                    </ul>
+                </div>
             </div>
-            <div class="navbar">
-                <ul>
-                    <li>
-                        <button>Contact</button>
-                    </li>
-                </ul>
-            </div>
+
         </div>
     </nav>
 </header>
@@ -106,71 +116,244 @@
 
                 <aside class="project__aside">
                     <div class="project-header">
-                        <span class="label-tag">Portfolio</span>
-                        <h2 class="section-title">Mes <em>Créations</em></h2>
-                        <p class="section-desc">Une sélection de projets imaginés et réalisés avec passion</p>
+                        <h2 class="section-title">Nos <em>Réalisations</em></h2>
+                        <p class="section-desc">Des produits conçus, développés et déployés en interne. Voici une sélection de ce qui tourne aujourd’hui en production.</p>
                     </div>
 
-                    <!-- Le total « 04 » est écrit en dur : le JS déduit le nombre de
-                         projets du DOM, mais pas ce libellé. Pour passer de 4 à N,
-                         voir aussi les quatre points listés au-dessus de
-                         .project__stack-inner dans style.css. -->
+                    <!-- Les repères de progression sont générés par portfolio.js à
+                         partir du nombre de projets présents dans le DOM : rien à
+                         tenir à jour ici pour passer de 4 à N. -->
                     <div class="project__counter">
-                        <span class="project__counter-current">01</span> — 04
+                        <span class="project__counter-current">01</span>
                     </div>
 
                     <div class="project__texts">
                         <article class="project__text">
-                            <h3 class="project__title">Nom du projet 1</h3>
-                            <p class="project__desc">Courte description du projet, de ses objectifs et de la valeur créée pour le client ou l'utilisateur final.</p>
-                            <p class="project__meta">2025 · HTML / CSS · GSAP</p>
+                            <h3 class="project__title">Gachapon</h3>
+                            <p class="project__desc">Une machine à pince en 3D, et une collection de 329 cartes à compléter.</p>
+                            <p class="project__meta">Jeu multijoueur · React · Three.js</p>
+                            <a class="project__more" href="/projects/gachapon/">En savoir plus <span aria-hidden="true">→</span></a>
                         </article>
                         <article class="project__text">
-                            <h3 class="project__title">Nom du projet 2</h3>
-                            <p class="project__desc">Description du projet, de ses enjeux et de la solution mise en place pour le client.</p>
-                            <p class="project__meta">2025 · WordPress · PHP</p>
+                            <h3 class="project__title">MediSync</h3>
+                            <p class="project__desc">L’agenda partagé d’une équipe soignante, et le suivi des programmes patient.</p>
+                            <p class="project__meta">Application métier · React · Fastify</p>
+                            <a class="project__more" href="/projects/medisync/">En savoir plus <span aria-hidden="true">→</span></a>
                         </article>
                         <article class="project__text">
-                            <h3 class="project__title">Nom du projet 3</h3>
-                            <p class="project__desc">Landing page de conversion optimisée pour une startup tech en forte croissance.</p>
-                            <p class="project__meta">2024 · React · Node.js</p>
+                            <h3 class="project__title">Ink Point</h3>
+                            <p class="project__desc">Un roguelike de survie où l’on incarne un curseur, poursuivi par l’encre.</p>
+                            <p class="project__meta">Jeu navigateur · TypeScript · Canvas</p>
+                            <a class="project__more" href="/projects/inkpoint/">En savoir plus <span aria-hidden="true">→</span></a>
                         </article>
                         <article class="project__text">
-                            <h3 class="project__title">Nom du projet 4</h3>
-                            <p class="project__desc">Expérience interactive 3D avec animations avancées et transitions fluides entre les sections.</p>
-                            <p class="project__meta">2024 · Three.js · GSAP</p>
+                            <h3 class="project__title">CCTV</h3>
+                            <p class="project__desc">Une caméra de surveillance en 3D qui suit le curseur, puis reprend sa ronde.</p>
+                            <p class="project__meta">Expérience 3D · Three.js · WebGL</p>
+                            <a class="project__more" href="/projects/cctv/">En savoir plus <span aria-hidden="true">→</span></a>
                         </article>
+                    </div>
+
+                    <div class="project__outro">
+                        <a href="/projects/" class="project__outro-btn">Voir tous les projets <span aria-hidden="true">→</span></a>
                     </div>
                 </aside>
 
+                <div class="project__col">
                 <div class="project__stack">
+                    <!-- Surface WebGL des visuels, affichée seulement en desktop.
+                         Le repli empilé, lui, s'appuie sur les dégradés CSS des
+                         .project__shot-media ci-dessous. -->
+                    <canvas class="project__gl" aria-hidden="true"></canvas>
                     <div class="project__stack-inner">
-                        <a class="project__shot" href="#" aria-label="Voir le projet Nom du projet 1">
+                        <a class="project__shot" href="/projects/gachapon/" data-visuel="./assets/projects/gachapon/cover.webp" aria-label="Voir le projet Gachapon">
                             <span class="project__shot-media project__shot-media--1"></span>
                         </a>
-                        <a class="project__shot" href="#" aria-label="Voir le projet Nom du projet 2">
+                        <a class="project__shot" href="/projects/medisync/" data-visuel="./assets/projects/medisync/cover.webp" aria-label="Voir le projet MediSync">
                             <span class="project__shot-media project__shot-media--2"></span>
                         </a>
-                        <a class="project__shot" href="#" aria-label="Voir le projet Nom du projet 3">
+                        <a class="project__shot" href="/projects/inkpoint/" data-visuel="./assets/projects/inkpoint/cover.webp" aria-label="Voir le projet Ink Point">
                             <span class="project__shot-media project__shot-media--3"></span>
                         </a>
-                        <a class="project__shot" href="#" aria-label="Voir le projet Nom du projet 4">
+                        <a class="project__shot" href="/projects/cctv/" data-visuel="./assets/projects/cctv/cover.webp" aria-label="Voir le projet CCTV">
                             <span class="project__shot-media project__shot-media--4"></span>
                         </a>
                     </div>
                 </div>
 
-                <div class="project__outro">
-                    <a href="/work" class="project__outro-btn">Voir tous les projets <span aria-hidden="true">→</span></a>
                 </div>
 
             </div>
         </section>
     </div>
 
-    <div class="team">
+    <section class="about" id="a-propos">
+        <div class="about__inner">
 
-    </div>
+            <p class="about__eyebrow">À propos</p>
+
+            <h2 class="about__statement">
+                Nous concevons et développons des sites que nous
+                <em>ne confions à personne d'autre</em>.
+            </h2>
+
+            <div class="about__lead">
+                <p>Une équipe réduite, un seul interlocuteur, et le même regard du premier croquis jusqu'à la mise en ligne. Pas d'intermédiaire, pas de partie sous-traitée&nbsp;: ce que nous livrons, nous l'avons écrit.</p>
+            </div>
+
+            <ol class="practice">
+                <li class="practice__item">
+                    <span class="practice__index">01</span>
+                    <h3 class="practice__title">Conception</h3>
+                    <p class="practice__desc">On part de votre objectif, pas d'un gabarit. Cadrage, arborescence, maquettes&nbsp;— jusqu'à ce que le parcours tienne debout.</p>
+                </li>
+                <li class="practice__item">
+                    <span class="practice__index">02</span>
+                    <h3 class="practice__title">Développement</h3>
+                    <p class="practice__desc">Du sur-mesure, sans surcouche inutile. Un code lisible, rapide à charger, que quelqu'un d'autre peut reprendre après nous.</p>
+                </li>
+                <li class="practice__item">
+                    <span class="practice__index">03</span>
+                    <h3 class="practice__title">Mise en ligne &amp; suivi</h3>
+                    <p class="practice__desc">Déploiement, mesure, corrections. On reste joignables une fois le site en production&nbsp;— c'est là que le vrai travail commence.</p>
+                </li>
+            </ol>
+
+            <div class="about__skills">
+                <div class="skills__layout">
+
+                    <div class="skills__intro">
+                        <p class="about__eyebrow">Compétences</p>
+                        <h3 class="skills__statement">Des outils choisis pour ce qu'ils règlent, <em>pas pour leur nom</em>.</h3>
+                        <a class="skills__cta" href="/contact/">Nous contacter <span aria-hidden="true">&rarr;</span></a>
+
+                        <div class="skills__cube" aria-hidden="true">
+                            <span class="skills__cube-face skills__cube-face--back"></span>
+                            <span class="skills__cube-face skills__cube-face--front"></span>
+                        </div>
+                    </div>
+
+                    <dl class="skills">
+                        <div class="skills__group">
+                            <dt class="skills__head">
+                                <span class="skills__index">01</span>
+                                <span class="skills__label">Frontend</span>
+                            </dt>
+                            <dd class="skills__list">
+                                <ul>
+                                    <li>HTML</li>
+                                    <li>CSS</li>
+                                    <li>JavaScript</li>
+                                    <li>TypeScript</li>
+                                    <li>React</li>
+                                    <li>Next.js</li>
+                                    <li>Tailwind</li>
+                                    <li>Bootstrap</li>
+                                    <li>Electron</li>
+                                </ul>
+                            </dd>
+                        </div>
+                        <div class="skills__group">
+                            <dt class="skills__head">
+                                <span class="skills__index">02</span>
+                                <span class="skills__label">Animation &amp; 3D</span>
+                            </dt>
+                            <dd class="skills__list">
+                                <ul>
+                                    <li>GSAP</li>
+                                    <li>Lenis</li>
+                                    <li>Barba.js</li>
+                                    <li>Three.js</li>
+                                    <li>WebGL</li>
+                                    <li>Blender</li>
+                                </ul>
+                            </dd>
+                        </div>
+                        <div class="skills__group">
+                            <dt class="skills__head">
+                                <span class="skills__index">03</span>
+                                <span class="skills__label">Backend</span>
+                            </dt>
+                            <dd class="skills__list">
+                                <ul>
+                                    <li>Node.js</li>
+                                    <li>Express.js</li>
+                                    <li>Python</li>
+                                    <li>Java</li>
+                                    <li>PHP</li>
+                                    <li>Netlify</li>
+                                </ul>
+                            </dd>
+                        </div>
+                        <div class="skills__group">
+                            <dt class="skills__head">
+                                <span class="skills__index">04</span>
+                                <span class="skills__label">Bases de données</span>
+                            </dt>
+                            <dd class="skills__list">
+                                <ul>
+                                    <li>MySQL</li>
+                                    <li>PostgreSQL</li>
+                                    <li>MongoDB</li>
+                                    <li>Supabase</li>
+                                </ul>
+                            </dd>
+                        </div>
+                        <div class="skills__group">
+                            <dt class="skills__head">
+                                <span class="skills__index">05</span>
+                                <span class="skills__label">DevOps &amp; Outils</span>
+                            </dt>
+                            <dd class="skills__list">
+                                <ul>
+                                    <li>Docker</li>
+                                    <li>Vercel</li>
+                                    <li>Git</li>
+                                    <li>GitHub</li>
+                                    <li>GitLab</li>
+                                    <li>Cloudflare</li>
+                                </ul>
+                            </dd>
+                        </div>
+                        <div class="skills__group">
+                            <dt class="skills__head">
+                                <span class="skills__index">06</span>
+                                <span class="skills__label">Système &amp; Sécurité</span>
+                            </dt>
+                            <dd class="skills__list">
+                                <ul>
+                                    <li>Linux</li>
+                                    <li>Bash</li>
+                                    <li>Shell</li>
+                                    <li>Owasp</li>
+                                    <li>Metasploit</li>
+                                    <li>Nmap</li>
+                                    <li>OpenVAS</li>
+                                    <li>Ossec</li>
+                                </ul>
+                            </dd>
+                        </div>
+                        <div class="skills__group">
+                            <dt class="skills__head">
+                                <span class="skills__index">07</span>
+                                <span class="skills__label">Design</span>
+                            </dt>
+                            <dd class="skills__list">
+                                <ul>
+                                    <li>Photoshop</li>
+                                    <li>Canva</li>
+                                    <li>Figma</li>
+                                </ul>
+                            </dd>
+                        </div>
+                    </dl>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
 
 </main>
 
@@ -189,6 +372,7 @@
                     <a href="/">Accueil</a>
                     <a href="/about">À propos</a>
                     <a href="/work">Expertise</a>
+                    <a href="/contact/">Contact</a>
                 </nav>
 
                 <div class="footer-contact">
@@ -234,6 +418,7 @@
     <script src="./js/game/main.js"></script>
 
     <script src="./js/script.js"></script>
+    <script src="./js/portfolio-gl.js"></script>
     <script src="./js/portfolio.js"></script>
 </body>
 

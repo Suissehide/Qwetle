@@ -32,8 +32,23 @@ body {
 .nav {
    z-index: 10 !important;
    user-select: none;
-   position: absolute;
+   /* Collé en haut : la section portfolio étant épinglée, une barre en
+      position absolue disparaissait dès l'entrée dans la séquence. */
+   position: fixed;
+   top: 0;
    width: 100%;
+   background: rgba(255, 253, 249, 0.55);
+   -webkit-backdrop-filter: blur(16px) saturate(1.4);
+   backdrop-filter: blur(16px) saturate(1.4);
+   border-bottom: 1px solid rgba(255, 255, 255, 0.55);
+}
+
+/* Repli pour les navigateurs sans backdrop-filter : sans lui, le fond
+   translucide laisserait le contenu défiler en toutes lettres derrière. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+   .nav {
+      background: rgba(255, 253, 249, 0.92);
+   }
 }
 
 .nav .nav-content {
@@ -128,6 +143,145 @@ body {
 .nav-links a:hover:after, .nav-links a:hover:before {
    width: 100%;
    left: 0;
+}
+
+/* Le menu occupe la largeur restante à droite du logo : le premier groupe se
+   cale à gauche, le second à droite. Le logo, lui, a quitté le premier
+   .navbar pour rester dans la barre quand le menu se replie sous elle. */
+.nav .nav-menu {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   flex: 1;
+}
+
+/* Bouton de menu : absent tant que la barre tient sur une ligne. */
+.nav-toggle {
+   display: none;
+   flex-direction: column;
+   justify-content: center;
+   gap: 6px;
+   width: 44px;
+   height: 44px;
+   padding: 0;
+   border: none;
+   background: transparent;
+   cursor: pointer;
+}
+
+.nav-toggle span {
+   display: block;
+   width: 26px;
+   height: 2px;
+   margin: 0 auto;
+   background: var(--charcoal);
+   transition: transform .3s cubic-bezier(.694, .048, .335, 1);
+}
+
+.nav-content.is-open .nav-toggle span:first-child {
+   transform: translateY(4px) rotate(45deg);
+}
+
+.nav-content.is-open .nav-toggle span:last-child {
+   transform: translateY(-4px) rotate(-45deg);
+}
+
+.nav-toggle:focus-visible {
+   outline: 2px solid var(--paradise-pink);
+   outline-offset: 2px;
+}
+
+/* Repli de la barre.
+   Cinq libellés en Staatliches 32px ne tiennent pas sous 900px : ils
+   passaient à la ligne et sortaient du cadre. Les deux listes quittent donc
+   la barre et se replient dans un panneau que le bouton ouvre.
+   Le panneau est masqué par `visibility` et pas seulement par une hauteur
+   nulle : sans ça, ses liens resteraient atteignables au clavier menu fermé. */
+@media (max-width: 899.98px) {
+
+   .nav .nav-content {
+      position: relative;
+      padding: 0 22px;
+      height: 64px;
+   }
+
+   .nav .logo {
+      margin-right: 0;
+   }
+
+   .nav .logo img {
+      width: 86px;
+   }
+
+   .nav-toggle {
+      display: flex;
+   }
+
+   .nav .nav-menu {
+      position: absolute;
+      top: 64px;
+      left: 0;
+      width: 100%;
+      flex-direction: column;
+      align-items: stretch;
+      /* Opaque, et pas seulement presque : le panneau se pose au-dessus du
+         contenu de la page, et un fond translucide y laissait passer les
+         grands titres du hero derrière les libellés. */
+      background: var(--baby-powder);
+      border-bottom: 1px solid rgba(47, 65, 87, 0.12);
+      box-shadow: 0 18px 40px rgba(47, 65, 87, 0.12);
+      max-height: 0;
+      overflow: hidden;
+      visibility: hidden;
+      transition: max-height .35s cubic-bezier(.16, 1, .3, 1), visibility 0s .35s;
+   }
+
+   .nav-content.is-open .nav-menu {
+      max-height: 70vh;
+      overflow-y: auto;
+      visibility: visible;
+      transition: max-height .35s cubic-bezier(.16, 1, .3, 1), visibility 0s;
+   }
+
+   .nav .nav-menu .navbar {
+      display: block;
+      width: 100%;
+   }
+
+   .nav .nav-links {
+      flex-direction: column;
+      align-items: stretch;
+   }
+
+   .nav .nav-links li + li,
+   .nav .nav-menu .navbar + .navbar {
+      border-top: 1px solid rgba(47, 65, 87, 0.1);
+   }
+
+   .nav ul li a,
+   .nav ul li button {
+      display: block;
+      width: 100%;
+      margin-left: 0;
+      padding: 16px 22px;
+      font-size: 26px;
+      text-align: left;
+   }
+
+   /* Le souligné de survol n'a pas de sens dans une liste verticale, et sur
+      tactile il n'y a de toute façon pas de survol. */
+   .nav-links a:before,
+   .nav-links a:after {
+      display: none;
+   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+   .nav-toggle span,
+   .nav .nav-menu {
+      transition: none;
+   }
 }
 
 /* Fond dégradé de la page d'accueil.
@@ -314,12 +468,14 @@ body {
    position: absolute;
    top: calc(var(--cube-overflow) * -1);
    left: -200px;
-   /* Le carré doit couvrir la colonne texte, large de 36% de la fenêtre,
-      mais il est dimensionné par sa hauteur. Sur une fenêtre large et basse
-      (outils de dev ancrés en bas, ultra-large, demi-hauteur), 140vh ne
-      suffit plus et le texte déborderait sur le rose. Le plancher en vw
-      raccroche donc la taille à la largeur. */
-   height: max(140vh, 62vw);
+   /* Le carré doit couvrir les deux tiers de la largeur au repos. Son bord peint
+      se trouve à `left + côté × 0.974` (le SVG a une marge transparente à
+      droite), donc viser 2/3 de la fenêtre donne `68.5vw + 205px`.
+      Dimensionné en vw et non en vh : la cible est une fraction de largeur, et
+      un terme en hauteur la ferait dépasser sur les fenêtres hautes. La
+      couverture du texte, elle, est garantie côté JS par une cible déduite de la
+      largeur réelle de la colonne. */
+   height: calc(68.5vw + 205px);
    width: auto;
    z-index: 0;
    pointer-events: none;
@@ -349,19 +505,6 @@ body {
    margin-bottom: 44px;
 }
 
-.label-tag {
-   display: inline-block;
-   padding: 6px 22px;
-   background: var(--paradise-pink);
-   color: #fff;
-   font-family: "Staatliches Regular", serif;
-   font-size: 18px;
-   letter-spacing: 3px;
-   text-transform: uppercase;
-   border-radius: 50px;
-   margin-bottom: 18px;
-}
-
 .section-title {
    font-family: "Staatliches Regular", serif;
    font-size: 64px;
@@ -384,6 +527,9 @@ body {
 }
 
 .project__counter {
+   display: flex;
+   align-items: center;
+   gap: 14px;
    font-family: "Staatliches Regular", serif;
    font-size: 18px;
    letter-spacing: 3px;
@@ -391,9 +537,32 @@ body {
    margin-bottom: 14px;
 }
 
+/* Repères de progression : un segment par projet, l'actif allongé et opaque.
+   Remplace le « — 04 », qui disait le total mais pas où l'on en était. */
+.project__counter-steps {
+   display: flex;
+   align-items: center;
+   gap: 6px;
+}
+
+.project__counter-steps i {
+   display: block;
+   width: 14px;
+   height: 3px;
+   border-radius: 3px;
+   background: var(--cherry-blossom-pink);
+   opacity: 0.3;
+   transition: width 0.4s ease, opacity 0.4s ease;
+}
+
+.project__counter-steps i.is-active {
+   width: 34px;
+   opacity: 1;
+}
+
 .project__texts {
    position: relative;
-   min-height: 230px;
+   min-height: 300px;
 }
 
 .project__text {
@@ -401,6 +570,9 @@ body {
    top: 0;
    left: 0;
    right: 0;
+   /* Le carré bleu se rétrécit vers le bas (c'est un carré pivoté) : un mot
+      long qui force la ligne à s'allonger sortirait du navy. */
+   overflow-wrap: break-word;
 }
 
 .project__title {
@@ -424,14 +596,44 @@ body {
    font-size: 15px;
    letter-spacing: 2px;
    color: var(--cherry-blossom-pink);
+   margin-bottom: 24px;
 }
 
-/* Colonne visuels, sur le rose */
+/* Bouton par projet, sur le bleu. Contour plutôt que fond plein, pour
+   rester secondaire face au bouton « Voir tous les projets ». */
+.project__more {
+   display: inline-block;
+   padding: 12px 28px;
+   border: 2px solid var(--cherry-blossom-pink);
+   border-radius: 50px;
+   font-family: "Staatliches Regular", serif;
+   font-size: 17px;
+   letter-spacing: 2px;
+   color: var(--baby-powder);
+   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.project__more:hover {
+   background: var(--cherry-blossom-pink);
+   color: var(--charcoal);
+}
+
+/* Colonne visuels, sur le rose : la pile puis le bouton global, empilés */
+.project__col {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   gap: 30px;
+   height: 100%;
+}
+
 .project__stack {
    position: relative;
    width: 78%;
+   /* Le bouton ayant rejoint la colonne bleue, la colonne de droite n'a plus
+      que le visuel : il peut reprendre de la hauteur. */
    height: 64vh;
-   justify-self: center;
    /* `clip` et non `hidden` : une boîte en overflow:hidden reste défilable
       par programme, si bien qu'un Tab vers un visuel hors cadre faisait
       défiler la pile pour le révéler — décalage définitif de la séquence,
@@ -439,6 +641,21 @@ body {
       défilement. La ligne `hidden` reste comme repli avant Safari 16. */
    overflow: hidden;
    overflow: clip;
+}
+
+/* Surface WebGL : masquée par défaut, elle ne prend le relais qu'en desktop
+   (voir le media query de l'état de repos, plus bas). Sans elle — mobile,
+   mouvement réduit, WebGL indisponible — ce sont les dégradés CSS des
+   .project__shot-media qui s'affichent. */
+.project__gl {
+   display: none;
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   border-radius: 24px;
+   box-shadow: 0 8px 28px rgba(47, 65, 87, 0.14);
 }
 
 /* ---------------------------------------------------------------------------
@@ -472,7 +689,10 @@ body {
    border-radius: 24px;
    background-size: cover;
    background-position: center;
-   box-shadow: 0 18px 50px rgba(47, 65, 87, 0.18);
+   /* Ombre courte et peu décalée : à 18px de décalage et 50px de flou, elle se
+      déposait en pleine gouttière entre deux cartes, qui ressortait plus grise
+      que le fond rose. */
+   box-shadow: 0 8px 28px rgba(47, 65, 87, 0.14);
    transition: transform 0.4s ease;
 }
 
@@ -480,33 +700,33 @@ body {
    transform: scale(1.015);
 }
 
-/* Dégradés de repli tant que les images de projets n'existent pas */
+/* Visuels des projets. Le dégradé reste en seconde couche : si un fichier
+   venait à manquer, la carte garde une couleur de marque au lieu d'un trou.
+   Ce repli sert au mobile et aux navigateurs sans WebGL ; en desktop, c'est
+   la surface .project__gl qui prend le relais avec les mêmes fichiers. */
 .project__shot-media--1 {
-   background-image: linear-gradient(135deg, #E94767 0%, #F5ACBA 100%);
+   background-image: url("../assets/projects/gachapon/cover.webp"),
+                     linear-gradient(135deg, #E94767 0%, #F5ACBA 100%);
 }
 
 .project__shot-media--2 {
-   background-image: linear-gradient(135deg, #2F4157 0%, #1a2735 100%);
+   background-image: url("../assets/projects/medisync/cover.webp"),
+                     linear-gradient(135deg, #2F4157 0%, #1a2735 100%);
 }
 
 .project__shot-media--3 {
-   background-image: linear-gradient(135deg, #F5ACBA 0%, #e8d5da 100%);
+   background-image: url("../assets/projects/inkpoint/cover.webp"),
+                     linear-gradient(135deg, #F5ACBA 0%, #e8d5da 100%);
 }
 
 .project__shot-media--4 {
-   background-image: linear-gradient(135deg, #E94767 10%, #2F4157 100%);
+   background-image: url("../assets/projects/cctv/cover.webp"),
+                     linear-gradient(135deg, #E94767 10%, #2F4157 100%);
 }
 
-/* Bouton de fin de section */
+/* Bouton global, visible en permanence sous le texte, dans la colonne bleue */
 .project__outro {
-   position: absolute;
-   top: 0;
-   bottom: 0;
-   left: 36%;
-   right: 0;
-   display: flex;
-   align-items: center;
-   justify-content: center;
+   margin-top: 36px;
 }
 
 .project__outro-btn {
@@ -551,6 +771,562 @@ body {
 .team {
    height: 400px;
    background: linear-gradient(to bottom, #4a6580, #1a2735);
+}
+
+/*
+|--------------------------------------------------------------------------
+| About (À propos)
+|--------------------------------------------------------------------------
+*/
+
+.about {
+   position: relative;
+   /* Pas de z-index ici, volontairement. .project en porte un, donc son carré
+      bleu — qui déborde d'environ 300px sous elle — passe par-dessus cette
+      section et finit sa courbe sur le fond clair au lieu d'être tranché net
+      à la jonction. La réserve en haut de .about__inner lui laisse la place. */
+   background-color: var(--baby-powder);
+   color: var(--charcoal);
+}
+
+.about__inner {
+   max-width: 1180px;
+   margin: 0 auto;
+   /* Réserve haute : le carré descend d'environ 300px dans la section. Le
+      contenu commence dessous plutôt qu'à côté, pour que la courbe se termine
+      dans du vide et non contre du texte. */
+   padding: 360px 60px 150px;
+}
+
+/* Méta en monospace : registre repris des deux références, et seul contraste
+   possible ici — le projet n'embarque que Comfortaa et Staatliches. Pile
+   système, donc aucun fichier de police en plus. */
+.about__eyebrow {
+   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+   font-size: 12px;
+   letter-spacing: 2px;
+   text-transform: uppercase;
+   color: var(--paradise-pink);
+   margin-bottom: 40px;
+}
+
+.about__statement {
+   font-family: "Staatliches Regular", serif;
+   /* Se cale sur la largeur de la fenêtre plutôt que sur des paliers : la
+      phrase garde le même nombre de lignes du portable au grand écran. */
+   font-size: clamp(38px, 5.4vw, 82px);
+   line-height: 1.06;
+   letter-spacing: -0.5px;
+   max-width: 15ch;
+   margin-bottom: 60px;
+}
+
+/* Accent des titres. Un seul rose par type de fond, et pas un seul rose pour
+   toute la page : le rose pâle de « Nos Réalisations » plafonne à 1,8:1 sur
+   le fond clair (illisible), et le rose vif à 1,8:1 sur le bleu du carré. Les
+   deux se contredisent, aucune valeur unique ne passe les 3:1 exigés par un
+   grand titre. C'est donc le rôle « accent » qui est commun, pas le code hexa :
+   rose vif sur clair (.about__statement, .skills__statement,
+   .contact__statement), rose pâle sur bleu (.section-title). */
+.about__statement em {
+   font-style: normal;
+   color: var(--paradise-pink);
+}
+
+.about__lead {
+   display: flex;
+   justify-content: flex-end;
+   padding-bottom: 110px;
+   border-bottom: 1px solid rgba(47, 65, 87, 0.16);
+}
+
+.about__lead p {
+   font-family: "Comfortaa Regular", serif;
+   font-size: 16px;
+   line-height: 1.85;
+   color: rgba(47, 65, 87, 0.72);
+   max-width: 46ch;
+}
+
+/* Ce que nous faisons */
+.practice__item {
+   display: grid;
+   grid-template-columns: 90px minmax(0, 300px) minmax(0, 1fr);
+   gap: 40px;
+   align-items: start;
+   padding: 46px 0;
+   border-bottom: 1px solid rgba(47, 65, 87, 0.16);
+}
+
+.practice__index {
+   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+   font-size: 12px;
+   letter-spacing: 2px;
+   color: rgba(47, 65, 87, 0.4);
+   padding-top: 8px;
+}
+
+.practice__title {
+   font-family: "Staatliches Regular", serif;
+   font-size: 32px;
+   letter-spacing: 1px;
+   color: var(--charcoal);
+}
+
+.practice__desc {
+   font-family: "Comfortaa Regular", serif;
+   font-size: 15px;
+   line-height: 1.8;
+   color: rgba(47, 65, 87, 0.66);
+   max-width: 52ch;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Compétences
+|--------------------------------------------------------------------------
+| Deux colonnes : à gauche l'accroche, qui reste collée pendant que la liste
+| défile ; à droite les sept familles, toutes ouvertes. Rien n'est replié —
+| la section se lit d'un coup d'œil, sans clic préalable.
+*/
+
+.about__skills {
+   margin-top: 140px;
+}
+
+.skills__layout {
+   display: grid;
+   grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+   gap: 90px;
+   align-items: start;
+}
+
+/* Colonne gauche : suit le défilement de la liste. 90px = les 70px de barre
+   fixe plus une marge de respiration au-dessus de l'accroche. */
+.skills__intro {
+   position: sticky;
+   top: 90px;
+}
+
+.skills__statement {
+   font-family: "Staatliches Regular", serif;
+   font-size: clamp(28px, 2.6vw, 40px);
+   line-height: 1.12;
+   letter-spacing: -0.3px;
+   color: var(--charcoal);
+   max-width: 16ch;
+   padding-bottom: 40px;
+   border-bottom: 1px solid rgba(47, 65, 87, 0.16);
+}
+
+.skills__statement em {
+   font-style: normal;
+   color: var(--paradise-pink);
+}
+
+.skills__cta {
+   display: inline-flex;
+   align-items: center;
+   gap: 10px;
+   margin-top: 32px;
+   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+   font-size: 12px;
+   letter-spacing: 2px;
+   text-transform: uppercase;
+   color: var(--charcoal);
+   transition: color 0.3s ease;
+}
+
+.skills__cta span {
+   transition: transform 0.35s cubic-bezier(.694, .048, .335, 1);
+}
+
+.skills__cta:hover {
+   color: var(--paradise-pink);
+}
+
+.skills__cta:hover span {
+   transform: translateX(6px);
+}
+
+/* Cube de la section : posé sous la colonne de gauche, dans le vide que
+   laisse l'accroche collée. En absolu — et non dans le flux — pour ne pas
+   allonger .skills__intro : sa hauteur détermine la durée du collage, et
+   240px de plus le décrocheraient avant la fin de la liste. */
+.skills__cube {
+   position: absolute;
+   top: 100%;
+   left: 4px;
+   width: clamp(180px, 17vw, 240px);
+   aspect-ratio: 1;
+   margin-top: 72px;
+   pointer-events: none;
+}
+
+.skills__cube-face {
+   position: absolute;
+   inset: 0;
+   border-radius: 22%;
+   /* Inclinaison de repos : sans JS (mouvement réduit), les deux carrés
+      restent lisibles comme un motif voulu et non comme un bug d'alignement.
+      GSAP écrase ces valeurs dès qu'il pilote le défilement. */
+   will-change: transform;
+}
+
+.skills__cube-face--back {
+   background: rgba(245, 172, 186, 0.45);
+   transform: rotate(16deg) scale(0.88);
+}
+
+.skills__cube-face--front {
+   border: 2px solid rgba(47, 65, 87, 0.55);
+   transform: rotate(-12deg);
+}
+
+/* Colonne droite : un filet en haut de la pile, puis un par famille. La
+   dernière ligne n'en porte pas, sinon elle double celui de la section. */
+.skills {
+   border-top: 1px solid rgba(47, 65, 87, 0.16);
+}
+
+.skills__group {
+   padding: 30px 0 34px;
+   border-bottom: 1px solid rgba(47, 65, 87, 0.16);
+}
+
+.skills__group:last-child {
+   border-bottom: none;
+}
+
+.skills__head {
+   display: grid;
+   grid-template-columns: 46px minmax(0, 1fr) auto;
+   gap: 18px;
+   align-items: baseline;
+   margin-bottom: 18px;
+}
+
+.skills__index, .skills__count {
+   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+   font-size: 12px;
+   letter-spacing: 2px;
+   color: rgba(47, 65, 87, 0.4);
+   transition: color 0.3s ease;
+}
+
+.skills__label {
+   font-family: "Staatliches Regular", serif;
+   font-size: clamp(26px, 2.4vw, 36px);
+   line-height: 1;
+   letter-spacing: 0.5px;
+   color: var(--charcoal);
+}
+
+/* Le numéro passe au rose au survol de la ligne entière : le repère se
+   déplace avec le regard sans qu'aucun texte ne bouge. */
+.skills__group:hover .skills__index {
+   color: var(--paradise-pink);
+}
+
+/* Décalage aligné sur la colonne du numéro : les technos commencent sous le
+   nom de la famille, pas sous son index. */
+.skills__list {
+   padding-left: 64px;
+}
+
+.skills__list ul {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 8px 26px;
+}
+
+.skills__list li {
+   font-family: "Comfortaa Regular", serif;
+   font-size: 14px;
+   line-height: 1.6;
+   color: rgba(47, 65, 87, 0.66);
+   transition: color 0.25s ease;
+}
+
+.skills__list li:hover {
+   color: var(--paradise-pink);
+}
+
+
+@media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+   /* Prolongement du dégradé rose : troisième écran de la même image, dans le
+      même découpage que .heading (0) et .project (-100vh). La jonction avec la
+      section au-dessus est donc invisible. Un voile blanc posé par-dessus le
+      résorbe ensuite dans le fond clair de la section — d'où une transition
+      progressive plutôt qu'une ligne de rupture. */
+   .about {
+      background-image:
+         linear-gradient(to bottom,
+            rgba(255, 253, 249, 0) 0,
+            rgba(255, 253, 249, 0) 150px,
+            var(--baby-powder) 620px,
+            var(--baby-powder) 100%),
+         url("../assets/background/background-ROSE.png");
+      background-repeat: no-repeat, no-repeat;
+      background-position: 0 0, 0 -200vh;
+      background-size: 100% 100%, 100% 326vh;
+   }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Contact (page /contact/)
+|--------------------------------------------------------------------------
+| Même grammaire que la section Compétences : accroche à gauche, contenu à
+| droite, filets fins et intitulés en monospace. La page n'a pas de fond
+| dégradé — le pied de page en porte déjà un, et le formulaire a besoin d'un
+| fond franc pour rester lisible.
+*/
+
+.contact {
+   background-color: var(--baby-powder);
+   color: var(--charcoal);
+   /* La page est courte : sans hauteur plancher, le pied de page remonterait
+      au milieu de l'écran sur les grands moniteurs. */
+   min-height: 100vh;
+}
+
+.contact__inner {
+   max-width: 1180px;
+   margin: 0 auto;
+   /* 170px en haut : les 70px de barre fixe, plus la même respiration que le
+      reste du site au-dessus d'un premier bloc. */
+   padding: 170px 60px 140px;
+}
+
+.contact__statement {
+   font-family: "Staatliches Regular", serif;
+   font-size: clamp(38px, 5.4vw, 82px);
+   line-height: 1.06;
+   letter-spacing: -0.5px;
+   max-width: 18ch;
+   margin-bottom: 44px;
+}
+
+.contact__statement em {
+   font-style: normal;
+   color: var(--paradise-pink);
+}
+
+.contact__lead {
+   padding-bottom: 90px;
+   border-bottom: 1px solid rgba(47, 65, 87, 0.16);
+}
+
+.contact__lead p {
+   font-family: "Comfortaa Regular", serif;
+   font-size: 16px;
+   line-height: 1.85;
+   color: rgba(47, 65, 87, 0.72);
+   max-width: 52ch;
+}
+
+.contact__layout {
+   display: grid;
+   grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+   gap: 90px;
+   align-items: start;
+   padding-top: 80px;
+}
+
+.contact__aside {
+   position: sticky;
+   top: 110px;
+}
+
+/* Cube décoratif : reprend les deux faces du cube des compétences, mais dans
+   le flux — la colonne est courte, il n'y a pas de hauteur de collage à
+   préserver ici. */
+.contact__cube {
+   position: relative;
+   width: clamp(140px, 13vw, 180px);
+   aspect-ratio: 1;
+   margin-bottom: 64px;
+   pointer-events: none;
+}
+
+.contact__fact {
+   padding: 20px 0;
+   border-bottom: 1px solid rgba(47, 65, 87, 0.16);
+}
+
+.contact__fact:first-child {
+   border-top: 1px solid rgba(47, 65, 87, 0.16);
+}
+
+.contact__fact dt {
+   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+   font-size: 12px;
+   letter-spacing: 2px;
+   text-transform: uppercase;
+   color: rgba(47, 65, 87, 0.45);
+   margin-bottom: 10px;
+}
+
+.contact__fact dd {
+   font-family: "Comfortaa Regular", serif;
+   font-size: 15px;
+   line-height: 1.6;
+   color: rgba(47, 65, 87, 0.72);
+}
+
+.contact__email {
+   font-family: "Staatliches Regular", serif;
+   font-size: 26px;
+   letter-spacing: 1px;
+   color: var(--charcoal);
+   transition: color 0.25s ease;
+}
+
+.contact__email:hover {
+   color: var(--paradise-pink);
+}
+
+.contact__socials {
+   margin-top: 32px;
+}
+
+/* Formulaire */
+.contact__row {
+   display: grid;
+   grid-template-columns: repeat(2, minmax(0, 1fr));
+   gap: 34px;
+}
+
+.contact__field {
+   margin-bottom: 34px;
+}
+
+.contact__field label {
+   display: block;
+   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+   font-size: 12px;
+   letter-spacing: 2px;
+   text-transform: uppercase;
+   color: rgba(47, 65, 87, 0.45);
+   margin-bottom: 12px;
+}
+
+.contact__field label span {
+   text-transform: none;
+   letter-spacing: 0;
+   color: rgba(47, 65, 87, 0.3);
+}
+
+/* reset.css ne pose ni box-sizing global ni `font: inherit` sur les contrôles
+   de formulaire (input, select et textarea ne figurent pas dans sa liste) :
+   les deux se déclarent donc ici, sinon la police système reprend la main et
+   un padding fait déborder les champs de leur colonne. */
+.contact__field input,
+.contact__field select,
+.contact__field textarea {
+   box-sizing: border-box;
+   display: block;
+   width: 100%;
+   padding: 12px 2px;
+   font-family: "Comfortaa Regular", serif;
+   font-size: 16px;
+   line-height: 1.5;
+   color: var(--charcoal);
+   background: transparent;
+   border: none;
+   border-bottom: 1px solid rgba(47, 65, 87, 0.28);
+   border-radius: 0;
+   transition: border-color 0.25s ease;
+}
+
+.contact__field textarea {
+   resize: vertical;
+   min-height: 140px;
+}
+
+/* Le select natif garde sa flèche mais perd le fond gris et les coins arrondis
+   des styles d'agent utilisateur, qui trancheraient au milieu de champs
+   soulignés. */
+.contact__field select {
+   -webkit-appearance: none;
+   appearance: none;
+   padding-right: 28px;
+   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%232F4157' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+   background-repeat: no-repeat;
+   background-position: right 2px center;
+}
+
+.contact__field input:hover,
+.contact__field select:hover,
+.contact__field textarea:hover {
+   border-bottom-color: rgba(47, 65, 87, 0.5);
+}
+
+/* reset.css coupe `outline` sur :focus pour toute la page. Il faut donc le
+   rendre explicitement ici, sans quoi la navigation au clavier traverse le
+   formulaire à l'aveugle. Le rose vif et non le rose pâle : à 3,7:1 sur le
+   fond clair, c'est le seul des deux qui se voie. */
+.contact__field input:focus-visible,
+.contact__field select:focus-visible,
+.contact__field textarea:focus-visible {
+   outline: 2px solid var(--paradise-pink);
+   outline-offset: 4px;
+   border-bottom-color: var(--paradise-pink);
+}
+
+.contact__help {
+   font-family: "Comfortaa Regular", serif;
+   font-size: 12px;
+   line-height: 1.6;
+   color: rgba(47, 65, 87, 0.45);
+   margin-top: 10px;
+}
+
+.contact__submit {
+   display: inline-flex;
+   align-items: center;
+   gap: 12px;
+   margin-top: 10px;
+   padding: 18px 44px;
+   background: var(--paradise-pink);
+   color: #fff;
+   font-family: "Staatliches Regular", serif;
+   font-size: 24px;
+   letter-spacing: 2px;
+   border: none;
+   border-radius: 50px;
+   cursor: pointer;
+   box-shadow: 0 12px 32px rgba(233, 71, 103, 0.28);
+   transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact__submit span {
+   transition: transform 0.35s cubic-bezier(.694, .048, .335, 1);
+}
+
+.contact__submit:hover {
+   transform: translateY(-3px);
+   box-shadow: 0 18px 44px rgba(233, 71, 103, 0.38);
+}
+
+.contact__submit:hover span {
+   transform: translateX(6px);
+}
+
+.contact__submit:focus-visible {
+   outline: 2px solid var(--charcoal);
+   outline-offset: 4px;
+}
+
+.contact__note {
+   font-family: "Comfortaa Regular", serif;
+   font-size: 12px;
+   line-height: 1.8;
+   color: rgba(47, 65, 87, 0.45);
+   max-width: 46ch;
+   margin-top: 28px;
 }
 
 /*
@@ -723,6 +1499,7 @@ footer {
    }
    .project__aside,
    .project__texts,
+   .project__col,
    .project__stack,
    .project__stack-inner {
       display: contents;
@@ -764,24 +1541,141 @@ footer {
    .project__meta {
       color: var(--charcoal);
    }
+   .project__more {
+      border-color: var(--paradise-pink);
+      color: var(--paradise-pink);
+   }
+   .project__more:hover {
+      background: var(--paradise-pink);
+      color: #fff;
+   }
    .project__outro {
-      position: static;
       grid-row: 10;
       padding: 60px 24px 80px;
+      text-align: center;
    }
    .cursor-label {
       display: none;
    }
 }
 
-/* L'état de repos de la séquence : seuls le premier texte et aucun bouton.
+/* L'état de repos de la séquence : seul le premier texte est visible.
    Posé ici plutôt qu'en JS pour qu'il n'y ait ni superposition ni
-   clignotement entre le chargement de la page et l'initialisation de GSAP. */
+   clignotement entre le chargement de la page et l'initialisation de GSAP.
+   Le bouton « Voir tous les projets » n'est plus concerné : il reste
+   affiché en permanence. */
 @media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
    .project__text:not(:first-child),
-   .project__outro {
+   .project__shot:not(:first-child) {
       opacity: 0;
       visibility: hidden;
+   }
+   /* En desktop, c'est le canvas qui peint les visuels. Les liens restent
+      empilés en surimpression, invisibles mais cliquables : ils portent le
+      clic vers le projet, le survol qui déclenche le label, et le nom
+      accessible. Seul l'actif est visible, donc focusable. */
+   .project__gl {
+      display: block;
+   }
+   /* Le curseur natif disparaît sur la carte : le label « Voir le projet »
+      le remplace. Cantonné à ce media query, le seul où ce label existe —
+      sous 900px ou en mouvement réduit il est masqué, et masquer le curseur
+      sans rien mettre à la place laisserait l'utilisateur sans repère. */
+   .project__stack,
+   .project__shot {
+      cursor: none;
+   }
+   .project__stack-inner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+   }
+   .project__shot {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+   }
+   .project__shot-media {
+      display: none;
+   }
+}
+
+@media (max-width: 900px) {
+   .about__inner {
+      /* Pas de carre bleu a laisser passer sous 900px : il est rogne a sa
+         bande haute, la reserve n'a donc plus lieu d'etre. */
+      padding: 90px 24px 100px;
+   }
+   .about__lead {
+      justify-content: flex-start;
+      padding-bottom: 70px;
+   }
+   .practice__item {
+      grid-template-columns: 1fr;
+      gap: 12px;
+      padding: 34px 0;
+   }
+   .practice__index {
+      padding-top: 0;
+   }
+   .about__skills {
+      margin-top: 80px;
+   }
+   /* Sous 900px la colonne de gauche repasse dans le flux : collée, elle
+      occuperait la moitié de l'écran pendant tout le défilement de la liste. */
+   .skills__layout {
+      grid-template-columns: 1fr;
+      gap: 48px;
+   }
+   .skills__intro {
+      position: static;
+   }
+   /* Plus de colonne collée, donc plus de vide à occuper : le cube n'aurait
+      plus qu'à s'intercaler entre l'accroche et la liste. */
+   .skills__cube {
+      display: none;
+   }
+   .skills__statement {
+      max-width: 20ch;
+      padding-bottom: 28px;
+   }
+   .skills__head {
+      grid-template-columns: 34px minmax(0, 1fr) auto;
+      gap: 12px;
+   }
+   .skills__list {
+      padding-left: 46px;
+   }
+
+   .contact__inner {
+      padding: 130px 24px 100px;
+   }
+   .contact__lead {
+      padding-bottom: 60px;
+   }
+   .contact__layout {
+      grid-template-columns: 1fr;
+      gap: 56px;
+      padding-top: 56px;
+   }
+   .contact__aside {
+      position: static;
+   }
+   /* Le cube passe avant le formulaire une fois la page en une colonne : 180px
+      de décoration à faire défiler avant d'atteindre le premier champ. */
+   .contact__cube {
+      display: none;
+   }
+   /* Les deux champs de la première ligne s'empilent ; la gouttière tombe à
+      zéro, la marge basse de .contact__field assure déjà l'écart. */
+   .contact__row {
+      grid-template-columns: 1fr;
+      gap: 0;
    }
 }
 
@@ -807,6 +1701,15 @@ footer {
 @media (max-width: 480px) {
    .section-title {
       font-size: 38px;
+   }
+   /* Le retrait des technos est conservé — il rattache la liste à sa famille —
+      mais les gouttières se resserrent pour tenir plus de noms par ligne. */
+   .skills__list ul {
+      gap: 6px 18px;
+   }
+   .contact__submit {
+      padding: 16px 32px;
+      font-size: 20px;
    }
    .footer-wrapper {
       padding: 48px 24px 28px;
