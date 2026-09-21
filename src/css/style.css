@@ -1388,10 +1388,10 @@ html.lenis body {
 |--------------------------------------------------------------------------
 | Footer
 |--------------------------------------------------------------------------
-| Pied de page plein écran, fixé derrière la page. Un espace vide de 100vh
-| (.footer-space) donne la course : au fil du défilement, la page se retire et
-| le découvre, les lettres du mot-marque sortent de leur masque et les liens se
-| dévoilent. Sans GSAP, ou sous mouvement réduit,
+| Pied de page plein écran, fixé sous la page. Un espace vide de 100vh
+| (.footer-space) donne la course : au fil du défilement, le rideau charcoal
+| monte (clip-path piloté par script.js), les lettres du mot-marque sortent de
+| leur masque et les liens se dévoilent. Sans GSAP, ou sous mouvement réduit,
 | <html> ne reçoit pas la classe footer-reveal : le pied de page reste alors
 | un bloc ordinaire en fin de flux, complet et lisible.
 */
@@ -1422,38 +1422,12 @@ html.footer-reveal .footer {
    position: fixed;
    inset: 0;
    min-height: 0;
-   /* Derrière la page, et non plus par-dessus : le pied de page n'est pas
-      animé (voir la timeline dans js/script.js), il attend là et c'est la
-      page qui se retire pour le découvrir. */
-   z-index: 0;
+   /* Au-dessus de la barre de navigation (10) et des aperçus qui suivent le
+      curseur (50, .cursor-label et .work-preview) : le rideau recouvre tout. */
+   z-index: 60;
    visibility: hidden;
-}
-
-/* La page passe au-dessus du pied de page fixé et doit être opaque : sans
-   fond, on le verrait par transparence dès le haut de la page. L'espace vide
-   (.footer-space), lui, reste transparent — c'est par lui qu'on découvre le
-   pied de page en fin de défilement. */
-html.footer-reveal body > main {
-   position: relative;
-   z-index: 1;
-   background-color: var(--baby-powder);
-}
-
-/* La barre de navigation reste au-dessus du pied de page découvert : elle est
-   fixe, et le pied de page passe désormais derrière la page, pas devant. Les
-   trois ordres ne peuvent pas être satisfaits ensemble — page au-dessus du
-   pied de page, pied de page au-dessus de la barre, barre au-dessus de la
-   page forment un cycle. La première ligne se décale donc sous la barre au
-   lieu de se cacher dessous. */
-html.footer-reveal .footer__top {
-   padding-top: calc(70px + 44px);
-}
-
-@media (max-width: 899.98px) {
-
-   html.footer-reveal .footer__top {
-      padding-top: calc(64px + 36px);
-   }
+   clip-path: inset(100% 0 0 0);
+   will-change: clip-path;
 }
 
 /* Deux halos, rose en bas à gauche et bleu en haut à droite, pour que le

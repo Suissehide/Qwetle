@@ -195,12 +195,9 @@ gsap.utils.toArray([".about__eyebrow", ".about__statement", ".about__lead", ".pr
     gsap.set(left, { xPercent: -120 });
     gsap.set(right, { xPercent: 120 });
 
-    // Une seule timeline scrubée sur la traversée de l'espace vide. Le pied de
-    // page, lui, n'est plus animé : il est fixé derrière la page, et c'est
-    // celle-ci qui se retire pour le découvrir (voir html.footer-reveal .footer
-    // dans style.css). Les motifs suivent la molette au pixel ; les lettres et
-    // les liens partent un peu plus tard avec un amorti, pour finir avec la
-    // page.
+    // Une seule timeline scrubée sur la traversée de l'espace vide. Le rideau
+    // et les motifs suivent la molette au pixel ; les lettres et les liens
+    // partent un peu plus tard avec un amorti, pour finir avec la page.
     var tl = gsap.timeline({
         scrollTrigger: {
             trigger: space,
@@ -219,6 +216,9 @@ gsap.utils.toArray([".about__eyebrow", ".about__statement", ".about__lead", ".pr
         }
     });
 
+    tl.fromTo(footer,
+        { clipPath: 'inset(100% 0 0 0)' },
+        { clipPath: 'inset(0% 0 0 0)', ease: 'none', duration: 1 }, 0);
     tl.to(left,  { xPercent: 0, ease: 'none', duration: 1 }, 0);
     tl.to(right, { xPercent: 0, ease: 'none', duration: 1 }, 0);
     tl.to(letters, {
