@@ -792,14 +792,6 @@
    z-index: 0;
 }
 
-/* Les deux faces sont pleines : un carré rose derrière, un carré bleu
-   translucide devant, comme le grand carré bleu du décor. Le contour seul
-   de l'accueil lisait comme un cadre vide. */
-.pj-keys__cube .skills__cube-face--front {
-   border: 0;
-   background: rgba(112, 163, 188, 0.42);
-}
-
 .pj-bento {
    display: grid;
    grid-template-columns: repeat(4, minmax(0, 1fr));

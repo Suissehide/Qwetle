@@ -1021,7 +1021,9 @@ html.lenis body {
 }
 
 .skills__cube-face--front {
-   border: 2px solid rgba(47, 65, 87, 0.55);
+   /* Face pleine et translucide, comme le grand carré bleu du décor : un
+      contour seul lisait comme un cadre vide. */
+   background: rgba(112, 163, 188, 0.42);
    transform: rotate(-12deg);
 }
 
