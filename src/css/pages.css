@@ -1526,30 +1526,6 @@
    grid-area: form;
 }
 
-/* La pilule dans le titre : le cube flou du logo, coupé en gélule rose.
-   Dimensionnée en em pour suivre le corps du titre à toutes les largeurs. */
-.ct-pill {
-   position: relative;
-   display: inline-block;
-   width: 1.55em;
-   height: 0.64em;
-   margin: 0 0.06em;
-   vertical-align: -0.04em;
-   border-radius: 999px;
-   overflow: hidden;
-   background: linear-gradient(135deg, #f7c4ce 0%, var(--paradise-pink) 100%);
-   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 10px 24px rgba(233, 71, 103, 0.28);
-}
-
-.ct-pill img {
-   position: absolute;
-   left: -18%;
-   top: -70%;
-   width: 136%;
-   height: auto;
-   will-change: transform;
-}
-
 /* Assez pâle pour rester une teinte sous le verre : à pleine opacité, les
    intitulés du formulaire se perdaient sur la masse sombre. */
 .pg-hero--contact .pj-square {

@@ -128,13 +128,10 @@
 
     /* ---------------------------------------------------------------------
        Décor de marque
-       La pilule du titre tourne sans fin, très lentement. Les cubes
-       flottent sur des durées premières entre elles, pour ne jamais repasser
-       ensemble par la même position. Le carré bleu remonte et pivote pendant
-       que le hero sort de l'écran.
+       Les cubes flottent sur des durées premières entre elles, pour ne
+       jamais repasser ensemble par la même position. Le carré bleu remonte
+       et pivote pendant que le hero sort de l'écran.
        --------------------------------------------------------------------- */
-
-    gsap.to('.ct-pill img', { rotate: 360, duration: 40, ease: 'none', repeat: -1 });
 
     [11, 13, 17].forEach(function (duree, i) {
         gsap.to('.pg-hero__cube--' + (i + 1), {
