@@ -64,16 +64,24 @@
 
     <section class="work-hero">
 
+        <!-- Le décor déborde sous le hero : le carré bleu se dissout dans la
+             première liste et les petits carrés de la palette franchissent la
+             frontière au défilement. Aucune coupure entre l'en-tête et le corps. -->
         <div class="work-hero__decor" aria-hidden="true">
             <span class="pj-square"><img src="../assets/background/grand-cube-bleu.svg" alt=""></span>
             <span class="pj-cube work-hero__cube--1"><img src="../assets/logo/cube-flou_logo_GRAND.svg" alt=""></span>
             <span class="pj-cube work-hero__cube--2"><img src="../assets/logo/cube-flou_logo_PETIT.svg" alt=""></span>
             <span class="pj-cube work-hero__cube--3"><img src="../assets/logo/cube-flou_logo_GRAND.svg" alt=""></span>
+            <span class="work-chip work-chip--pink" style="--x: 46%; --y: 64%; --s: 22px; --tilt: 14deg;" data-speed="1.4"></span>
+            <span class="work-chip work-chip--cherry" style="--x: 66%; --y: 78%; --s: 34px; --tilt: -9deg;" data-speed="0.8"></span>
+            <span class="work-chip work-chip--charcoal" style="--x: 8%; --y: 88%; --s: 14px; --tilt: 22deg;" data-speed="1.1"></span>
+            <span class="work-chip work-chip--pink" style="--x: 30%; --y: 108%; --s: 18px; --tilt: -18deg;" data-speed="1.7"></span>
+            <span class="work-chip work-chip--cherry" style="--x: 88%; --y: 118%; --s: 46px; --tilt: 8deg;" data-speed="0.6"></span>
+            <span class="work-chip work-chip--charcoal" style="--x: 50%; --y: 132%; --s: 12px; --tilt: 35deg;" data-speed="1.3"></span>
         </div>
 
         <div class="work-hero__inner work__inner">
-            <p class="about__eyebrow">Réalisations</p>
-            <h1 class="work-hero__title">Une sélection de projets, <em>d’hier à aujourd’hui</em>.</h1>
+            <h1 class="work-hero__title">Des outils qui tournent, <em>des idées qui restent en ligne</em>.</h1>
             <p class="work-hero__lead">Chaque fois un défi différent, un contexte différent, et la même
                 obsession du détail&nbsp;: des outils qui tournent tous les jours chez ceux qui les
                 utilisent, et des expériences laissées en ligne pour que vous puissiez les essayer.</p>
@@ -202,11 +210,19 @@
         </div>
     </section>
 
-    <div class="work-end"></div>
-
+    <!-- Le décor du bloc d'appel remonte sur la fin de la liste : carré bleu
+         dissous vers le haut et petits carrés en dérive. Pas de bande, pas
+         d'espaceur, la liste coule dans l'appel. -->
     <section class="pj-cta">
-        <span class="pj-square" aria-hidden="true"><img src="../assets/background/grand-cube-bleu.svg" alt=""></span>
-        <span class="pj-cube" aria-hidden="true"><img src="../assets/logo/cube-flou_logo_GRAND.svg" alt=""></span>
+        <div class="pj-cta__decor" aria-hidden="true">
+            <span class="pj-square"><img src="../assets/background/grand-cube-bleu.svg" alt=""></span>
+            <span class="pj-cube"><img src="../assets/logo/cube-flou_logo_GRAND.svg" alt=""></span>
+            <span class="work-chip work-chip--pink" style="--x: 14%; --y: -6%; --s: 20px; --tilt: 12deg;" data-speed="1.5"></span>
+            <span class="work-chip work-chip--cherry" style="--x: 78%; --y: -14%; --s: 40px; --tilt: -14deg;" data-speed="0.7"></span>
+            <span class="work-chip work-chip--charcoal" style="--x: 60%; --y: 4%; --s: 12px; --tilt: 30deg;" data-speed="1.2"></span>
+            <span class="work-chip work-chip--pink" style="--x: 90%; --y: 40%; --s: 16px; --tilt: -22deg;" data-speed="1.8"></span>
+            <span class="work-chip work-chip--cherry" style="--x: 6%; --y: 62%; --s: 28px; --tilt: 6deg;" data-speed="0.9"></span>
+        </div>
         <div class="work__inner pj-cta__inner">
             <h2 class="pj-cta__title">Un projet à mettre <em>en ligne</em>&nbsp;?</h2>
             <p class="pj-cta__text">Décrivez-le en quelques lignes. Nous répondons sous 48&nbsp;heures ouvrées, avec des questions, un délai et un ordre de prix.</p>

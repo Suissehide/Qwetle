@@ -515,21 +515,35 @@ html.lenis body {
    align-items: center;
 }
 
-/* Colonne texte, sur le bleu */
+/* Colonne texte, sur le bleu. Le retrait haut vaut la barre fixe : le
+   contenu est centré dans l'écran, et le surtitre ne doit pas passer sous
+   elle sur les fenêtres basses. */
 .project__aside {
-   padding: 0 90px 0 80px;
+   padding: 70px 90px 0 80px;
 }
 
 .project-header {
    text-align: left;
-   margin-bottom: 44px;
+   margin-bottom: 34px;
+}
+
+/* Surtitre, dans le même registre que ceux de « À propos » et
+   « Compétences » plus bas : le nom de la section en petit, la phrase en
+   grand. Rose pâle, seul rose lisible sur le bleu du carré. */
+.project__eyebrow {
+   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+   font-size: 12px;
+   letter-spacing: 2px;
+   text-transform: uppercase;
+   color: var(--cherry-blossom-pink);
+   margin-bottom: 16px;
 }
 
 .section-title {
    font-family: "Staatliches Regular", serif;
-   font-size: 64px;
+   font-size: 56px;
    color: var(--baby-powder);
-   line-height: 1;
+   line-height: 1.02;
    margin-bottom: 14px;
 }
 
@@ -875,12 +889,23 @@ html.lenis body {
    border-bottom: 1px solid rgba(47, 65, 87, 0.16);
 }
 
-.practice__index {
-   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
-   font-size: 12px;
-   letter-spacing: 2px;
-   color: rgba(47, 65, 87, 0.4);
-   padding-top: 8px;
+/* Le petit carré rose pivoté du logo, en repère de ligne : il remplace le
+   numéro d'index, qui n'apportait rien à une liste qui n'est pas un
+   classement. Même marqueur que .work-row__mark et .pj-gain sur /projects. */
+.practice__mark {
+   display: block;
+   width: 12px;
+   height: 12px;
+   margin-top: 14px;
+   border-radius: 3px;
+   background: var(--cherry-blossom-pink);
+   transform: rotate(14deg);
+   transition: background-color 0.25s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.practice__item:hover .practice__mark {
+   background: var(--paradise-pink);
+   transform: rotate(104deg);
 }
 
 .practice__title {
@@ -1023,12 +1048,24 @@ html.lenis body {
    margin-bottom: 18px;
 }
 
-.skills__index, .skills__count {
+.skills__count {
    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
    font-size: 12px;
    letter-spacing: 2px;
    color: rgba(47, 65, 87, 0.4);
    transition: color 0.3s ease;
+}
+
+/* Même carré rose que les lignes de /projects, aligné sur la ligne de base
+   du nom de famille. */
+.skills__mark {
+   display: block;
+   width: 12px;
+   height: 12px;
+   border-radius: 3px;
+   background: var(--cherry-blossom-pink);
+   transform: rotate(14deg);
+   transition: background-color 0.25s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .skills__label {
@@ -1039,10 +1076,11 @@ html.lenis body {
    color: var(--charcoal);
 }
 
-/* Le numéro passe au rose au survol de la ligne entière : le repère se
-   déplace avec le regard sans qu'aucun texte ne bouge. */
-.skills__group:hover .skills__index {
-   color: var(--paradise-pink);
+/* Le carré passe au rose vif et pivote au survol de la ligne entière : le
+   repère se déplace avec le regard sans qu'aucun texte ne bouge. */
+.skills__group:hover .skills__mark {
+   background: var(--paradise-pink);
+   transform: rotate(104deg);
 }
 
 /* Décalage aligné sur la colonne du numéro : les technos commencent sous le
@@ -1350,10 +1388,10 @@ html.lenis body {
 |--------------------------------------------------------------------------
 | Footer
 |--------------------------------------------------------------------------
-| Pied de page plein écran, fixé sous la page. Un espace vide de 100vh
-| (.footer-space) donne la course : au fil du défilement, le rideau charcoal
-| monte (clip-path piloté par script.js), les lettres du mot-marque sortent de
-| leur masque et les liens se dévoilent. Sans GSAP, ou sous mouvement réduit,
+| Pied de page plein écran, fixé derrière la page. Un espace vide de 100vh
+| (.footer-space) donne la course : au fil du défilement, la page se retire et
+| le découvre, les lettres du mot-marque sortent de leur masque et les liens se
+| dévoilent. Sans GSAP, ou sous mouvement réduit,
 | <html> ne reçoit pas la classe footer-reveal : le pied de page reste alors
 | un bloc ordinaire en fin de flux, complet et lisible.
 */
@@ -1384,12 +1422,38 @@ html.footer-reveal .footer {
    position: fixed;
    inset: 0;
    min-height: 0;
-   /* Au-dessus de la barre de navigation (10) et des aperçus qui suivent le
-      curseur (50, .cursor-label et .work-preview) : le rideau recouvre tout. */
-   z-index: 60;
+   /* Derrière la page, et non plus par-dessus : le pied de page n'est pas
+      animé (voir la timeline dans js/script.js), il attend là et c'est la
+      page qui se retire pour le découvrir. */
+   z-index: 0;
    visibility: hidden;
-   clip-path: inset(100% 0 0 0);
-   will-change: clip-path;
+}
+
+/* La page passe au-dessus du pied de page fixé et doit être opaque : sans
+   fond, on le verrait par transparence dès le haut de la page. L'espace vide
+   (.footer-space), lui, reste transparent — c'est par lui qu'on découvre le
+   pied de page en fin de défilement. */
+html.footer-reveal body > main {
+   position: relative;
+   z-index: 1;
+   background-color: var(--baby-powder);
+}
+
+/* La barre de navigation reste au-dessus du pied de page découvert : elle est
+   fixe, et le pied de page passe désormais derrière la page, pas devant. Les
+   trois ordres ne peuvent pas être satisfaits ensemble — page au-dessus du
+   pied de page, pied de page au-dessus de la barre, barre au-dessus de la
+   page forment un cycle. La première ligne se décale donc sous la barre au
+   lieu de se cacher dessous. */
+html.footer-reveal .footer__top {
+   padding-top: calc(70px + 44px);
+}
+
+@media (max-width: 899.98px) {
+
+   html.footer-reveal .footer__top {
+      padding-top: calc(64px + 36px);
+   }
 }
 
 /* Deux halos, rose en bas à gauche et bleu en haut à droite, pour que le
@@ -1548,30 +1612,42 @@ html.footer-reveal .footer {
    position: relative;
    z-index: 1;
    display: flex;
-   justify-content: space-between;
+   /* Aligné à gauche, comme le logo de la barre de navigation. En
+      `space-between`, les six lettres étaient écartées sur toute la largeur :
+      la répartition avait été réglée pour Staatliches, qui est condensée et
+      remplissait la ligne d'elle-même. Comfortaa, plus large mais posée à une
+      taille bien moindre, y laissait de grands trous. Le carré rose retrouve
+      du même coup sa place juste après le mot, comme le point du logo. */
+   justify-content: flex-start;
    align-items: flex-end;
-   /* Le remplissage bas laisse la place à la queue du Q sous la ligne de
-      base : sans lui, elle passe sous le bord de l'écran. */
-   padding: 0 2vw 0.09em;
+   /* Le remplissage bas laisse la place au jambage du q sous la ligne de
+      base : sans lui, il passe sous le bord de l'écran. Plus profond que
+      pour le Q de Staatliches, dont la queue descendait à peine. */
+   padding: 0 2vw 0.24em;
    margin-top: auto;
    /* Comfortaa, comme le logo : le nom se lit en bas de page exactement comme
       en haut de la barre de navigation. La fonte est large là où Staatliches
       était condensée, d'où une taille très inférieure pour que les six
       lettres et le carré tiennent sur une seule ligne. */
    font-family: "Comfortaa Bold", serif;
-   font-size: clamp(54px, 12.5vw, 230px);
-   letter-spacing: -0.02em;
+   /* Relevée maintenant que le mot n'est plus étiré : il tient sa ligne de
+      lui-même, sans atteindre le bord droit. */
+   font-size: clamp(60px, 18vw, 290px);
+   letter-spacing: -0.03em;
    line-height: 0.82;
    color: var(--baby-powder);
    white-space: nowrap;
    user-select: none;
 }
 
+/* Le masque du roulement de lettres. Sa réserve basse doit couvrir le
+   jambage, sinon `overflow: hidden` le tranche avant même le bord de
+   l'écran ; la marge négative annule la place prise. */
 .footer__letter {
    display: inline-block;
    overflow: hidden;
-   padding: 0.08em 0.04em 0.16em;
-   margin: -0.08em -0.04em -0.16em;
+   padding: 0.08em 0.04em 0.26em;
+   margin: -0.08em -0.04em -0.26em;
 }
 
 .footer__letter > span {
@@ -1648,7 +1724,7 @@ html.footer-reveal .footer {
       top: 44%;
    }
    .footer__name {
-      padding: 0 16px 0.16em;
+      padding: 0 16px 0.24em;
    }
 }
 
@@ -1667,7 +1743,7 @@ html.footer-reveal .footer {
 
 @media (max-width: 1280px) {
    .project__aside {
-      padding: 0 60px 0 50px;
+      padding: 70px 60px 0 50px;
    }
    .section-title {
       font-size: 54px;
@@ -1685,6 +1761,21 @@ html.footer-reveal .footer {
 @media (max-width: 899.98px), (prefers-reduced-motion: reduce) {
    .project {
       height: auto;
+   }
+   /* Empilée, la section n'a plus le troisième écran du dégradé que .about
+      prolonge en mode épinglé : le fond rose s'arrêtait net à la jonction.
+      Un voile clair sur les derniers 340px le résorbe dans le fond de page,
+      sous le contenu (.project__inner est au-dessus, en z-index 1). */
+   .project::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -1px;
+      height: 340px;
+      z-index: 0;
+      pointer-events: none;
+      background: linear-gradient(to bottom, rgba(255, 253, 249, 0) 0%, var(--baby-powder) 92%, var(--baby-powder) 100%);
    }
    /* Le carré ne peut pas simplement disparaître : son débordement de 240px
       vers le haut *est* la forme bleue en bas du hero, qui doit rester
@@ -1823,8 +1914,8 @@ html.footer-reveal .footer {
       gap: 12px;
       padding: 34px 0;
    }
-   .practice__index {
-      padding-top: 0;
+   .practice__mark {
+      margin-top: 6px;
    }
    .about__skills {
       margin-top: 80px;

@@ -150,12 +150,20 @@
 |--------------------------------------------------------------------------
 | Index — hero
 |--------------------------------------------------------------------------
+| Texte à gauche, décor à droite. Rien ne sépare l'en-tête du corps : le
+| dégradé s'éteint dans le fond de page sur le bas de la section, le carré
+| bleu passe sous la première liste en se dissolvant, et les petits carrés de
+| la palette franchissent la frontière au défilement.
 */
 
 .work-hero {
    position: relative;
-   overflow: hidden;
-   background: linear-gradient(165deg, #fffdf9 0%, #fff4f6 45%, #f9d6dd 100%);
+   z-index: 0;
+   /* Deux couches : le fondu vers le fond de page par-dessus, le dégradé
+      rose en dessous. La section n'a donc pas de bord bas visible. */
+   background:
+      linear-gradient(to bottom, rgba(255, 253, 249, 0) 50%, var(--baby-powder) 100%),
+      linear-gradient(165deg, #fffdf9 0%, #fff4f6 45%, #f9d6dd 100%);
 }
 
 .work-hero__inner {
@@ -163,22 +171,22 @@
    z-index: 1;
    /* 170px : les 70px de barre fixe, plus la respiration retenue sur /contact. */
    padding-top: 170px;
-   /* Court : la liste doit arriver dans la foulée du chapô, pas après un
-      écran de vide. Le fondu du décor fait la transition, pas l'espace. */
-   padding-bottom: 64px;
+   padding-bottom: 120px;
 }
 
+/* Le décor déborde de la moitié d'un écran sous le hero : c'est lui qui fait
+   la liaison avec la liste. Le rognage n'est que latéral, porté par <main>. */
 .work-hero__decor {
    position: absolute;
-   inset: 0;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: -55vh;
    z-index: 0;
    pointer-events: none;
 }
 
-/* Fondu vers le fond de page sur le tiers bas du hero : le carré et le
-   dégradé rose s'éteignent dans le clair au lieu d'être tranchés net à la
-   frontière de la section. Posé sur le décor, donc sous le texte. */
-.work-hero__decor::after,
+/* Fondu vers le fond de page sur le tiers bas du hero des pages projet. */
 .pj-hero__decor::after {
    content: "";
    position: absolute;
@@ -191,32 +199,35 @@
    background: linear-gradient(to bottom, rgba(255, 253, 249, 0) 0%, var(--baby-powder) 90%, var(--baby-powder) 100%);
 }
 
-/* Le carré bleu ancré en bas à droite, aux trois quarts hors cadre : c'est
-   la forme du hero de l'accueil, ramenée à un rappel. */
+/* Le carré bleu ancré à droite, à cheval sur la frontière : son bas se
+   dissout par un masque, si bien qu'il s'efface sous les premières lignes
+   au lieu d'être tranché. Assez pâle pour passer derrière le texte. */
 .work-hero .pj-square {
-   right: -18vw;
-   bottom: -34vw;
-   width: clamp(480px, 58vw, 980px);
-   opacity: 0.92;
+   right: -14vw;
+   top: 38%;
+   width: clamp(440px, 52vw, 900px);
+   opacity: 0.55;
+   -webkit-mask-image: linear-gradient(to bottom, #000 30%, rgba(0, 0, 0, 0) 78%);
+   mask-image: linear-gradient(to bottom, #000 30%, rgba(0, 0, 0, 0) 78%);
 }
 
-/* Cantonnés à la moitié droite : la colonne de texte est bornée à 46ch et ne
+/* Les cubes flous restent dans la moitié droite : la colonne de texte ne
    les atteint jamais, quelle que soit la largeur de fenêtre. */
 .work-hero__cube--1 {
    width: clamp(150px, 17vw, 250px);
-   top: 18%;
+   top: 14%;
    right: 12%;
 }
 
 .work-hero__cube--2 {
    width: clamp(70px, 8vw, 110px);
-   top: 60%;
+   top: 44%;
    right: 36%;
 }
 
 .work-hero__cube--3 {
    width: clamp(100px, 11vw, 165px);
-   top: 68%;
+   top: 50%;
    right: 2%;
 }
 
@@ -225,8 +236,8 @@
    font-size: clamp(38px, 5.6vw, 78px);
    line-height: 1.06;
    letter-spacing: -0.5px;
-   /* 22ch : la phrase tient sur deux lignes, jamais trois. */
-   max-width: 22ch;
+   /* 30ch : la phrase tient sur deux lignes en desktop, trois au plus. */
+   max-width: 30ch;
    margin-bottom: 36px;
 }
 
@@ -245,6 +256,45 @@
 
 /*
 |--------------------------------------------------------------------------
+| Carrés de la palette
+|--------------------------------------------------------------------------
+| Le marqueur des lignes (.work-row__mark), agrandi et semé dans les décors :
+| les trois couleurs du site, une inclinaison propre à chacun. Placés en
+| pourcentage du décor (--x, --y), ils peuvent dépasser 100 % pour tomber
+| dans la section suivante. Le script les fait dériver au défilement à des
+| vitesses différentes (data-speed) : c'est ce mouvement qui coud les
+| sections entre elles.
+*/
+
+.work-chip {
+   position: absolute;
+   left: var(--x);
+   top: var(--y);
+   width: var(--s);
+   height: var(--s);
+   border-radius: calc(var(--s) / 5);
+   transform: rotate(var(--tilt, 0deg));
+   pointer-events: none;
+   will-change: transform;
+}
+
+.work-chip--pink {
+   background: var(--paradise-pink);
+   opacity: 0.55;
+}
+
+.work-chip--cherry {
+   background: var(--cherry-blossom-pink);
+   opacity: 0.7;
+}
+
+.work-chip--charcoal {
+   background: var(--charcoal);
+   opacity: 0.22;
+}
+
+/*
+|--------------------------------------------------------------------------
 | Index — les deux familles
 |--------------------------------------------------------------------------
 | « Projets » d'un côté, « Lab » de l'autre. L'intertitre porte la distinction
@@ -253,6 +303,8 @@
 */
 
 .work-group {
+   position: relative;
+   z-index: 1;
    padding-top: 48px;
 }
 
@@ -419,11 +471,6 @@
    height: 100%;
    object-fit: cover;
    opacity: 0;
-}
-
-/* Espace entre la dernière liste et le bloc d'appel. */
-.work-end {
-   height: 56px;
 }
 
 /*
@@ -1014,31 +1061,60 @@
 |--------------------------------------------------------------------------
 | Appel à l'action (page projet et index)
 |--------------------------------------------------------------------------
-| Bande charcoal, le grand carré bleu en haut à gauche et un cube flou rose
-| en bas à droite. Le seul bloc du site où le rose vif est posé sur du sombre :
-| il y reste lisible parce qu'il ne porte que le bouton.
+| Posé à même le fond de page, sans bande de couleur : c'est le dernier bloc
+| avant le pied de page, et celui-ci arrive en rideau charcoal à coins
+| arrondis. Deux aplats sombres bout à bout auraient annulé l'effet — le
+| rideau ne se serait pas détaché, et l'arrondi ne se serait pas vu. Restent
+| le grand carré bleu en haut à gauche et le cube flou rose en bas à droite.
 */
 
 .pj-cta {
    position: relative;
    overflow: hidden;
    padding: 150px 0 170px;
-   background: var(--charcoal);
-   color: var(--baby-powder);
+   background: var(--baby-powder);
+   color: var(--charcoal);
 }
 
+/* Réduit à un angle, et non plus à une masse : sur le fond clair, le carré
+   passe derrière un texte sombre et centré. Le bord droit s'arrête avant la
+   colonne de texte (16ch centrés), sinon il la couperait en deux. */
 .pj-cta .pj-square {
-   left: -14vw;
-   top: -32vw;
-   width: clamp(600px, 70vw, 1200px);
-   opacity: 0.85;
+   left: -16vw;
+   top: -26vw;
+   width: clamp(420px, 46vw, 760px);
+   opacity: 0.38;
 }
 
 .pj-cta .pj-cube {
    right: -4%;
    bottom: -18%;
    width: clamp(220px, 26vw, 420px);
-   opacity: 0.7;
+   opacity: 0.55;
+}
+
+/* Sur l'index, le bloc ne rogne plus vers le haut : le décor remonte sur la
+   fin de la liste. Le rognage reste latéral et en bas, par clip-path, pour
+   que le cube ne déborde pas sur le rideau du pied de page. */
+.work .pj-cta {
+   overflow: visible;
+   z-index: 0;
+   clip-path: inset(-100vh 0 0 0);
+   padding-top: 190px;
+}
+
+.work .pj-cta__decor {
+   position: absolute;
+   inset: 0;
+   pointer-events: none;
+}
+
+/* Le carré bleu remonte de deux tiers sur la liste et se dissout vers le
+   haut : il apparaît sous les dernières lignes avant que l'appel commence. */
+.work .pj-cta .pj-square {
+   top: -34vw;
+   -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 18%, #000 60%);
+   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 18%, #000 60%);
 }
 
 .pj-cta__inner {
@@ -1058,20 +1134,16 @@
 
 .pj-cta__title em {
    font-style: normal;
-   color: var(--cherry-blossom-pink);
+   color: var(--paradise-pink);
 }
 
 .pj-cta__text {
    font-family: "Comfortaa Regular", serif;
    font-size: 16px;
    line-height: 1.85;
-   color: rgba(255, 253, 249, 0.72);
+   color: rgba(47, 65, 87, 0.72);
    max-width: 48ch;
    margin: 0 auto 40px;
-}
-
-.pj-cta .pj-btn--primary:focus-visible {
-   outline-color: var(--baby-powder);
 }
 
 /*
@@ -1195,7 +1267,15 @@
 
    .work-hero__inner {
       padding-top: 130px;
-      padding-bottom: 44px;
+      padding-bottom: 80px;
+   }
+
+   .work-hero__decor {
+      bottom: -30vh;
+   }
+
+   .work .pj-cta {
+      padding-top: 130px;
    }
 
    .work-hero__cube--1,
@@ -1232,10 +1312,6 @@
    .work-row__go,
    .work-cursor {
       display: none;
-   }
-
-   .work-end {
-      height: 36px;
    }
 
    .pj-hero {
@@ -1353,9 +1429,10 @@
    }
 
    .pj-cta .pj-square {
-      left: -60vw;
-      top: -60vw;
-      width: 150vw;
+      left: -62vw;
+      top: -52vw;
+      width: 120vw;
+      opacity: 0.3;
    }
 }
 
@@ -1399,5 +1476,42 @@
 
    .work-cursor {
       display: none;
+   }
+}
+
+/* Sous 768px, le carré bleu remonterait derrière le chapô : il est repoussé
+   vers l'angle, plus pâle, et les grands carrés de la palette se font plus
+   discrets. */
+@media (max-width: 767.98px) {
+   .work-hero .pj-square {
+      right: -58vw;
+      top: 58%;
+      width: 130vw;
+      opacity: 0.3;
+   }
+
+   /* Le hero est court : les carrés semés au-delà tombent sur les lignes.
+      Plus petits et plus pâles, ils passent derrière le texte sans le gêner. */
+   .work-chip {
+      width: calc(var(--s) * 0.7);
+      height: calc(var(--s) * 0.7);
+   }
+
+   .work-chip--pink {
+      opacity: 0.32;
+   }
+
+   .work-chip--cherry {
+      opacity: 0.42;
+   }
+
+   .work-chip--charcoal {
+      opacity: 0.12;
+   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+   .work-chip {
+      will-change: auto;
    }
 }

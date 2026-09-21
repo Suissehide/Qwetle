@@ -1,0 +1,1486 @@
+/* PAGES
+   Styles des deux pages éditoriales : /about et /work. Chargé après
+   projects.css, dont ces pages reprennent les primitives de marque :
+   .pj-glass, .pj-btn, .pj-square, .pj-cube, .pj-bento, .pj-marquee et le
+   bloc d'appel .pj-cta. Rien n'est redéfini ici de ce qui existe déjà : ce
+   fichier ne porte que le hero commun aux deux pages et les composants qui
+   leur sont propres.
+
+   Aucun numéro d'index nulle part : les listes sont marquées du petit carré
+   rose pivoté du logo, comme sur /projects.
+*/
+
+.ab,
+.xp {
+   background-color: var(--baby-powder);
+   color: var(--charcoal);
+   /* Les carrés et cubes de décor débordent volontairement du cadre. */
+   overflow-x: hidden;
+   overflow-x: clip;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Hero commun aux deux pages
+|--------------------------------------------------------------------------
+| Même dégradé et même décor que le hero de /projects, mais la colonne de
+| texte est plus large : ces deux pages ouvrent sur une phrase, pas sur une
+| liste.
+*/
+
+/* Trois pages, trois en-têtes. Le socle est commun : dégradé, décor, colonne
+   de texte. Chaque page pose ensuite sa variante : centrée pour /about, en
+   deux colonnes avec le jeu de cartes pour /work (l'index des projets a la
+   sienne dans projects.css). Le rognage est porté par le décor et non par la
+   section, pour que les éléments de liaison puissent déborder sur la suite. */
+.pg-hero {
+   position: relative;
+   background: linear-gradient(165deg, #fffdf9 0%, #fff4f6 45%, #f9d6dd 100%);
+}
+
+.pg-hero__decor {
+   position: absolute;
+   inset: 0;
+   z-index: 0;
+   overflow: hidden;
+   pointer-events: none;
+}
+
+/* Fondu vers le fond de page sur le tiers bas : le carré et le dégradé
+   s'éteignent dans le clair au lieu d'être coupés net. */
+.pg-hero__decor::after {
+   content: "";
+   position: absolute;
+   left: 0;
+   right: 0;
+   bottom: -1px;
+   height: 42%;
+   background: linear-gradient(to bottom, rgba(255, 253, 249, 0) 0%, var(--baby-powder) 90%, var(--baby-powder) 100%);
+}
+
+.pg-hero__inner {
+   position: relative;
+   z-index: 1;
+   /* 170px : les 70px de barre fixe, plus la respiration retenue ailleurs. */
+   padding-top: 170px;
+   padding-bottom: 96px;
+}
+
+.pg-hero__title {
+   font-family: "Staatliches Regular", serif;
+   font-size: clamp(40px, 5.4vw, 76px);
+   line-height: 1.06;
+   letter-spacing: -0.5px;
+   /* 20ch : la phrase tient sur trois lignes au plus, jamais davantage. */
+   max-width: 20ch;
+   margin-bottom: 34px;
+}
+
+.pg-hero__title em {
+   font-style: normal;
+   color: var(--paradise-pink);
+}
+
+.pg-hero__lead {
+   font-family: "Comfortaa Regular", serif;
+   font-size: 16px;
+   line-height: 1.85;
+   color: rgba(47, 65, 87, 0.72);
+   max-width: 46ch;
+   margin-bottom: 40px;
+}
+
+.pg-hero__actions {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 14px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| /about — en-tête centré et bandeau de liaison
+|--------------------------------------------------------------------------
+| Le texte est au centre, le grand carré bleu derrière lui, estompé, les cubes
+| de part et d'autre. Le bandeau incliné remonte sur le bas de la section.
+*/
+
+.pg-hero--about .pg-hero__inner {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   text-align: center;
+   padding-bottom: 170px;
+}
+
+.pg-hero--about .pg-hero__title {
+   font-size: clamp(42px, 6vw, 86px);
+   max-width: 22ch;
+}
+
+.pg-hero--about .pg-hero__lead {
+   max-width: 58ch;
+}
+
+.pg-hero--about .pg-hero__actions {
+   justify-content: center;
+}
+
+.pg-hero--about .pj-square {
+   left: 50%;
+   top: 46%;
+   right: auto;
+   bottom: auto;
+   width: clamp(560px, 64vw, 1120px);
+   margin-left: clamp(-560px, -32vw, -280px);
+   /* Assez pâle pour rester un décor sous le chapô et les boutons : le
+      titre, lui, passe au-dessus de son bord. */
+   opacity: 0.2;
+}
+
+.pg-hero--about .pg-hero__cube--1 {
+   width: clamp(150px, 16vw, 240px);
+   top: 22%;
+   left: 6%;
+   right: auto;
+}
+
+.pg-hero--about .pg-hero__cube--2 {
+   width: clamp(70px, 8vw, 110px);
+   top: 66%;
+   left: 20%;
+   right: auto;
+}
+
+.pg-hero--about .pg-hero__cube--3 {
+   width: clamp(120px, 13vw, 200px);
+   top: 24%;
+   right: 5%;
+}
+
+.ab-band {
+   position: relative;
+   z-index: 2;
+   margin-top: -74px;
+   padding: 30px 0 10px;
+   overflow: hidden;
+}
+
+/* Plus large que l'écran et incliné : les bords ne se voient jamais, et
+   l'inclinaison casse la ligne droite entre les deux sections. */
+.ab-band__strip {
+   margin: 0 -40px;
+   padding: 18px 0;
+   transform: rotate(-2deg);
+   background: rgba(255, 255, 255, 0.58);
+   -webkit-backdrop-filter: blur(20px) saturate(1.5);
+   backdrop-filter: blur(20px) saturate(1.5);
+   border-top: 1px solid rgba(255, 255, 255, 0.9);
+   border-bottom: 1px solid rgba(255, 255, 255, 0.9);
+   box-shadow: 0 24px 60px rgba(47, 65, 87, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.ab-band__track {
+   display: flex;
+   width: max-content;
+   animation: ab-band 44s linear infinite;
+}
+
+.ab-band:hover .ab-band__track {
+   animation-play-state: paused;
+}
+
+.ab-band__group {
+   display: flex;
+   align-items: center;
+   list-style: none;
+}
+
+.ab-band__group li {
+   display: inline-flex;
+   align-items: center;
+   gap: 34px;
+   padding-right: 34px;
+   font-family: "Staatliches Regular", serif;
+   font-size: clamp(28px, 3.2vw, 46px);
+   letter-spacing: 2px;
+   color: var(--charcoal);
+   white-space: nowrap;
+}
+
+.ab-band__group .pg-mark {
+   width: 14px;
+   height: 14px;
+}
+
+@keyframes ab-band {
+   to {
+      transform: translateX(-50%);
+   }
+}
+
+/*
+|--------------------------------------------------------------------------
+| /work — en-tête en deux colonnes et jeu de cartes
+|--------------------------------------------------------------------------
+| Le texte à gauche ; à droite, les quatre terrains en éventail, coque claire
+| et cœur opaque, pivotés autour d'un point situé sous la carte pour que
+| l'ouverture ressemble à une main de cartes. Le jeu déborde sur la pile qui
+| suit : c'est la liaison. js/expertise.js l'ouvre davantage au défilement.
+*/
+
+.pg-hero--split .pg-hero__inner {
+   display: grid;
+   /* La colonne de texte garde la place des deux boutons sur une ligne. */
+   grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+   gap: 30px;
+   align-items: center;
+   padding-bottom: 40px;
+}
+
+.pg-hero--split .pg-hero__title {
+   font-size: clamp(38px, 4.9vw, 68px);
+   max-width: 18ch;
+}
+
+.pg-hero--split .pj-square {
+   right: -22vw;
+   bottom: -26vw;
+   width: clamp(420px, 50vw, 860px);
+   opacity: 0.8;
+}
+
+.pg-hero--split .pg-hero__cube--1 {
+   top: 8%;
+   right: 4%;
+}
+
+.pg-hero--split .pg-hero__cube--2 {
+   top: 80%;
+   right: 46%;
+}
+
+.pg-hero--split .pg-hero__cube--3 {
+   top: 84%;
+   right: 6%;
+}
+
+.xp-deck {
+   position: relative;
+   height: 470px;
+   margin: 20px 0 -150px;
+   list-style: none;
+}
+
+.xp-deck__card {
+   position: absolute;
+   left: 50%;
+   top: 50%;
+   width: 224px;
+   height: 296px;
+   margin: -160px 0 0 -112px;
+   padding: 7px;
+   border-radius: 26px;
+   background: rgba(255, 255, 255, 0.5);
+   border: 1px solid rgba(255, 255, 255, 0.8);
+   box-shadow: 0 30px 70px rgba(47, 65, 87, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+   -webkit-backdrop-filter: blur(18px) saturate(1.4);
+   backdrop-filter: blur(18px) saturate(1.4);
+   transform-origin: 50% 135%;
+   transform: rotate(var(--r));
+   will-change: transform;
+}
+
+.xp-deck__card:nth-child(1) { z-index: 1; }
+.xp-deck__card:nth-child(2) { z-index: 2; }
+.xp-deck__card:nth-child(3) { z-index: 3; }
+.xp-deck__card:nth-child(4) { z-index: 4; }
+
+.xp-deck__core {
+   height: 100%;
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-end;
+   gap: 12px;
+   padding: 22px 20px;
+   border-radius: 19px;
+   background: rgba(255, 253, 249, 0.84);
+   box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.9);
+}
+
+.xp-deck__core .pg-mark {
+   margin-bottom: auto;
+}
+
+.xp-deck__title {
+   font-family: "Staatliches Regular", serif;
+   font-size: 24px;
+   line-height: 1.1;
+   letter-spacing: 0.5px;
+   color: var(--charcoal);
+}
+
+.xp-deck__line {
+   font-family: "Comfortaa Regular", serif;
+   font-size: 12px;
+   line-height: 1.7;
+   color: rgba(47, 65, 87, 0.62);
+}
+
+/*
+|--------------------------------------------------------------------------
+| Intertitres de section
+|--------------------------------------------------------------------------
+*/
+
+.pg-head {
+   max-width: 52ch;
+   margin-bottom: 52px;
+}
+
+.pg-head__title {
+   font-family: "Staatliches Regular", serif;
+   font-size: clamp(32px, 4.2vw, 56px);
+   line-height: 1.06;
+   letter-spacing: -0.4px;
+   margin-bottom: 18px;
+}
+
+.pg-head__title em {
+   font-style: normal;
+   color: var(--paradise-pink);
+}
+
+.pg-head__lead {
+   font-family: "Comfortaa Regular", serif;
+   font-size: 16px;
+   line-height: 1.85;
+   color: rgba(47, 65, 87, 0.72);
+   max-width: 46ch;
+}
+
+/* Le marqueur de marque, seul repère de liste du site : le petit carré du
+   logo, pivoté de 14 degrés. Il remplace toute numérotation. */
+.pg-mark {
+   display: block;
+   width: 12px;
+   height: 12px;
+   border-radius: 3px;
+   background: var(--paradise-pink);
+   transform: rotate(14deg);
+}
+
+/*
+|--------------------------------------------------------------------------
+| /about — la phrase, révélée mot à mot
+|--------------------------------------------------------------------------
+*/
+
+.ab-idea {
+   /* Le bandeau incliné occupe déjà le haut : moins de vide avant la phrase. */
+   padding: 110px 0 140px;
+}
+
+.ab-idea__text {
+   font-family: "Comfortaa Regular", serif;
+   font-size: clamp(21px, 2.5vw, 34px);
+   line-height: 1.5;
+   color: var(--charcoal);
+   max-width: 1000px;
+   margin-left: 10%;
+}
+
+.ab-idea__text em {
+   font-style: normal;
+   color: var(--paradise-pink);
+}
+
+/*
+|--------------------------------------------------------------------------
+| /about — la méthode, en accordéon horizontal
+|--------------------------------------------------------------------------
+| Quatre tranches côte à côte. Celle qui est ouverte prend trois fois et demie
+| la place des autres ; son fond passe au charcoal, son corps de texte se
+| découvre. Le titre reste écrit à la verticale dans tous les états : c'est
+| ce qui permet à la tranche fermée de rester lisible en 165 pixels de large.
+*/
+
+.ab-method {
+   padding-bottom: 150px;
+}
+
+.ab-acc {
+   display: flex;
+   gap: 14px;
+   height: 520px;
+}
+
+.ab-acc__panel {
+   position: relative;
+   display: flex;
+   align-items: flex-end;
+   gap: 26px;
+   flex: 1 1 0;
+   min-width: 0;
+   padding: 34px 30px;
+   overflow: hidden;
+   text-align: left;
+   color: var(--charcoal);
+   border-radius: 24px;
+   background: rgba(255, 255, 255, 0.46);
+   -webkit-backdrop-filter: blur(20px) saturate(1.5);
+   backdrop-filter: blur(20px) saturate(1.5);
+   border: 1px solid rgba(255, 255, 255, 0.75);
+   box-shadow: 0 24px 60px rgba(47, 65, 87, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+   transition: flex-grow 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+               background-color 0.5s ease,
+               color 0.5s ease,
+               border-color 0.5s ease;
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+   .ab-acc__panel {
+      background: rgba(255, 253, 249, 0.92);
+   }
+}
+
+/* La surface cliquable couvre toute la tranche et porte le nom de l'étape en
+   aria-label : le titre reste un vrai h3 dans le document, et le bouton ne
+   contient aucun contenu de flux. */
+.ab-acc__trigger {
+   position: absolute;
+   inset: 0;
+   z-index: 2;
+   -webkit-appearance: none;
+   appearance: none;
+   background: none;
+   border: 0;
+   cursor: pointer;
+}
+
+.ab-acc__trigger:focus-visible {
+   outline: 2px solid var(--paradise-pink);
+   outline-offset: -5px;
+   border-radius: 24px;
+}
+
+.ab-acc__panel.is-open {
+   flex-grow: 3.4;
+   background: linear-gradient(160deg, rgba(47, 65, 87, 0.97) 0%, rgba(47, 65, 87, 0.88) 100%);
+   border-color: rgba(255, 255, 255, 0.18);
+   color: var(--baby-powder);
+}
+
+/* Le carré rose en haut de la tranche : repère de position dans la suite,
+   sans numéro. Il pivote quand la tranche s'ouvre. */
+.ab-acc__mark {
+   position: absolute;
+   top: 32px;
+   left: 30px;
+   background: var(--cherry-blossom-pink);
+   transition: background-color 0.4s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ab-acc__panel.is-open .ab-acc__mark {
+   background: var(--paradise-pink);
+   transform: rotate(104deg);
+}
+
+.ab-acc__title {
+   flex: 0 0 auto;
+   writing-mode: vertical-rl;
+   transform: rotate(180deg);
+   font-family: "Staatliches Regular", serif;
+   font-size: clamp(22px, 2vw, 30px);
+   letter-spacing: 1.5px;
+   line-height: 1;
+   white-space: nowrap;
+}
+
+.ab-acc__body {
+   min-width: 0;
+   /* 34ch : la colonne reste lisible dans la tranche ouverte et ne dicte
+      jamais la largeur de la tranche fermée, qui la recouvre. */
+   width: 34ch;
+   max-width: 100%;
+   padding-bottom: 4px;
+   opacity: 0;
+   transform: translateX(20px);
+   transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ab-acc__panel.is-open .ab-acc__body {
+   opacity: 1;
+   transform: none;
+   transition-delay: 0.12s;
+}
+
+.ab-acc__text {
+   font-family: "Comfortaa Regular", serif;
+   font-size: 15px;
+   line-height: 1.8;
+   color: rgba(255, 253, 249, 0.78);
+   margin-bottom: 24px;
+}
+
+.ab-acc__gains li {
+   position: relative;
+   padding-left: 26px;
+   font-family: "Comfortaa Regular", serif;
+   font-size: 13px;
+   line-height: 1.7;
+   color: rgba(255, 253, 249, 0.62);
+}
+
+.ab-acc__gains li + li {
+   margin-top: 10px;
+}
+
+.ab-acc__gains li::before {
+   content: "";
+   position: absolute;
+   left: 0;
+   top: 7px;
+   width: 9px;
+   height: 9px;
+   border-radius: 2px;
+   background: var(--cherry-blossom-pink);
+   transform: rotate(14deg);
+}
+
+/*
+|--------------------------------------------------------------------------
+| /about — les repères, en bento
+|--------------------------------------------------------------------------
+| La grille et les cartes viennent de projects.css (.pj-bento, .pj-card) :
+| quatre colonnes, une carte 2x2 et quatre cartes 1x1, soit huit cellules
+| pour huit. Seul le fond de section est propre à cette page.
+*/
+
+.ab-facts {
+   position: relative;
+   overflow: hidden;
+   padding: 130px 0 140px;
+   background:
+      radial-gradient(60% 55% at 8% 0%, rgba(245, 172, 186, 0.6), transparent 70%),
+      radial-gradient(50% 60% at 96% 100%, rgba(112, 163, 188, 0.4), transparent 70%),
+      linear-gradient(180deg, #fffdf9 0%, #fdf0f2 100%);
+}
+
+.ab-facts__inner {
+   position: relative;
+   z-index: 1;
+}
+
+/* Le cube à deux faces des compétences, dans le coin haut droit : il fait
+   son quart de tour pendant la traversée de la section. */
+.ab-facts__cube {
+   position: absolute;
+   top: 64px;
+   right: 5%;
+   width: clamp(150px, 15vw, 230px);
+   aspect-ratio: 1;
+   pointer-events: none;
+   z-index: 0;
+}
+
+/*
+|--------------------------------------------------------------------------
+| /about — la preuve, colonne épinglée
+|--------------------------------------------------------------------------
+| Le titre reste en place à gauche pendant que les captures défilent à
+| droite. Chaque capture grandit en entrant dans l'écran et s'éteint en
+| sortant : le regard n'a qu'une image nette à la fois.
+*/
+
+.ab-proof {
+   padding: 130px 0 150px;
+}
+
+.ab-proof__inner {
+   display: grid;
+   grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+   gap: 80px;
+   align-items: start;
+}
+
+.ab-proof__head .pg-head {
+   margin-bottom: 34px;
+}
+
+.ab-proof__item {
+   display: block;
+   color: inherit;
+}
+
+.ab-proof__item + .ab-proof__item {
+   margin-top: 90px;
+}
+
+.ab-proof__media {
+   display: block;
+   padding: 12px;
+   border-radius: 28px;
+   overflow: hidden;
+   margin-bottom: 20px;
+}
+
+.ab-proof__media img {
+   display: block;
+   width: 100%;
+   height: auto;
+   border-radius: 18px;
+   transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ab-proof__item:hover .ab-proof__media img {
+   transform: scale(1.04);
+}
+
+.ab-proof__item:focus-visible {
+   outline: 2px solid var(--paradise-pink);
+   outline-offset: 6px;
+}
+
+.ab-proof__name {
+   display: flex;
+   align-items: center;
+   gap: 14px;
+   font-family: "Staatliches Regular", serif;
+   font-size: clamp(24px, 2.4vw, 34px);
+   line-height: 1.1;
+   margin-bottom: 8px;
+   transition: color 0.25s ease;
+}
+
+.ab-proof__item:hover .ab-proof__name {
+   color: var(--paradise-pink);
+}
+
+.ab-proof__name .pg-mark {
+   flex: 0 0 auto;
+   background: var(--cherry-blossom-pink);
+   transition: background-color 0.25s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ab-proof__item:hover .pg-mark {
+   background: var(--paradise-pink);
+   transform: rotate(104deg);
+}
+
+.ab-proof__desc {
+   font-family: "Comfortaa Regular", serif;
+   font-size: 15px;
+   line-height: 1.8;
+   color: rgba(47, 65, 87, 0.7);
+   max-width: 48ch;
+   padding-left: 26px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| /work — les domaines, cartes empilées
+|--------------------------------------------------------------------------
+| Chaque carte est collée sous la barre de navigation et se fait recouvrir
+| par la suivante. Le script rétrécit et assombrit celle du dessous à mesure
+| que la suivante arrive : la pile se lit comme un jeu de cartes posé.
+*/
+
+.xp-stack {
+   padding: 130px 0 60px;
+}
+
+.xp-card {
+   position: sticky;
+   top: 100px;
+   display: grid;
+   grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+   gap: 54px;
+   align-items: center;
+   padding: 48px;
+   border-radius: 28px;
+   margin-bottom: 40px;
+   background: linear-gradient(150deg, #fffdf9 0%, #fdeef1 100%);
+   border: 1px solid rgba(255, 255, 255, 0.85);
+   box-shadow: 0 30px 70px rgba(47, 65, 87, 0.14);
+   transform-origin: center top;
+   overflow: hidden;
+}
+
+/* Une carte sur deux renverse le sens de lecture : la pile ne donne pas
+   quatre fois la même page. */
+.xp-card:nth-child(even) .xp-card__body {
+   order: 2;
+}
+
+.xp-card:last-child {
+   margin-bottom: 0;
+}
+
+/* Rappel du carré bleu, hors cadre dans le coin de la carte. */
+.xp-card::after {
+   content: "";
+   position: absolute;
+   right: -70px;
+   top: -70px;
+   width: 210px;
+   height: 210px;
+   border-radius: 46px;
+   background: rgba(112, 163, 188, 0.16);
+   transform: rotate(14deg);
+   pointer-events: none;
+}
+
+.xp-card__kicker {
+   display: flex;
+   align-items: center;
+   gap: 14px;
+   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+   font-size: 12px;
+   letter-spacing: 1.6px;
+   text-transform: uppercase;
+   color: rgba(47, 65, 87, 0.45);
+   margin-bottom: 20px;
+}
+
+.xp-card__title {
+   font-family: "Staatliches Regular", serif;
+   font-size: clamp(30px, 3.4vw, 46px);
+   line-height: 1.05;
+   letter-spacing: -0.3px;
+   margin-bottom: 16px;
+}
+
+.xp-card__text {
+   font-family: "Comfortaa Regular", serif;
+   font-size: 15px;
+   line-height: 1.8;
+   color: rgba(47, 65, 87, 0.72);
+   max-width: 46ch;
+   margin-bottom: 28px;
+}
+
+.xp-card__gains {
+   border-top: 1px solid rgba(47, 65, 87, 0.14);
+}
+
+.xp-card__gains li {
+   position: relative;
+   padding: 14px 0 14px 28px;
+   border-bottom: 1px solid rgba(47, 65, 87, 0.14);
+   font-family: "Comfortaa Regular", serif;
+   font-size: 14px;
+   line-height: 1.7;
+   color: rgba(47, 65, 87, 0.78);
+}
+
+.xp-card__gains li::before {
+   content: "";
+   position: absolute;
+   left: 2px;
+   top: 20px;
+   width: 10px;
+   height: 10px;
+   border-radius: 3px;
+   background: var(--paradise-pink);
+   transform: rotate(14deg);
+}
+
+.xp-card__media {
+   position: relative;
+   z-index: 1;
+   margin: 0;
+   padding: 10px;
+   border-radius: 24px;
+   overflow: hidden;
+}
+
+.xp-card__media img {
+   display: block;
+   width: 100%;
+   height: auto;
+   border-radius: 16px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| /work — la boîte à outils
+|--------------------------------------------------------------------------
+| Titre épinglé à gauche, familles d'outils défilant à droite. Chaque
+| famille porte le carré rose, jamais un numéro.
+*/
+
+.xp-tools {
+   padding: 130px 0 140px;
+}
+
+.xp-tools__inner {
+   display: grid;
+   grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+   gap: 80px;
+   align-items: start;
+}
+
+.xp-tools__list {
+   border-top: 1px solid rgba(47, 65, 87, 0.16);
+}
+
+.xp-family {
+   padding: 30px 0 32px;
+   border-bottom: 1px solid rgba(47, 65, 87, 0.16);
+}
+
+.xp-family:last-child {
+   border-bottom: none;
+}
+
+.xp-family__head {
+   display: flex;
+   align-items: center;
+   gap: 16px;
+   margin-bottom: 18px;
+}
+
+.xp-family__head .pg-mark {
+   flex: 0 0 auto;
+   background: var(--cherry-blossom-pink);
+   transition: background-color 0.25s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.xp-family:hover .pg-mark {
+   background: var(--paradise-pink);
+   transform: rotate(104deg);
+}
+
+.xp-family__label {
+   font-family: "Staatliches Regular", serif;
+   font-size: clamp(24px, 2.4vw, 34px);
+   line-height: 1;
+   letter-spacing: 0.5px;
+}
+
+.xp-family__items {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 8px 24px;
+   padding-left: 28px;
+}
+
+.xp-family__items li {
+   font-family: "Comfortaa Regular", serif;
+   font-size: 14px;
+   color: rgba(47, 65, 87, 0.66);
+}
+
+/*
+|--------------------------------------------------------------------------
+| /work — le déroulé, en défilement horizontal
+|--------------------------------------------------------------------------
+| La section est épinglée et la piste glisse vers la gauche au rythme de la
+| molette. Sous 900px, le script ne l'épingle plus et la piste redevient une
+| colonne (voir le repli plus bas).
+*/
+
+.xp-steps {
+   position: relative;
+   overflow: hidden;
+   padding: 120px 0 130px;
+   background: var(--charcoal);
+   color: var(--baby-powder);
+}
+
+.xp-steps .pj-square {
+   left: -16vw;
+   top: -34vw;
+   width: clamp(600px, 66vw, 1100px);
+   opacity: 0.8;
+}
+
+.xp-steps__inner {
+   position: relative;
+   z-index: 1;
+}
+
+.xp-steps .pg-head__title {
+   color: var(--baby-powder);
+}
+
+.xp-steps .pg-head__title em {
+   color: var(--cherry-blossom-pink);
+}
+
+.xp-steps .pg-head__lead {
+   color: rgba(255, 253, 249, 0.7);
+}
+
+/* Par défaut la piste se parcourt à la main : c'est le repli quand le script
+   ne pose pas le défilement horizontal — sous mouvement réduit, sans GSAP, ou
+   au-dessous du seuil de 900px. Le script ferme le cadre en posant
+   `is-pinned` sur la section, et c'est alors lui qui déplace la piste. */
+.xp-steps__viewport {
+   position: relative;
+   z-index: 1;
+   overflow-x: auto;
+   overflow-y: hidden;
+}
+
+.xp-steps.is-pinned .xp-steps__viewport {
+   overflow: hidden;
+}
+
+/* La première carte s'aligne sur la colonne de texte de la section, et non
+   sur le bord de l'écran : la marge reprend le calcul de .pj__inner — la
+   moitié de ce qui dépasse des 1180px du conteneur, sans jamais descendre
+   sous la gouttière de la page. */
+.xp-steps__track {
+   display: flex;
+   gap: 26px;
+   width: max-content;
+   padding-left: max(60px, calc((100vw - 1180px) / 2));
+   padding-right: 60px;
+}
+
+.xp-step {
+   position: relative;
+   width: 380px;
+   padding: 38px 34px 40px;
+   border-radius: 24px;
+   background: rgba(255, 255, 255, 0.07);
+   border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.xp-step__mark {
+   margin-bottom: 26px;
+}
+
+.xp-step__title {
+   font-family: "Staatliches Regular", serif;
+   font-size: clamp(26px, 2.6vw, 36px);
+   line-height: 1.05;
+   margin-bottom: 14px;
+}
+
+.xp-step__text {
+   font-family: "Comfortaa Regular", serif;
+   font-size: 14px;
+   line-height: 1.8;
+   color: rgba(255, 253, 249, 0.72);
+   margin-bottom: 26px;
+}
+
+.xp-step__out {
+   padding-top: 18px;
+   border-top: 1px solid rgba(255, 255, 255, 0.16);
+   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+   font-size: 11px;
+   letter-spacing: 1.4px;
+   text-transform: uppercase;
+   line-height: 1.8;
+   color: var(--cherry-blossom-pink);
+}
+
+/*
+|--------------------------------------------------------------------------
+| /work — questions fréquentes
+|--------------------------------------------------------------------------
+| Accordéon vertical. La hauteur est animée par `grid-template-rows` qui
+| passe de 0fr à 1fr : pas de hauteur fixe à deviner, et la réponse peut
+| faire trois lignes ou dix.
+*/
+
+.xp-faq {
+   padding: 130px 0 150px;
+}
+
+.xp-faq__list {
+   border-top: 1px solid rgba(47, 65, 87, 0.16);
+}
+
+.xp-faq__item {
+   border-bottom: 1px solid rgba(47, 65, 87, 0.16);
+}
+
+.xp-faq__q {
+   display: flex;
+   align-items: center;
+   gap: 18px;
+   width: 100%;
+   padding: 30px 0;
+   text-align: left;
+   color: inherit;
+   -webkit-appearance: none;
+   appearance: none;
+   background: none;
+   border: 0;
+   cursor: pointer;
+}
+
+.xp-faq__q:focus-visible {
+   outline: 2px solid var(--paradise-pink);
+   outline-offset: 4px;
+}
+
+.xp-faq__q .pg-mark {
+   flex: 0 0 auto;
+   background: var(--cherry-blossom-pink);
+   transition: background-color 0.25s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.xp-faq__item.is-open .pg-mark,
+.xp-faq__q:hover .pg-mark {
+   background: var(--paradise-pink);
+}
+
+.xp-faq__item.is-open .pg-mark {
+   transform: rotate(104deg);
+}
+
+.xp-faq__label {
+   flex: 1 1 auto;
+   font-family: "Staatliches Regular", serif;
+   font-size: clamp(20px, 2.1vw, 28px);
+   line-height: 1.2;
+   letter-spacing: 0.3px;
+   transition: color 0.25s ease;
+}
+
+.xp-faq__q:hover .xp-faq__label {
+   color: var(--paradise-pink);
+}
+
+/* Le chevron est fait de deux traits : aucun fichier d'icône à charger. */
+.xp-faq__sign {
+   position: relative;
+   flex: 0 0 auto;
+   width: 18px;
+   height: 18px;
+}
+
+.xp-faq__sign::before,
+.xp-faq__sign::after {
+   content: "";
+   position: absolute;
+   left: 0;
+   top: 8px;
+   width: 18px;
+   height: 2px;
+   border-radius: 2px;
+   background: rgba(47, 65, 87, 0.5);
+   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease;
+}
+
+.xp-faq__sign::after {
+   transform: rotate(90deg);
+}
+
+.xp-faq__item.is-open .xp-faq__sign::after {
+   transform: rotate(0deg);
+}
+
+.xp-faq__item.is-open .xp-faq__sign::before,
+.xp-faq__item.is-open .xp-faq__sign::after {
+   background: var(--paradise-pink);
+}
+
+.xp-faq__panel {
+   display: grid;
+   grid-template-rows: 0fr;
+   transition: grid-template-rows 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.xp-faq__item.is-open .xp-faq__panel {
+   grid-template-rows: 1fr;
+}
+
+.xp-faq__panel > div {
+   overflow: hidden;
+}
+
+.xp-faq__panel p {
+   font-family: "Comfortaa Regular", serif;
+   font-size: 15px;
+   line-height: 1.85;
+   color: rgba(47, 65, 87, 0.72);
+   max-width: 62ch;
+   padding: 0 0 30px 30px;
+}
+
+.xp-faq__panel a {
+   color: var(--paradise-pink);
+   border-bottom: 1px solid rgba(233, 71, 103, 0.35);
+   transition: border-color 0.25s ease;
+}
+
+.xp-faq__panel a:hover {
+   border-color: var(--paradise-pink);
+}
+
+/* Le déroulé est épinglé pendant son défilement horizontal : la section doit
+   donc tenir dans la fenêtre, sinon son bas resterait hors champ tout du
+   long. La hauteur retranche les marges hautes et basses, le `box-sizing`
+   du site étant en `content-box`. */
+@media (min-width: 900px) {
+
+   .xp-steps.is-pinned {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 90px 0;
+      min-height: calc(100vh - 180px);
+   }
+}
+
+/*
+|--------------------------------------------------------------------------
+| Repli — tablette
+|--------------------------------------------------------------------------
+*/
+
+@media (max-width: 1024px) {
+
+   .ab-idea__text {
+      margin-left: 0;
+   }
+
+   .ab-acc {
+      height: 460px;
+   }
+
+   .ab-acc__body {
+      width: 30ch;
+   }
+
+   .ab-proof__inner,
+   .xp-tools__inner {
+      gap: 48px;
+   }
+
+   .xp-card {
+      padding: 36px;
+      gap: 36px;
+   }
+
+   .xp-step {
+      width: 320px;
+   }
+
+   .xp-steps__track {
+      padding-left: max(40px, calc((100vw - 1180px) / 2));
+      padding-right: 40px;
+   }
+}
+
+/*
+|--------------------------------------------------------------------------
+| Repli — sous 900px (seuil de la barre de navigation)
+|--------------------------------------------------------------------------
+| L'accordéon se déplie en colonne et toutes les tranches s'ouvrent, la pile
+| de cartes cesse de coller, les colonnes épinglées reprennent le flux et le
+| déroulé redevient une liste verticale. Le script ne pose plus aucun
+| épinglage sous ce seuil.
+*/
+
+@media (max-width: 899.98px) {
+
+   .pg-hero__inner {
+      padding-top: 130px;
+      padding-bottom: 70px;
+   }
+
+   .ab-acc {
+      flex-direction: column;
+      height: auto;
+      gap: 12px;
+   }
+
+   .ab-acc__panel {
+      flex: 0 0 auto;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 18px;
+      padding: 64px 26px 30px;
+      background: linear-gradient(160deg, rgba(47, 65, 87, 0.97) 0%, rgba(47, 65, 87, 0.88) 100%);
+      border-color: rgba(255, 255, 255, 0.18);
+      color: var(--baby-powder);
+   }
+
+   /* Toutes les tranches sont ouvertes : il n'y a plus rien à déclencher. */
+   .ab-acc__trigger {
+      display: none;
+   }
+
+   .ab-acc__mark {
+      top: 28px;
+      left: 26px;
+      background: var(--paradise-pink);
+   }
+
+   .ab-acc__title {
+      writing-mode: horizontal-tb;
+      transform: none;
+      white-space: normal;
+   }
+
+   .ab-acc__body {
+      width: auto;
+      opacity: 1;
+      transform: none;
+   }
+
+   .ab-proof__inner,
+   .xp-tools__inner {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 40px;
+   }
+
+   .ab-proof__item + .ab-proof__item {
+      margin-top: 54px;
+   }
+
+   .xp-card {
+      position: static;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 30px;
+   }
+
+   .xp-card:nth-child(even) .xp-card__body {
+      order: 0;
+   }
+
+   .xp-steps__track {
+      flex-direction: column;
+      width: auto;
+      padding-left: 0;
+      padding-right: 0;
+      gap: 16px;
+   }
+
+   .xp-step {
+      width: auto;
+   }
+}
+
+/*
+|--------------------------------------------------------------------------
+| Repli — mobile
+|--------------------------------------------------------------------------
+*/
+
+@media (max-width: 767.98px) {
+
+   .pg-hero__cube--1,
+   .pg-hero__cube--2,
+   .pg-hero__cube--3 {
+      display: none;
+   }
+
+   .pg-hero .pj-square {
+      right: -40vw;
+      bottom: -30vw;
+      width: 110vw;
+   }
+
+   .pg-hero__title {
+      max-width: none;
+   }
+
+   .pg-head {
+      margin-bottom: 34px;
+   }
+
+   .ab-idea {
+      padding: 80px 0 70px;
+   }
+
+   .ab-method {
+      padding-bottom: 80px;
+   }
+
+   .ab-facts {
+      padding: 70px 0 80px;
+   }
+
+   .ab-facts__cube {
+      display: none;
+   }
+
+   .ab-proof {
+      padding: 70px 0 80px;
+   }
+
+   .ab-proof__media {
+      padding: 8px;
+      border-radius: 20px;
+   }
+
+   .ab-proof__media img {
+      border-radius: 14px;
+   }
+
+   .xp-stack {
+      padding: 70px 0 20px;
+   }
+
+   .xp-card {
+      padding: 28px 24px 30px;
+      border-radius: 22px;
+      margin-bottom: 20px;
+   }
+
+   .xp-card::after {
+      display: none;
+   }
+
+   .xp-tools,
+   .xp-faq {
+      padding: 70px 0 80px;
+   }
+
+   .xp-family__items {
+      padding-left: 0;
+   }
+
+   .xp-steps {
+      padding: 70px 0 80px;
+   }
+
+   .xp-steps .pj-square {
+      left: -60vw;
+      top: -60vw;
+      width: 150vw;
+   }
+
+   .xp-step {
+      padding: 30px 26px 32px;
+   }
+
+   .xp-faq__q {
+      gap: 14px;
+      padding: 24px 0;
+   }
+
+   .xp-faq__panel p {
+      padding-left: 26px;
+   }
+}
+
+/*
+|--------------------------------------------------------------------------
+| Mouvement réduit
+|--------------------------------------------------------------------------
+| Le script coupe ses propres animations ; ce bloc neutralise ce qui vit en
+| CSS pur. L'accordéon garde son changement d'état — il porte l'information —
+| mais sans transition.
+*/
+
+@media (prefers-reduced-motion: reduce) {
+
+   .ab-acc__panel,
+   .ab-acc__mark,
+   .ab-acc__body,
+   .ab-proof__media img,
+   .ab-proof__name,
+   .xp-family__head .pg-mark,
+   .xp-faq__label,
+   .xp-faq__sign::before,
+   .xp-faq__sign::after,
+   .xp-faq__panel {
+      transition: none;
+   }
+
+   .ab-proof__item:hover .ab-proof__media img {
+      transform: none;
+   }
+}
+
+/*
+|--------------------------------------------------------------------------
+| Repli — en-têtes
+|--------------------------------------------------------------------------
+| Après les autres replis, pour l'emporter sur les règles génériques de
+| .pg-hero posées plus haut aux mêmes seuils.
+*/
+
+@media (max-width: 899.98px) {
+   .pg-hero--about .pg-hero__inner {
+      padding-bottom: 130px;
+   }
+
+   .pg-hero--split .pg-hero__inner {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0;
+      padding-bottom: 30px;
+   }
+
+   .xp-deck {
+      height: 400px;
+      margin: 10px 0 -120px;
+   }
+
+   .xp-deck__card {
+      width: 196px;
+      height: 260px;
+      margin: -140px 0 0 -98px;
+   }
+}
+
+@media (max-width: 767.98px) {
+   .pg-hero--about .pj-square {
+      top: 26%;
+      width: 130vw;
+      margin-left: -65vw;
+   }
+
+   .ab-band {
+      margin-top: -60px;
+   }
+
+   .ab-band__strip {
+      margin: 0 -24px;
+      transform: rotate(-3deg);
+   }
+
+   .ab-band__group li {
+      gap: 22px;
+      padding-right: 22px;
+   }
+}
+
+/* Sous 600px, plus d'éventail : les cartes se rangent en grille, droites,
+   et le jeu rentre dans le flux. `!important` pour passer devant la
+   transformation qu'expertise.js pose en ligne au-dessus de ce seuil. */
+@media (max-width: 599.98px) {
+   .xp-deck {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      height: auto;
+      margin: 36px 0 -50px;
+   }
+
+   .xp-deck__card {
+      position: static;
+      width: auto;
+      height: auto;
+      margin: 0;
+      transform: none !important;
+   }
+
+   .xp-deck__core {
+      gap: 10px;
+      padding: 18px 16px;
+   }
+
+   .xp-deck__core .pg-mark {
+      margin-bottom: 8px;
+   }
+
+   .xp-deck__title {
+      font-size: 20px;
+   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+   .ab-band__track {
+      animation: none;
+   }
+}
