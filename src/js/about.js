@@ -4,9 +4,8 @@
  * @license Copyright 2021, Qwetle. All rights reserved.
  * @author: Léo
  *
- * Page /about. L'accordéon de la méthode est branché en premier et hors de
- * toute condition de mouvement : c'est une commande, pas une animation, et
- * elle doit répondre même quand l'utilisateur a demandé moins de mouvement.
+ * Page /about. Tout ici est animation : sans GSAP ou sous mouvement réduit,
+ * la page reste complète et lisible telle que la feuille de styles la pose.
  */
 
 (function () {
@@ -14,62 +13,10 @@
     var page = document.querySelector('.ab');
     if (!page) return;
 
-    /* ---------------------------------------------------------------------
-       Méthode — accordéon horizontal
-       Une seule tranche ouverte à la fois. Au-dessus de 900px la tranche
-       survolée ou reçue au clavier s'ouvre ; en dessous, la feuille de style
-       les ouvre toutes et le bouton disparaît : on rétablit alors les
-       attributs pour que ce qui est annoncé corresponde à ce qui est montré.
-       --------------------------------------------------------------------- */
-
-    (function () {
-
-        var panneaux = Array.prototype.slice.call(page.querySelectorAll('.ab-acc__panel'));
-        if (!panneaux.length) return;
-
-        function ouvrir(cible) {
-            panneaux.forEach(function (panneau) {
-                var actif = panneau === cible;
-                var bouton = panneau.querySelector('.ab-acc__trigger');
-                panneau.classList.toggle('is-open', actif);
-                if (bouton) bouton.setAttribute('aria-expanded', String(actif));
-            });
-        }
-
-        panneaux.forEach(function (panneau) {
-            var bouton = panneau.querySelector('.ab-acc__trigger');
-            if (!bouton) return;
-
-            // Le survol ouvre, le clic aussi : au doigt, il n'y a pas de survol,
-            // et le clic reste le seul geste disponible.
-            panneau.addEventListener('mouseenter', function () { ouvrir(panneau); });
-            bouton.addEventListener('focus', function () { ouvrir(panneau); });
-            bouton.addEventListener('click', function () { ouvrir(panneau); });
-        });
-
-        // Sous 900px toutes les tranches sont dépliées : on l'annonce.
-        var large = window.matchMedia('(min-width: 900px)');
-
-        function surSeuil(e) {
-            if (e.matches) {
-                ouvrir(panneaux[0]);
-                return;
-            }
-            panneaux.forEach(function (panneau) {
-                var bouton = panneau.querySelector('.ab-acc__trigger');
-                if (bouton) bouton.setAttribute('aria-expanded', 'true');
-            });
-        }
-
-        surSeuil(large);
-        if (large.addEventListener) large.addEventListener('change', surSeuil);
-        else large.addListener(surSeuil);
-    }());
-
     if (!window.gsap || !window.ScrollTrigger) return;
 
     // Lu une fois, comme sur les pages projet : sous mouvement réduit, rien
-    // ne bouge au-delà de l'accordéon branché plus haut.
+    // ne bouge, la page reste telle que la feuille de styles la pose.
     if (!window.matchMedia('(prefers-reduced-motion: no-preference)').matches) return;
 
     /* ---------------------------------------------------------------------
@@ -149,8 +96,7 @@
        --------------------------------------------------------------------- */
 
     var blocs = [
-        '.pg-head__title', '.pg-head__lead', '.ab-acc__panel', '.pj-card',
-        '.ab-proof__head .pj-link', '.ab-proof__name', '.ab-proof__desc',
+        '.pg-head__title', '.pg-head__lead', '.ab-step', '.pj-card',
         '.pj-cta__title', '.pj-cta__text', '.pj-cta .pj-btn',
     ];
 
@@ -165,21 +111,48 @@
     });
 
     /* ---------------------------------------------------------------------
-       Repères — le cube à deux faces
-       Même quart de tour que la section Compétences de l'accueil, étalé sur
-       la traversée de la section.
+       Méthode — le rail se remplit, l'étape sous les yeux s'allume
+       Le trait rose grandit du haut vers le bas pendant la traversée de la
+       liste ; chaque étape reçoit is-active tant qu'elle occupe le milieu de
+       l'écran. Deux déclencheurs simples plutôt qu'une timeline : ils n'ont
+       rien à se synchroniser.
        --------------------------------------------------------------------- */
 
-    var cube = page.querySelector('.ab-facts__cube');
+    var rail = page.querySelector('.ab-path__fill');
 
-    if (cube) {
-        var back  = cube.querySelector('.skills__cube-face--back');
-        var front = cube.querySelector('.skills__cube-face--front');
+    if (rail) {
+        gsap.fromTo(rail, { scaleY: 0 }, {
+            scaleY: 1,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: '.ab-path',
+                start: 'top 60%',
+                end: 'bottom 60%',
+                scrub: 0.5,
+            },
+        });
+    }
 
-        gsap.set(front, { rotate: -12, yPercent: 14 });
-        gsap.set(back,  { rotate: 16, yPercent: 22, scale: 0.88 });
+    gsap.utils.toArray('.ab-step').forEach(function (etape) {
+        ScrollTrigger.create({
+            trigger: etape,
+            start: 'top 60%',
+            end: 'bottom 60%',
+            toggleClass: { targets: etape, className: 'is-active' },
+        });
+    });
 
-        var tour = gsap.timeline({
+    /* ---------------------------------------------------------------------
+       Repères — les cubes flous
+       Ils descendent et pivotent doucement pendant la traversée de la
+       section, à des vitesses différentes : c'est ce décalage qui donne de
+       la profondeur, pas une ombre.
+       --------------------------------------------------------------------- */
+
+    var cubes = page.querySelectorAll('.ab-facts__cube');
+
+    if (cubes.length) {
+        var derive = gsap.timeline({
             scrollTrigger: {
                 trigger: '.ab-facts',
                 start: 'top bottom',
@@ -188,71 +161,8 @@
             },
         });
 
-        tour.to(front, { rotate: 78, yPercent: -14, ease: 'none' }, 0);
-        tour.to(back,  { rotate: -44, yPercent: -22, scale: 1.06, ease: 'none' }, 0);
+        derive.fromTo(cubes[0], { y: -60, rotate: -8 }, { y: 120, rotate: 14, ease: 'none' }, 0);
+        if (cubes[1]) derive.fromTo(cubes[1], { y: 40, rotate: 10 }, { y: -90, rotate: -24, ease: 'none' }, 0);
     }
-
-    /* ---------------------------------------------------------------------
-       Preuve — les captures grandissent puis s'éteignent
-       Chaque visuel entre à 86 % et atteint sa taille pleine au milieu de
-       l'écran, puis s'assombrit en sortant par le haut : le regard n'a
-       jamais qu'une image nette à la fois. Deux déclencheurs distincts,
-       l'un sur l'échelle et l'autre sur l'opacité, pour qu'ils ne se
-       disputent pas la même propriété.
-       --------------------------------------------------------------------- */
-
-    gsap.utils.toArray('.ab-proof__media').forEach(function (media) {
-
-        gsap.fromTo(media, { scale: 0.86 }, {
-            scale: 1,
-            ease: 'none',
-            scrollTrigger: {
-                trigger: media,
-                start: 'top 92%',
-                end: 'top 42%',
-                scrub: 0.6,
-            },
-        });
-
-        gsap.fromTo(media, { opacity: 1 }, {
-            opacity: 0.25,
-            ease: 'none',
-            immediateRender: false,
-            scrollTrigger: {
-                trigger: media,
-                start: 'bottom 45%',
-                end: 'bottom 5%',
-                scrub: true,
-            },
-        });
-    });
-
-    /* ---------------------------------------------------------------------
-       Desktop seulement : la colonne de gauche reste en place
-       Sous 900px la grille repasse en une colonne (CSS) : matchMedia retire
-       l'épinglage en descendant sous le seuil, et le recrée au retour.
-       --------------------------------------------------------------------- */
-
-    ScrollTrigger.matchMedia({
-
-        '(min-width: 900px)': function () {
-
-            var head = page.querySelector('.ab-proof__head');
-            var list = page.querySelector('.ab-proof__list');
-            if (!head || !list) return;
-
-            // `pinSpacing: false` : la grille tient déjà la hauteur, c'est la
-            // colonne de droite qui la fixe.
-            ScrollTrigger.create({
-                trigger: head,
-                start: 'top 110px',
-                endTrigger: list,
-                end: 'bottom bottom',
-                pin: true,
-                pinSpacing: false,
-            });
-        },
-
-    });
 
 }());

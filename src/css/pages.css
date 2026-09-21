@@ -409,134 +409,112 @@
    padding-bottom: 150px;
 }
 
-.ab-acc {
-   display: flex;
-   gap: 14px;
-   height: 520px;
-}
+/*
+|--------------------------------------------------------------------------
+| /about — la méthode, le long d'un rail
+|--------------------------------------------------------------------------
+| Un trait vertical à gauche, une étape par rangée : le nom en grand, le
+| texte et les gains en regard. Le trait rose se remplit avec le défilement
+| et l'étape sous les yeux prend la couleur (classe is-active, about.js).
+*/
 
-.ab-acc__panel {
+.ab-path {
    position: relative;
-   display: flex;
-   align-items: flex-end;
-   gap: 26px;
-   flex: 1 1 0;
-   min-width: 0;
-   padding: 34px 30px;
-   overflow: hidden;
-   text-align: left;
-   color: var(--charcoal);
-   border-radius: 24px;
-   background: rgba(255, 255, 255, 0.46);
-   -webkit-backdrop-filter: blur(20px) saturate(1.5);
-   backdrop-filter: blur(20px) saturate(1.5);
-   border: 1px solid rgba(255, 255, 255, 0.75);
-   box-shadow: 0 24px 60px rgba(47, 65, 87, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-   transition: flex-grow 0.75s cubic-bezier(0.16, 1, 0.3, 1),
-               background-color 0.5s ease,
-               color 0.5s ease,
-               border-color 0.5s ease;
+   list-style: none;
+   margin-top: 20px;
 }
 
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-   .ab-acc__panel {
-      background: rgba(255, 253, 249, 0.92);
-   }
-}
-
-/* La surface cliquable couvre toute la tranche et porte le nom de l'étape en
-   aria-label : le titre reste un vrai h3 dans le document, et le bouton ne
-   contient aucun contenu de flux. */
-.ab-acc__trigger {
+.ab-path::before,
+.ab-path__fill {
+   content: "";
    position: absolute;
-   inset: 0;
-   z-index: 2;
-   -webkit-appearance: none;
-   appearance: none;
-   background: none;
-   border: 0;
-   cursor: pointer;
+   left: 5px;
+   top: 0;
+   bottom: 0;
+   width: 2px;
+   border-radius: 2px;
 }
 
-.ab-acc__trigger:focus-visible {
-   outline: 2px solid var(--paradise-pink);
-   outline-offset: -5px;
-   border-radius: 24px;
+.ab-path::before {
+   background: rgba(47, 65, 87, 0.14);
 }
 
-.ab-acc__panel.is-open {
-   flex-grow: 3.4;
-   background: linear-gradient(160deg, rgba(47, 65, 87, 0.97) 0%, rgba(47, 65, 87, 0.88) 100%);
-   border-color: rgba(255, 255, 255, 0.18);
-   color: var(--baby-powder);
-}
-
-/* Le carré rose en haut de la tranche : repère de position dans la suite,
-   sans numéro. Il pivote quand la tranche s'ouvre. */
-.ab-acc__mark {
-   position: absolute;
-   top: 32px;
-   left: 30px;
-   background: var(--cherry-blossom-pink);
-   transition: background-color 0.4s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.ab-acc__panel.is-open .ab-acc__mark {
+.ab-path__fill {
    background: var(--paradise-pink);
-   transform: rotate(104deg);
+   transform: scaleY(0);
+   transform-origin: top;
+   will-change: transform;
 }
 
-.ab-acc__title {
-   flex: 0 0 auto;
-   writing-mode: vertical-rl;
-   transform: rotate(180deg);
+.ab-step {
+   position: relative;
+   display: grid;
+   grid-template-columns: 64px minmax(0, 0.75fr) minmax(0, 1.25fr);
+   column-gap: 40px;
+   padding: 52px 0;
+}
+
+.ab-step:first-child {
+   padding-top: 10px;
+}
+
+.ab-step:last-child {
+   padding-bottom: 10px;
+}
+
+/* Le carré rose du logo, centré sur le rail : c'est le seul repère d'ordre. */
+.ab-step__mark {
+   display: block;
+   width: 12px;
+   height: 12px;
+   margin-top: 12px;
+   border-radius: 3px;
+   background: var(--cherry-blossom-pink);
+   transform: rotate(14deg);
+   transition: background-color 0.35s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ab-step.is-active .ab-step__mark {
+   background: var(--paradise-pink);
+   transform: rotate(104deg) scale(1.35);
+}
+
+.ab-step__title {
    font-family: "Staatliches Regular", serif;
-   font-size: clamp(22px, 2vw, 30px);
-   letter-spacing: 1.5px;
+   font-size: clamp(30px, 3.2vw, 46px);
    line-height: 1;
-   white-space: nowrap;
+   letter-spacing: 0.5px;
+   color: var(--charcoal);
+   transition: color 0.4s ease;
 }
 
-.ab-acc__body {
-   min-width: 0;
-   /* 34ch : la colonne reste lisible dans la tranche ouverte et ne dicte
-      jamais la largeur de la tranche fermée, qui la recouvre. */
-   width: 34ch;
-   max-width: 100%;
-   padding-bottom: 4px;
-   opacity: 0;
-   transform: translateX(20px);
-   transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+.ab-step.is-active .ab-step__title {
+   color: var(--paradise-pink);
 }
 
-.ab-acc__panel.is-open .ab-acc__body {
-   opacity: 1;
-   transform: none;
-   transition-delay: 0.12s;
-}
-
-.ab-acc__text {
+.ab-step__text {
    font-family: "Comfortaa Regular", serif;
-   font-size: 15px;
-   line-height: 1.8;
-   color: rgba(255, 253, 249, 0.78);
-   margin-bottom: 24px;
+   font-size: 16px;
+   line-height: 1.85;
+   color: rgba(47, 65, 87, 0.78);
+   max-width: 52ch;
+   margin-bottom: 22px;
 }
 
-.ab-acc__gains li {
+.ab-step__gains li {
    position: relative;
    padding-left: 26px;
    font-family: "Comfortaa Regular", serif;
    font-size: 13px;
    line-height: 1.7;
-   color: rgba(255, 253, 249, 0.62);
+   color: rgba(47, 65, 87, 0.62);
 }
 
-.ab-acc__gains li + li {
+.ab-step__gains li + li {
    margin-top: 10px;
 }
 
-.ab-acc__gains li::before {
+.ab-step__gains li::before {
    content: "";
    position: absolute;
    left: 0;
@@ -554,17 +532,20 @@
 |--------------------------------------------------------------------------
 | La grille et les cartes viennent de projects.css (.pj-bento, .pj-card) :
 | quatre colonnes, une carte 2x2 et quatre cartes 1x1, soit huit cellules
-| pour huit. Seul le fond de section est propre à cette page.
+| pour huit. Le fond commence et finit dans le clair de la page, les halos
+| sont au milieu : aucune ligne aux jonctions. Pas de rognage, pour que les
+| cubes puissent chevaucher la section précédente et le carré bleu de
+| l'appel à l'action remonter par le bas.
 */
 
 .ab-facts {
    position: relative;
-   overflow: hidden;
    padding: 130px 0 140px;
+   /* Transparent aux deux bords, quel que soit le fond de page dessous. */
    background:
-      radial-gradient(60% 55% at 8% 0%, rgba(245, 172, 186, 0.6), transparent 70%),
-      radial-gradient(50% 60% at 96% 100%, rgba(112, 163, 188, 0.4), transparent 70%),
-      linear-gradient(180deg, #fffdf9 0%, #fdf0f2 100%);
+      radial-gradient(55% 42% at 6% 42%, rgba(245, 172, 186, 0.55), transparent 70%),
+      radial-gradient(50% 48% at 96% 72%, rgba(112, 163, 188, 0.34), transparent 70%),
+      linear-gradient(180deg, rgba(253, 240, 242, 0) 0%, #fdf0f2 45%, rgba(253, 240, 242, 0) 100%);
 }
 
 .ab-facts__inner {
@@ -572,109 +553,67 @@
    z-index: 1;
 }
 
-/* Le cube à deux faces des compétences, dans le coin haut droit : il fait
-   son quart de tour pendant la traversée de la section. */
+.ab-facts__decor {
+   position: absolute;
+   inset: -120px 0 0;
+   z-index: 0;
+   pointer-events: none;
+}
+
 .ab-facts__cube {
    position: absolute;
-   top: 64px;
-   right: 5%;
-   width: clamp(150px, 15vw, 230px);
-   aspect-ratio: 1;
-   pointer-events: none;
-   z-index: 0;
+   will-change: transform;
+}
+
+.ab-facts__cube img {
+   display: block;
+   width: 100%;
+   height: auto;
+}
+
+.ab-facts__cube--big {
+   top: 0;
+   right: 4%;
+   width: clamp(220px, 22vw, 340px);
+   opacity: 0.9;
+}
+
+.ab-facts__cube--small {
+   top: 230px;
+   right: 25%;
+   width: clamp(70px, 7vw, 110px);
+   opacity: 0.8;
 }
 
 /*
 |--------------------------------------------------------------------------
-| /about — la preuve, colonne épinglée
+| /about — l'appel, sur un écran entier
 |--------------------------------------------------------------------------
-| Le titre reste en place à gauche pendant que les captures défilent à
-| droite. Chaque capture grandit en entrant dans l'écran et s'éteint en
-| sortant : le regard n'a qu'une image nette à la fois.
+| Dernier bloc avant le rideau du pied de page : il occupe la hauteur de
+| l'écran, le texte dans le tiers haut, pour que le rideau monte sur du vide
+| et non sur la phrase. Le carré bleu remonte dans les repères (règles
+| partagées avec l'index dans projects.css).
 */
 
-.ab-proof {
-   padding: 130px 0 150px;
+/* La page n'avait pas de fond : les sections posaient leur crème sur du
+   blanc, et chaque bord se voyait. Le fond est posé une fois sur <main>,
+   les dégradés des sections partent de la transparence. */
+.ab {
+   background-color: var(--baby-powder);
 }
 
-.ab-proof__inner {
-   display: grid;
-   grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-   gap: 80px;
-   align-items: start;
-}
-
-.ab-proof__head .pg-head {
-   margin-bottom: 34px;
-}
-
-.ab-proof__item {
-   display: block;
-   color: inherit;
-}
-
-.ab-proof__item + .ab-proof__item {
-   margin-top: 90px;
-}
-
-.ab-proof__media {
-   display: block;
-   padding: 12px;
-   border-radius: 28px;
-   overflow: hidden;
-   margin-bottom: 20px;
-}
-
-.ab-proof__media img {
-   display: block;
-   width: 100%;
-   height: auto;
-   border-radius: 18px;
-   transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.ab-proof__item:hover .ab-proof__media img {
-   transform: scale(1.04);
-}
-
-.ab-proof__item:focus-visible {
-   outline: 2px solid var(--paradise-pink);
-   outline-offset: 6px;
-}
-
-.ab-proof__name {
+.ab .pj-cta {
+   box-sizing: border-box;
+   min-height: 100vh;
+   min-height: 100svh;
    display: flex;
-   align-items: center;
-   gap: 14px;
-   font-family: "Staatliches Regular", serif;
-   font-size: clamp(24px, 2.4vw, 34px);
-   line-height: 1.1;
-   margin-bottom: 8px;
-   transition: color 0.25s ease;
+   flex-direction: column;
+   justify-content: center;
+   padding: 150px 0 30vh;
 }
 
-.ab-proof__item:hover .ab-proof__name {
-   color: var(--paradise-pink);
-}
-
-.ab-proof__name .pg-mark {
-   flex: 0 0 auto;
-   background: var(--cherry-blossom-pink);
-   transition: background-color 0.25s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.ab-proof__item:hover .pg-mark {
-   background: var(--paradise-pink);
-   transform: rotate(104deg);
-}
-
-.ab-proof__desc {
-   font-family: "Comfortaa Regular", serif;
-   font-size: 15px;
-   line-height: 1.8;
-   color: rgba(47, 65, 87, 0.7);
-   max-width: 48ch;
-   padding-left: 26px;
+.ab .pj-cta .pj-square {
+   top: -16vw;
 }
 
 /*
@@ -1142,15 +1081,8 @@
       margin-left: 0;
    }
 
-   .ab-acc {
-      height: 460px;
-   }
 
-   .ab-acc__body {
-      width: 30ch;
-   }
 
-   .ab-proof__inner,
    .xp-tools__inner {
       gap: 48px;
    }
@@ -1187,55 +1119,18 @@
       padding-bottom: 70px;
    }
 
-   .ab-acc {
-      flex-direction: column;
-      height: auto;
-      gap: 12px;
-   }
 
-   .ab-acc__panel {
-      flex: 0 0 auto;
-      flex-direction: column;
-      align-items: stretch;
-      gap: 18px;
-      padding: 64px 26px 30px;
-      background: linear-gradient(160deg, rgba(47, 65, 87, 0.97) 0%, rgba(47, 65, 87, 0.88) 100%);
-      border-color: rgba(255, 255, 255, 0.18);
-      color: var(--baby-powder);
-   }
 
    /* Toutes les tranches sont ouvertes : il n'y a plus rien à déclencher. */
-   .ab-acc__trigger {
-      display: none;
-   }
 
-   .ab-acc__mark {
-      top: 28px;
-      left: 26px;
-      background: var(--paradise-pink);
-   }
 
-   .ab-acc__title {
-      writing-mode: horizontal-tb;
-      transform: none;
-      white-space: normal;
-   }
 
-   .ab-acc__body {
-      width: auto;
-      opacity: 1;
-      transform: none;
-   }
 
-   .ab-proof__inner,
    .xp-tools__inner {
       grid-template-columns: minmax(0, 1fr);
       gap: 40px;
    }
 
-   .ab-proof__item + .ab-proof__item {
-      margin-top: 54px;
-   }
 
    .xp-card {
       position: static;
@@ -1304,18 +1199,8 @@
       display: none;
    }
 
-   .ab-proof {
-      padding: 70px 0 80px;
-   }
 
-   .ab-proof__media {
-      padding: 8px;
-      border-radius: 20px;
-   }
 
-   .ab-proof__media img {
-      border-radius: 14px;
-   }
 
    .xp-stack {
       padding: 70px 0 20px;
@@ -1375,22 +1260,7 @@
 
 @media (prefers-reduced-motion: reduce) {
 
-   .ab-acc__panel,
-   .ab-acc__mark,
-   .ab-acc__body,
-   .ab-proof__media img,
-   .ab-proof__name,
-   .xp-family__head .pg-mark,
-   .xp-faq__label,
-   .xp-faq__sign::before,
-   .xp-faq__sign::after,
-   .xp-faq__panel {
-      transition: none;
-   }
 
-   .ab-proof__item:hover .ab-proof__media img {
-      transform: none;
-   }
 }
 
 /*
@@ -1483,6 +1353,40 @@
 @media (prefers-reduced-motion: reduce) {
    .ab-band__track {
       animation: none;
+   }
+}
+
+/*
+|--------------------------------------------------------------------------
+| Repli — /about, la méthode et les repères
+|--------------------------------------------------------------------------
+*/
+
+@media (max-width: 767.98px) {
+   .ab-step {
+      grid-template-columns: 40px minmax(0, 1fr);
+      row-gap: 18px;
+      padding: 36px 0;
+   }
+
+   .ab-step__body {
+      grid-column: 2;
+   }
+
+   .ab-facts__decor {
+      display: none;
+   }
+
+   .ab .pj-cta {
+      min-height: 0;
+      padding: 110px 0 130px;
+   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+   .ab-step__mark,
+   .ab-step__title {
+      transition: none;
    }
 }
 

@@ -123,86 +123,80 @@
         </div>
     </section>
 
+    <!-- La méthode : quatre temps le long d'un rail. Le trait rose se remplit
+         au fil du défilement et l'étape sous les yeux passe au rose
+         (js/about.js). Sans script, le rail gris et les étapes restent. -->
     <section class="ab-method">
         <div class="pj__inner">
 
             <div class="pg-head">
                 <h2 class="pg-head__title">Quatre temps, <em>et vous êtes là à chacun</em>.</h2>
                 <p class="pg-head__lead">Rien ne se décide sans vous, et rien ne part en production sans
-                    que vous l'ayez vu tourner. Survolez une étape pour voir ce qui s'y passe.</p>
+                    que vous l'ayez vu tourner.</p>
             </div>
 
-            <ul class="ab-acc">
-                <li class="ab-acc__panel is-open">
-                    <button class="ab-acc__trigger" type="button" aria-expanded="true" aria-label="Cadrage"></button>
-                    <span class="pg-mark ab-acc__mark" aria-hidden="true"></span>
-                    <h3 class="ab-acc__title">Cadrage</h3>
-                    <div class="ab-acc__body">
-                        <p class="ab-acc__text">On commence par comprendre ce que vous vendez, à qui, et
-                            ce qui coince aujourd'hui. Une heure de bonnes questions vaut mieux qu'un
-                            mois de maquettes.</p>
-                        <ul class="ab-acc__gains">
+            <ol class="ab-path">
+                <span class="ab-path__fill" aria-hidden="true"></span>
+                <li class="ab-step">
+                    <span class="ab-step__mark" aria-hidden="true"></span>
+                    <h3 class="ab-step__title">Cadrage</h3>
+                    <div class="ab-step__body">
+                        <p class="ab-step__text">On commence par comprendre ce que vous vendez, à qui, et ce qui coince aujourd'hui. Une heure de bonnes questions vaut mieux qu'un mois de maquettes.</p>
+                        <ul class="ab-step__gains">
                             <li>Un objectif écrit, chiffré quand c'est possible</li>
                             <li>Un périmètre clair&nbsp;: ce qui entre, ce qui attend</li>
                             <li>Un délai et un ordre de prix avant toute signature</li>
                         </ul>
                     </div>
                 </li>
-                <li class="ab-acc__panel">
-                    <button class="ab-acc__trigger" type="button" aria-expanded="false" aria-label="Conception"></button>
-                    <span class="pg-mark ab-acc__mark" aria-hidden="true"></span>
-                    <h3 class="ab-acc__title">Conception</h3>
-                    <div class="ab-acc__body">
-                        <p class="ab-acc__text">Arborescence, parcours, maquettes. On part de votre
-                            objectif, jamais d'un gabarit acheté. Vous validez tout avant la première
-                            ligne de code.</p>
-                        <ul class="ab-acc__gains">
+                <li class="ab-step">
+                    <span class="ab-step__mark" aria-hidden="true"></span>
+                    <h3 class="ab-step__title">Conception</h3>
+                    <div class="ab-step__body">
+                        <p class="ab-step__text">Arborescence, parcours, maquettes. On part de votre objectif, jamais d'un gabarit acheté. Vous validez tout avant la première ligne de code.</p>
+                        <ul class="ab-step__gains">
                             <li>Des maquettes de vos vraies pages, avec vos vrais textes</li>
                             <li>Un parcours pensé pour le téléphone d'abord</li>
                             <li>Des aller-retours tant que ça ne tient pas debout</li>
                         </ul>
                     </div>
                 </li>
-                <li class="ab-acc__panel">
-                    <button class="ab-acc__trigger" type="button" aria-expanded="false" aria-label="Développement"></button>
-                    <span class="pg-mark ab-acc__mark" aria-hidden="true"></span>
-                    <h3 class="ab-acc__title">Développement</h3>
-                    <div class="ab-acc__body">
-                        <p class="ab-acc__text">Du sur-mesure, sans surcouche inutile. Un code lisible,
-                            rapide à charger, que quelqu'un d'autre pourra reprendre après nous si vous
-                            le décidez un jour.</p>
-                        <ul class="ab-acc__gains">
+                <li class="ab-step">
+                    <span class="ab-step__mark" aria-hidden="true"></span>
+                    <h3 class="ab-step__title">Développement</h3>
+                    <div class="ab-step__body">
+                        <p class="ab-step__text">Du sur-mesure, sans surcouche inutile. Un code lisible, rapide à charger, que quelqu'un d'autre pourra reprendre après nous si vous le décidez un jour.</p>
+                        <ul class="ab-step__gains">
                             <li>Des pages qui s'affichent avant qu'on ait le temps d'attendre</li>
                             <li>Un contenu que vous modifiez sans nous appeler</li>
                             <li>Le code vous appartient, sans abonnement caché</li>
                         </ul>
                     </div>
                 </li>
-                <li class="ab-acc__panel">
-                    <button class="ab-acc__trigger" type="button" aria-expanded="false" aria-label="Mise en ligne"></button>
-                    <span class="pg-mark ab-acc__mark" aria-hidden="true"></span>
-                    <h3 class="ab-acc__title">Mise en ligne</h3>
-                    <div class="ab-acc__body">
-                        <p class="ab-acc__text">Déploiement, mesure, corrections. Nous restons joignables
-                            une fois le site en production&nbsp;: c'est là que le vrai travail commence,
-                            pas là qu'il s'arrête.</p>
-                        <ul class="ab-acc__gains">
+                <li class="ab-step">
+                    <span class="ab-step__mark" aria-hidden="true"></span>
+                    <h3 class="ab-step__title">Mise en ligne</h3>
+                    <div class="ab-step__body">
+                        <p class="ab-step__text">Déploiement, mesure, corrections. Nous restons joignables une fois le site en production&nbsp;: c'est là que le vrai travail commence, pas là qu'il s'arrête.</p>
+                        <ul class="ab-step__gains">
                             <li>Un hébergement qui tient la charge et se met à jour</li>
                             <li>Des chiffres de fréquentation que vous savez lire</li>
                             <li>Une adresse à qui écrire quand quelque chose cloche</li>
                         </ul>
                     </div>
                 </li>
-            </ul>
+            </ol>
 
         </div>
     </section>
 
     <section class="ab-facts">
 
-        <div class="ab-facts__cube" aria-hidden="true">
-            <span class="skills__cube-face skills__cube-face--back"></span>
-            <span class="skills__cube-face skills__cube-face--front"></span>
+        <!-- Les cubes flous du logo, à cheval sur la jonction avec la section
+             précédente : ils descendent et pivotent au défilement. -->
+        <div class="ab-facts__decor" aria-hidden="true">
+            <span class="ab-facts__cube ab-facts__cube--big"><img src="../assets/logo/cube-flou_logo_GRAND.svg" alt=""></span>
+            <span class="ab-facts__cube ab-facts__cube--small"><img src="../assets/logo/cube-flou_logo_PETIT.svg" alt=""></span>
         </div>
 
         <div class="pj__inner ab-facts__inner">
@@ -245,57 +239,6 @@
                     <p class="pj-card__text">et à distance partout ailleurs, avec le même interlocuteur
                         d'un bout à l'autre.</p>
                 </article>
-            </div>
-
-        </div>
-    </section>
-
-    <section class="ab-proof">
-        <div class="pj__inner ab-proof__inner">
-
-            <div class="ab-proof__head">
-                <div class="pg-head">
-                    <h2 class="pg-head__title">Nos réalisations parlent <em>mieux que nous</em>.</h2>
-                    <p class="pg-head__lead">Des outils qui tournent tous les jours chez ceux qui les
-                        utilisent, et des terrains d'essai laissés en ligne pour que vous puissiez
-                        y jouer.</p>
-                </div>
-                <a class="pj-link" href="/projects/">Voir tous les projets <span aria-hidden="true">&rarr;</span></a>
-            </div>
-
-            <div class="ab-proof__list">
-                <a class="ab-proof__item" href="/projects/medisync/">
-                    <figure class="ab-proof__media pj-glass">
-                        <img src="../assets/projects/medisync/cover.webp" alt="Le planning partagé de MediSync" loading="lazy" decoding="async">
-                    </figure>
-                    <h3 class="ab-proof__name"><span class="pg-mark" aria-hidden="true"></span>MediSync</h3>
-                    <p class="ab-proof__desc">Toute l'équipe soignante sur un seul planning, et le
-                        parcours de chaque patient sous les yeux.</p>
-                </a>
-                <a class="ab-proof__item" href="/projects/shiva/">
-                    <figure class="ab-proof__media pj-glass">
-                        <img src="../assets/projects/shiva/cover.webp" alt="La page d'accueil du site Shiva" loading="lazy" decoding="async">
-                    </figure>
-                    <h3 class="ab-proof__name"><span class="pg-mark" aria-hidden="true"></span>Shiva</h3>
-                    <p class="ab-proof__desc">Le site public d'un programme de recherche, de l'identité
-                        visuelle jusqu'à la mise en ligne en deux langues.</p>
-                </a>
-                <a class="ab-proof__item" href="/projects/horus/">
-                    <figure class="ab-proof__media pj-glass">
-                        <img src="../assets/projects/horus/cover.webp" alt="Le suivi des mesures dans Horus" loading="lazy" decoding="async">
-                    </figure>
-                    <h3 class="ab-proof__name"><span class="pg-mark" aria-hidden="true"></span>Horus</h3>
-                    <p class="ab-proof__desc">Le carnet de bord de deux études cliniques&nbsp;: chaque
-                        mesure à sa place, chaque correction tracée.</p>
-                </a>
-                <a class="ab-proof__item" href="/projects/gachapon/">
-                    <figure class="ab-proof__media pj-glass">
-                        <img src="../assets/projects/gachapon/cover.webp" alt="La machine à capsules en 3D de Gachapon" loading="lazy" decoding="async">
-                    </figure>
-                    <h3 class="ab-proof__name"><span class="pg-mark" aria-hidden="true"></span>Gachapon</h3>
-                    <p class="ab-proof__desc">Une machine à capsules en 3D, 329 cartes, et une bonne
-                        raison de revenir chaque jour.</p>
-                </a>
             </div>
 
         </div>
