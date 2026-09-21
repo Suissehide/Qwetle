@@ -1174,6 +1174,28 @@
    opacity: 0.55;
 }
 
+/* Sur les pages projet, le bloc ne rogne plus : le carré bleu remonte sous
+   « projet suivant » et s'y dissout par un masque au lieu d'être tranché à la
+   frontière, et le cube tient entier dans la section (il ne dépasse que sur
+   le bord droit de l'écran). Le rognage reste latéral et en bas, par clip-path. */
+.project-page .pj-cta {
+   overflow: visible;
+   z-index: 0;
+   clip-path: inset(-100vh 0 0 0);
+   background: transparent;
+}
+
+.project-page .pj-cta .pj-square {
+   left: -22vw;
+   top: -30vw;
+   -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 30%, #000 70%);
+   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 30%, #000 70%);
+}
+
+.project-page .pj-cta .pj-cube {
+   bottom: 4%;
+}
+
 /* Sur l'index, le bloc ne rogne plus vers le haut : le décor remonte sur la
    fin de la liste. Le rognage reste latéral et en bas, par clip-path, pour
    que le cube ne déborde pas sur le rideau du pied de page. */
