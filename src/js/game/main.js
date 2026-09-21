@@ -51,13 +51,28 @@
         while (expired < Q.touchPoints.length && Q.touchPoints[expired].life <= 0) expired++;
         if (expired > 0) Q.touchPoints.splice(0, expired);
 
-        // Enregistrer la position courante
+        // Enregistrer la position courante, mais seulement si la lame a bougé :
+        // un pointeur à l'arrêt empilerait des points au même endroit, que le
+        // tracé rendrait en trois pastilles fixes.
         if (Q.pointer.isDown) {
-            Q.touchPoints.push({
-                x: Q.pointer.scene.x,
-                y: Q.pointer.scene.y,
-                life: Q.touchPointLife,
-            });
+            const last = Q.touchPoints[Q.touchPoints.length - 1];
+            if (!last || last.touchBreak) {
+                Q.touchPoints.push(Q.makeTouchPoint(Q.pointer.scene.x, Q.pointer.scene.y));
+            } else {
+                const dx = Q.pointer.scene.x - last.x;
+                const dy = Q.pointer.scene.y - last.y;
+                const dist = Math.hypot(dx, dy);
+                if (dist > Q.touchPointMinStep) {
+                    // Un geste rapide saute plusieurs dizaines d'unités entre deux
+                    // frames : on jalonne le trajet pour que la courbe reste dense
+                    // quelle que soit la vitesse.
+                    const steps = Math.min(Math.ceil(dist / Q.touchPointMaxStep), Q.touchPointMaxInserts);
+                    for (let n = 1; n <= steps; n++) {
+                        const t = n / steps;
+                        Q.touchPoints.push(Q.makeTouchPoint(last.x + dx * t, last.y + dy * t));
+                    }
+                }
+            }
         }
 
         // Spawn de cubes

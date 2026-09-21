@@ -45,22 +45,33 @@ const _handlePointerMove = (x, y) => {
 if ('PointerEvent' in window) {
     const _canvas = document.getElementById('stageTrail');
 
+    // Souris et stylet survolent : la lame suit le curseur sans clic.
+    // Le tactile n'a pas de survol, il garde le contact comme déclencheur.
+    const _hovers = e => e.pointerType !== 'touch';
+
     _canvas.addEventListener('pointerdown', e => {
-        if (!e.isPrimary) return;
+        if (!e.isPrimary || _hovers(e)) return;
         const top = window.pageYOffset || document.documentElement.scrollTop;
         const left = window.pageXOffset || document.documentElement.scrollLeft;
         _handlePointerDown(e.clientX + left, e.clientY + top);
     });
 
     _canvas.addEventListener('pointerup', e => {
-        if (e.isPrimary) _handlePointerUp();
+        if (e.isPrimary && !_hovers(e)) _handlePointerUp();
     });
 
     _canvas.addEventListener('pointermove', e => {
         if (!e.isPrimary) return;
         const top = window.pageYOffset || document.documentElement.scrollTop;
         const left = window.pageXOffset || document.documentElement.scrollLeft;
+        // Au survol, la première position amorce la lame sans tracer de saut
+        // depuis l'endroit où le curseur était sorti.
+        if (_hovers(e)) _handlePointerDown(e.clientX + left, e.clientY + top);
         _handlePointerMove(e.clientX + left, e.clientY + top);
+    });
+
+    _canvas.addEventListener('pointerleave', e => {
+        if (e.isPrimary) _handlePointerUp();
     });
 
     document.body.addEventListener('mouseleave', _handlePointerUp);
