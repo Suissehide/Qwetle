@@ -2,8 +2,9 @@
    Styles des deux gabarits de réalisations : l'index /projects et les pages
    /projects/<slug>. Fichier séparé de style.css parce que la page d'accueil
    n'a rien à faire de ces règles, et qu'elle est la page critique au chargement.
-   Les variables de couleur, les polices, la barre de navigation et le pied de
-   page viennent de style.css, chargé avant celui-ci.
+   Les variables de couleur, les polices, la barre de navigation, le pied de
+   page et les deux faces du cube (.skills__cube-face) viennent de style.css,
+   chargé avant celui-ci.
 */
 
 /*
@@ -16,6 +17,10 @@
 .project-page {
    background-color: var(--baby-powder);
    color: var(--charcoal);
+   /* Les carrés et cubes de décor débordent volontairement du cadre : sans
+      ça, ils élargiraient la page et ouvriraient un défilement horizontal. */
+   overflow-x: hidden;
+   overflow-x: clip;
 }
 
 .work__inner,
@@ -26,8 +31,7 @@
    padding-right: 60px;
 }
 
-/* Intitulé de section. Le trait sous le mot reprend celui des titres de Horus
-   et du reste du site : un souligné court, pas une bordure pleine largeur. */
+/* Intitulé de section. */
 .pj-h2 {
    font-family: "Staatliches Regular", serif;
    font-size: clamp(30px, 3.6vw, 46px);
@@ -44,12 +48,102 @@
 /* Méta en monospace : même registre que .about__eyebrow sur l'accueil. Pile
    système, donc aucun fichier de police en plus. */
 .pj-meta dt,
-.pj-fact dt,
+.pj-kicker,
+.pj-card__label,
 .work-row__meta {
    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
    font-size: 12px;
    letter-spacing: 1.6px;
    text-transform: uppercase;
+}
+
+/* Verre. Le fond translucide n'a de sens que posé sur une couleur : les
+   sections qui portent des cartes de verre ont donc toutes un dégradé ou un
+   carré derrière. Le liseré blanc en haut donne l'épaisseur du verre, l'ombre
+   longue le décolle du fond. */
+.pj-glass {
+   position: relative;
+   background: rgba(255, 255, 255, 0.46);
+   -webkit-backdrop-filter: blur(20px) saturate(1.5);
+   backdrop-filter: blur(20px) saturate(1.5);
+   border: 1px solid rgba(255, 255, 255, 0.75);
+   border-radius: 24px;
+   box-shadow: 0 24px 60px rgba(47, 65, 87, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+   .pj-glass {
+      background: rgba(255, 253, 249, 0.92);
+   }
+}
+
+/* Boutons. Deux poids : rose plein pour l'action principale, contour pour la
+   seconde. Le rayon de 50px est celui de tout ce qui se clique sur le site. */
+.pj-btn {
+   display: inline-flex;
+   align-items: center;
+   gap: 12px;
+   padding: 16px 36px;
+   border-radius: 50px;
+   font-family: "Staatliches Regular", serif;
+   font-size: 20px;
+   letter-spacing: 2px;
+   white-space: nowrap;
+   transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+.pj-btn span {
+   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pj-btn:hover span {
+   transform: translateX(6px);
+}
+
+.pj-btn:active {
+   transform: translateY(1px);
+}
+
+.pj-btn:focus-visible {
+   outline: 2px solid var(--paradise-pink);
+   outline-offset: 4px;
+}
+
+.pj-btn--primary {
+   background: var(--paradise-pink);
+   color: #fff;
+   box-shadow: 0 12px 32px rgba(233, 71, 103, 0.28);
+}
+
+.pj-btn--primary:hover {
+   transform: translateY(-3px);
+   box-shadow: 0 18px 44px rgba(233, 71, 103, 0.38);
+}
+
+.pj-btn--ghost {
+   border: 2px solid var(--charcoal);
+   color: var(--charcoal);
+}
+
+.pj-btn--ghost:hover {
+   background: var(--charcoal);
+   color: var(--baby-powder);
+}
+
+/* Décor de marque : le grand carré bleu pivoté et les cubes flous roses du
+   hero de l'accueil. Posés en absolu, hors flux, sans interaction. */
+.pj-square,
+.pj-cube {
+   position: absolute;
+   pointer-events: none;
+   will-change: transform;
+}
+
+.pj-square img,
+.pj-cube img {
+   display: block;
+   width: 100%;
+   height: auto;
 }
 
 /*
@@ -60,8 +154,8 @@
 
 .work-hero {
    position: relative;
-   /* Le carré déborde des quatre côtés : sans rognage il élargirait la page. */
    overflow: hidden;
+   background: linear-gradient(165deg, #fffdf9 0%, #fff4f6 45%, #f9d6dd 100%);
 }
 
 .work-hero__inner {
@@ -69,50 +163,61 @@
    z-index: 1;
    /* 170px : les 70px de barre fixe, plus la respiration retenue sur /contact. */
    padding-top: 170px;
-   padding-bottom: 110px;
+   /* Court : la liste doit arriver dans la foulée du chapô, pas après un
+      écran de vide. Le fondu du décor fait la transition, pas l'espace. */
+   padding-bottom: 64px;
 }
 
-/* Décor du hero : les cubes flous du haut de la page d'accueil, pas le grand
-   carré marine de la section portfolio. C'est le motif de *hero* du site, et
-   c'est un hero. Le carré, lui, poserait un aplat sombre derrière une barre de
-   navigation translucide : le contraste de « Contact » tomberait sous le seuil
-   lisible. */
-.work-hero__cubes {
+.work-hero__decor {
    position: absolute;
    inset: 0;
    z-index: 0;
    pointer-events: none;
 }
 
-.work-hero__cubes img {
+/* Fondu vers le fond de page sur le tiers bas du hero : le carré et le
+   dégradé rose s'éteignent dans le clair au lieu d'être tranchés net à la
+   frontière de la section. Posé sur le décor, donc sous le texte. */
+.work-hero__decor::after,
+.pj-hero__decor::after {
+   content: "";
    position: absolute;
-   display: block;
-   width: 100%;
-   height: auto;
+   left: 0;
+   right: 0;
+   /* Déborde d'un pixel et atteint l'opaque à 90 % : sans ça, la dernière
+      ligne de pixels laissait deviner le bord du carré. */
+   bottom: -1px;
+   height: 42%;
+   background: linear-gradient(to bottom, rgba(255, 253, 249, 0) 0%, var(--baby-powder) 90%, var(--baby-powder) 100%);
+}
+
+/* Le carré bleu ancré en bas à droite, aux trois quarts hors cadre : c'est
+   la forme du hero de l'accueil, ramenée à un rappel. */
+.work-hero .pj-square {
+   right: -18vw;
+   bottom: -34vw;
+   width: clamp(480px, 58vw, 980px);
+   opacity: 0.92;
 }
 
 /* Cantonnés à la moitié droite : la colonne de texte est bornée à 46ch et ne
    les atteint jamais, quelle que soit la largeur de fenêtre. */
-.work-hero__cube {
-   position: absolute;
-}
-
 .work-hero__cube--1 {
    width: clamp(150px, 17vw, 250px);
-   top: 20%;
+   top: 18%;
    right: 12%;
 }
 
 .work-hero__cube--2 {
    width: clamp(70px, 8vw, 110px);
-   top: 56%;
-   right: 33%;
+   top: 60%;
+   right: 36%;
 }
 
 .work-hero__cube--3 {
    width: clamp(100px, 11vw, 165px);
-   top: 66%;
-   right: 4%;
+   top: 68%;
+   right: 2%;
 }
 
 .work-hero__title {
@@ -120,7 +225,8 @@
    font-size: clamp(38px, 5.6vw, 78px);
    line-height: 1.06;
    letter-spacing: -0.5px;
-   max-width: 17ch;
+   /* 22ch : la phrase tient sur deux lignes, jamais trois. */
+   max-width: 22ch;
    margin-bottom: 36px;
 }
 
@@ -139,11 +245,48 @@
 
 /*
 |--------------------------------------------------------------------------
+| Index — les deux familles
+|--------------------------------------------------------------------------
+| « Projets » d'un côté, « Lab » de l'autre. L'intertitre porte la distinction
+| à lui seul : les deux listes sont identiques, et la numérotation repart à 01
+| dans chacune.
+*/
+
+.work-group {
+   padding-top: 48px;
+}
+
+.work-group + .work-group {
+   padding-top: 28px;
+}
+
+.work-group__head {
+   /* Aligné sur la première ligne de la liste qui suit, pas centré : le regard
+      descend le long du même bord que les numéros de projet. */
+   max-width: 46ch;
+   margin-bottom: 28px;
+}
+
+.work-group__title {
+   font-family: "Staatliches Regular", serif;
+   font-size: clamp(30px, 3.6vw, 46px);
+   line-height: 1.1;
+   letter-spacing: -0.3px;
+   margin-bottom: 16px;
+}
+
+.work-group__lead {
+   font-family: "Comfortaa Regular", serif;
+   font-size: 15px;
+   line-height: 1.8;
+   color: rgba(47, 65, 87, 0.72);
+}
+
+/*
+|--------------------------------------------------------------------------
 | Index — la liste
 |--------------------------------------------------------------------------
-| Une ligne par projet. Un seul filet, sous chaque ligne sauf la dernière :
-| un filet au-dessus *et* en dessous doublerait chaque trait et transformerait
-| la liste en tableau.
+| Une ligne par projet. Un seul filet, sous chaque ligne sauf la dernière.
 */
 
 .work-list {
@@ -158,15 +301,31 @@
 .work-row__link {
    position: relative;
    display: grid;
-   grid-template-columns: 68px minmax(0, 1fr) 250px 40px;
+   grid-template-columns: 34px minmax(0, 1fr) 250px 40px;
    align-items: center;
    gap: 24px;
-   padding: 34px 0;
+   padding: 28px 0;
    color: inherit;
 }
 
-/* Le filet rose se dessine de la gauche vers la droite au survol : il indique
-   la ligne visée sans avoir à teinter tout son fond. */
+/* Marqueur de ligne : le petit carré pivoté du logo, rose pâle au repos et
+   rose vif au survol. Il remplace le numéro, qui n'apportait rien. */
+.work-row__mark {
+   display: block;
+   width: 12px;
+   height: 12px;
+   border-radius: 3px;
+   background: var(--cherry-blossom-pink);
+   transform: rotate(14deg);
+   transition: background-color 0.25s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.work-row__link:hover .work-row__mark {
+   background: var(--paradise-pink);
+   transform: rotate(104deg);
+}
+
+/* Le filet rose se dessine de la gauche vers la droite au survol. */
 .work-row__link::after {
    content: "";
    position: absolute;
@@ -188,19 +347,6 @@
    outline-offset: 4px;
 }
 
-.work-row__index {
-   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
-   font-size: 13px;
-   color: rgba(47, 65, 87, 0.35);
-   transition: color 0.25s ease;
-}
-
-.work-row__link:hover .work-row__index {
-   color: var(--paradise-pink);
-}
-
-/* La cellule titre + résumé. `min-width: 0` sans quoi un résumé long refuse de
-   se replier et pousse la colonne de méta hors du cadre. */
 .work-row__body {
    min-width: 0;
 }
@@ -248,14 +394,11 @@
 |--------------------------------------------------------------------------
 | Index — visuel suiveur
 |--------------------------------------------------------------------------
-| Un seul élément fixe, garni par le script d'une image par ligne. Les images
-| sont toutes dans le document dès le départ : les charger au survol ferait
-| apparaître un cadre vide le temps du premier aller-retour réseau.
 */
 
 .work-cursor {
    position: fixed;
-   border: 1px solid rgba(47, 65, 87, 0.12);
+   border: 1px solid rgba(255, 255, 255, 0.7);
    top: 0;
    left: 0;
    z-index: 50;
@@ -278,64 +421,66 @@
    opacity: 0;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Index — fin de page
-|--------------------------------------------------------------------------
-*/
-
-.work-outro {
-   padding: 40px 0 140px;
-   border-top: 1px solid rgba(47, 65, 87, 0.16);
-   margin-top: 40px;
-}
-
-.work-outro__title {
-   font-family: "Staatliches Regular", serif;
-   font-size: clamp(30px, 4.4vw, 58px);
-   line-height: 1.08;
-   letter-spacing: -0.3px;
-   max-width: 17ch;
-   margin: 44px 0 32px;
-}
-
-.work-outro__title em {
-   font-style: normal;
-   color: var(--paradise-pink);
-}
-
-.work-outro__btn {
-   display: inline-block;
-   padding: 18px 44px;
-   background: var(--paradise-pink);
-   color: #fff;
-   font-family: "Staatliches Regular", serif;
-   font-size: 22px;
-   letter-spacing: 2px;
-   white-space: nowrap;
-   border-radius: 50px;
-   box-shadow: 0 12px 32px rgba(233, 71, 103, 0.28);
-   transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.work-outro__btn:hover {
-   transform: translateY(-3px);
-   box-shadow: 0 18px 44px rgba(233, 71, 103, 0.38);
-}
-
-.work-outro__btn:active {
-   transform: translateY(-1px);
+/* Espace entre la dernière liste et le bloc d'appel. */
+.work-end {
+   height: 56px;
 }
 
 /*
 |--------------------------------------------------------------------------
-| Page projet — en-tête
+| Page projet — hero
 |--------------------------------------------------------------------------
+| Texte à gauche, capture à droite dans un cadre de verre posé sur le carré
+| bleu. Le conteneur est plus large que le reste de la page pour que la
+| capture garde une taille lisible à côté du titre.
 */
+
+.pj-hero {
+   position: relative;
+   background: linear-gradient(165deg, #fffdf9 0%, #fff3f5 40%, #f7cbd4 100%);
+   padding-bottom: 90px;
+}
+
+.pj-hero__decor {
+   position: absolute;
+   inset: 0;
+   z-index: 0;
+   overflow: hidden;
+   pointer-events: none;
+}
+
+.pj-hero .pj-square {
+   right: -14vw;
+   bottom: -22vw;
+   width: clamp(560px, 64vw, 1100px);
+}
+
+.pj-hero__cube--1 {
+   width: clamp(140px, 16vw, 260px);
+   top: 10%;
+   right: 40%;
+}
+
+.pj-hero__cube--2 {
+   width: clamp(60px, 7vw, 110px);
+   top: 62%;
+   left: 42%;
+}
 
 .pj-hero__inner {
-   padding-top: 150px;
-   padding-bottom: 60px;
+   position: relative;
+   z-index: 1;
+   max-width: 1320px;
+   margin: 0 auto;
+   padding: 160px 60px 0;
+   display: grid;
+   grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+   gap: 60px;
+   align-items: end;
+}
+
+.pj-hero__text {
+   padding-bottom: 40px;
 }
 
 .pj-back {
@@ -363,33 +508,69 @@
    transform: translateX(-6px);
 }
 
-.pj-title {
-   font-family: "Staatliches Regular", serif;
-   font-size: clamp(46px, 7.4vw, 108px);
-   line-height: 0.98;
-   letter-spacing: -1px;
-   margin-bottom: 26px;
+.pj-kicker {
+   color: var(--paradise-pink);
+   margin-bottom: 18px;
 }
 
-.pj-lead {
+.pj-title {
+   font-family: "Staatliches Regular", serif;
+   font-size: clamp(52px, 8vw, 128px);
+   line-height: 0.94;
+   letter-spacing: -1.5px;
+   margin-bottom: 22px;
+   overflow-wrap: anywhere;
+}
+
+.pj-tagline {
    font-family: "Comfortaa Regular", serif;
    font-size: clamp(16px, 1.5vw, 20px);
    line-height: 1.7;
-   color: rgba(47, 65, 87, 0.72);
-   max-width: 52ch;
-   margin-bottom: 56px;
+   color: rgba(47, 65, 87, 0.78);
+   max-width: 40ch;
+   margin-bottom: 38px;
+}
+
+.pj-hero__actions {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 14px;
+}
+
+/* Visuel principal, dans son cadre de verre. */
+.pj-cover {
+   margin: 0;
+   transform-origin: center bottom;
+}
+
+.pj-cover__frame {
+   padding: 12px;
+   border-radius: 28px;
+}
+
+.pj-cover__frame img {
+   display: block;
+   width: 100%;
+   height: auto;
+   border-radius: 18px;
+}
+
+/* Barre méta : à cheval sur le bas du hero. */
+.pj-meta-wrap {
+   position: relative;
+   z-index: 2;
+   margin-top: -46px;
 }
 
 .pj-meta {
    display: grid;
    grid-template-columns: repeat(4, minmax(0, 1fr));
-   gap: 30px;
-   padding-top: 26px;
-   border-top: 1px solid rgba(47, 65, 87, 0.16);
+   gap: 28px;
+   padding: 28px 36px;
 }
 
 .pj-meta dt {
-   color: rgba(47, 65, 87, 0.4);
+   color: rgba(47, 65, 87, 0.45);
    margin-bottom: 8px;
 }
 
@@ -410,164 +591,318 @@
    border-color: var(--paradise-pink);
 }
 
-/* Visuel principal. Le rognage laisse la place à la parallaxe : l'image est
-   plus haute que son cadre, et se déplace à l'intérieur au défilement. */
-.pj-cover {
-   max-width: 1400px;
-   margin: 0 auto;
-   padding: 0 60px;
-}
+/*
+|--------------------------------------------------------------------------
+| Page projet — bandeau de points clés
+|--------------------------------------------------------------------------
+| Une bande charcoal qui défile sans fin. Les items sont écrits deux fois dans
+| le balisage : la piste glisse d'exactement la moitié de sa largeur, et la
+| seconde copie prend la place de la première sans raccord visible. L'écart
+| est porté par une marge sur chaque item et non par un `gap`, sinon la
+| moitié ne tomberait pas juste.
+*/
 
-/* Le cadre épouse l'image, sans hauteur imposée. Une capture d'interface a un
-   cadrage qui est son contenu : la rogner pour ménager une course de parallaxe
-   la faisait paraître mal cadrée, et le décalage au défilement se lisait comme
-   un défaut plutôt que comme de la profondeur. */
-.pj-cover__frame {
+.pj-marquee {
    overflow: hidden;
-   border-radius: 24px;
-   border: 1px solid rgba(47, 65, 87, 0.1);
-   background: rgba(47, 65, 87, 0.06);
+   background: var(--charcoal);
+   padding: 22px 0;
+   margin-top: 80px;
 }
 
-.pj-cover__frame img {
+.pj-marquee__track {
+   display: flex;
+   width: max-content;
+   animation: pj-marquee 42s linear infinite;
+}
+
+.pj-marquee__track span {
+   display: inline-flex;
+   align-items: center;
+   margin-right: 48px;
+   font-family: "Staatliches Regular", serif;
+   font-size: 26px;
+   letter-spacing: 2px;
+   color: var(--baby-powder);
+   white-space: nowrap;
+}
+
+.pj-marquee__track span::after {
+   content: "";
    display: block;
-   width: 100%;
-   height: auto;
+   width: 12px;
+   height: 12px;
+   margin-left: 48px;
+   border-radius: 3px;
+   background: var(--paradise-pink);
+   transform: rotate(14deg);
+}
+
+@keyframes pj-marquee {
+   to {
+      transform: translateX(-50%);
+   }
 }
 
 /*
 |--------------------------------------------------------------------------
-| Page projet — le point de départ
+| Page projet — l'idée
 |--------------------------------------------------------------------------
-| Titre puis texte empilés, la colonne de texte décalée vers la droite. Le
-| décalage tient lieu de composition : pas de colonne d'appoint à remplir.
+| Un seul paragraphe, en grand, révélé mot à mot au défilement.
 */
 
-.pj-brief {
-   padding: 120px 0 100px;
+.pj-idea {
+   padding: 140px 0 120px;
 }
 
-.pj-prose {
-   margin-left: 12%;
-   max-width: 58ch;
-}
-
-.pj-prose p {
+.pj-idea__text {
    font-family: "Comfortaa Regular", serif;
-   font-size: 16px;
-   line-height: 1.9;
+   font-size: clamp(21px, 2.5vw, 34px);
+   line-height: 1.5;
+   color: var(--charcoal);
+   max-width: 1000px;
+   margin-left: 12%;
+}
+
+.pj-word {
+   display: inline-block;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Page projet — points clés (bento)
+|--------------------------------------------------------------------------
+| Quatre colonnes sur deux rangs : la carte principale occupe 2×2, les quatre
+| autres une cellule chacune. 4 + 4 = 8 cellules pour une grille de 8, sans
+| trou. `dense` remplit ce qui resterait si une carte manquait.
+*/
+
+.pj-keys {
+   position: relative;
+   overflow: hidden;
+   padding: 120px 0 140px;
+   background:
+      radial-gradient(60% 55% at 8% 0%, rgba(245, 172, 186, 0.6), transparent 70%),
+      radial-gradient(50% 60% at 96% 100%, rgba(112, 163, 188, 0.4), transparent 70%),
+      linear-gradient(180deg, #fffdf9 0%, #fdf0f2 100%);
+}
+
+.pj-keys__inner {
+   position: relative;
+   z-index: 1;
+}
+
+/* Le cube à deux faces des compétences, dans le coin haut droit, tourne au
+   fil du défilement de la section. */
+.pj-keys__cube {
+   position: absolute;
+   top: 70px;
+   right: 5%;
+   width: clamp(150px, 15vw, 230px);
+   aspect-ratio: 1;
+   pointer-events: none;
+   z-index: 0;
+}
+
+.pj-bento {
+   display: grid;
+   grid-template-columns: repeat(4, minmax(0, 1fr));
+   grid-auto-rows: minmax(230px, auto);
+   grid-auto-flow: dense;
+   gap: 20px;
+}
+
+.pj-card {
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-end;
+   padding: 34px 32px;
+   overflow: hidden;
+   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s ease;
+}
+
+.pj-card:hover {
+   transform: translateY(-6px);
+   box-shadow: 0 32px 70px rgba(47, 65, 87, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.pj-card__label {
+   color: var(--paradise-pink);
+   margin-bottom: 18px;
+}
+
+.pj-card__figure {
+   font-family: "Staatliches Regular", serif;
+   font-size: clamp(40px, 4.4vw, 64px);
+   line-height: 1;
+   color: var(--paradise-pink);
+   margin-bottom: 12px;
+}
+
+.pj-card__figure--word {
+   font-size: clamp(28px, 2.7vw, 40px);
+   line-height: 1.05;
+}
+
+.pj-card__text {
+   font-family: "Comfortaa Regular", serif;
+   font-size: 14px;
+   line-height: 1.75;
    color: rgba(47, 65, 87, 0.72);
 }
 
-.pj-prose p + p {
-   margin-top: 22px;
+/* Carte principale : le carré bleu devenu carte. */
+.pj-card--lead {
+   grid-column: span 2;
+   grid-row: span 2;
+   justify-content: space-between;
+   background: linear-gradient(160deg, rgba(47, 65, 87, 0.97) 0%, rgba(47, 65, 87, 0.88) 100%);
+   border-color: rgba(255, 255, 255, 0.18);
+   color: var(--baby-powder);
 }
 
-.pj-prose strong {
-   font-family: "Comfortaa Bold", serif;
-   font-weight: normal;
-   color: var(--charcoal);
+.pj-card--lead::after {
+   content: "";
+   position: absolute;
+   right: -36px;
+   top: -36px;
+   width: 150px;
+   height: 150px;
+   border-radius: 34px;
+   background: rgba(245, 172, 186, 0.28);
+   transform: rotate(14deg);
+   pointer-events: none;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Page projet — les faits
-|--------------------------------------------------------------------------
-| Un seul filet au-dessus de la bande, aucun encadré. Trois faits vérifiés,
-| relevés sur le projet en ligne ou dans son dépôt.
-*/
-
-.pj-facts {
-   display: grid;
-   grid-template-columns: repeat(3, minmax(0, 1fr));
-   gap: 40px;
-   padding-top: 34px;
-   padding-bottom: 120px;
-   border-top: 1px solid rgba(47, 65, 87, 0.16);
+.pj-card--lead .pj-card__label {
+   color: var(--cherry-blossom-pink);
 }
 
-.pj-fact dt {
-   color: rgba(47, 65, 87, 0.4);
-   margin-bottom: 14px;
-}
-
-.pj-fact dd {
+.pj-card__big {
    font-family: "Staatliches Regular", serif;
-   font-size: clamp(22px, 2.4vw, 32px);
-   line-height: 1.15;
-   color: var(--charcoal);
+   font-size: clamp(30px, 3.2vw, 48px);
+   line-height: 1.05;
+   letter-spacing: -0.3px;
+   margin-bottom: 20px;
 }
 
-.pj-fact dd em {
-   font-style: normal;
-   color: var(--paradise-pink);
+.pj-card--lead .pj-card__text {
+   color: rgba(255, 253, 249, 0.78);
+   max-width: 46ch;
 }
 
 /*
 |--------------------------------------------------------------------------
-| Page projet — galerie
+| Page projet — galerie empilée
 |--------------------------------------------------------------------------
-| Trois formes, appliquées selon le nombre de visuels : pleine largeur, deux
-| de front, ou un seul décalé. Les pages qui n'ont qu'un visuel de galerie
-| prennent la forme pleine largeur.
+| Chaque capture est collée en haut de l'écran et se fait recouvrir par la
+| suivante. Le script rétrécit et assombrit celle du dessous à mesure que la
+| suivante arrive. La largeur est bornée par la hauteur d'écran pour qu'une
+| carte entière tienne sous la barre de navigation.
 */
 
 .pj-gallery {
-   padding-bottom: 40px;
+   padding: 60px 0 100px;
+}
+
+.pj-gallery__stack {
+   position: relative;
 }
 
 .pj-shot {
-   margin-bottom: 40px;
+   position: sticky;
+   top: 100px;
+   width: min(100%, calc((100vh - 200px) * 1.9));
+   margin: 0 auto 48px;
+   transform-origin: center top;
 }
 
-.pj-shot img {
+.pj-shot:last-child {
+   margin-bottom: 0;
+}
+
+.pj-shot__frame {
+   padding: 12px;
+   border-radius: 28px;
+   background: rgba(255, 255, 255, 0.6);
+}
+
+.pj-shot__frame img {
    display: block;
    width: 100%;
    height: auto;
-   border-radius: 24px;
-   border: 1px solid rgba(47, 65, 87, 0.1);
-   background: rgba(47, 65, 87, 0.06);
-}
-
-.pj-shots-2 {
-   display: grid;
-   grid-template-columns: repeat(2, minmax(0, 1fr));
-   gap: 40px;
-}
-
-.pj-shots-2 .pj-shot {
-   margin-bottom: 40px;
-}
-
-/* Visuel décalé : borné à 72% et poussé à droite. C'est la respiration de la
-   galerie, elle ne revient qu'une fois par page. */
-.pj-shot--offset {
-   width: 72%;
-   margin-left: auto;
+   border-radius: 18px;
 }
 
 /*
 |--------------------------------------------------------------------------
-| Page projet — ce que ça a demandé
+| Page projet — ce que vous y gagnez
 |--------------------------------------------------------------------------
-| Miroir du bloc « point de départ » : le texte passe à gauche, le titre reste
-| en tête. Deux blocs de prose, deux calages différents.
+| Titre et chapô épinglés à gauche pendant que la liste défile à droite.
 */
 
-.pj-detail {
-   padding: 80px 0 120px;
+.pj-gains {
+   padding: 100px 0 140px;
 }
 
-.pj-detail .pj-prose {
-   margin-left: 0;
-   margin-right: 12%;
+.pj-gains__inner {
+   display: grid;
+   grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+   gap: 80px;
+   align-items: start;
+}
+
+.pj-gains__lead {
+   font-family: "Comfortaa Regular", serif;
+   font-size: 16px;
+   line-height: 1.85;
+   color: rgba(47, 65, 87, 0.72);
+   max-width: 40ch;
+   margin-bottom: 34px;
+}
+
+.pj-gains__list {
+   border-top: 1px solid rgba(47, 65, 87, 0.16);
+}
+
+/* Chaque bénéfice est marqué du petit carré rose pivoté, pas d'un numéro :
+   la liste n'est pas un classement. */
+.pj-gain {
+   position: relative;
+   padding: 36px 0 36px 44px;
+   border-bottom: 1px solid rgba(47, 65, 87, 0.16);
+}
+
+.pj-gain::before {
+   content: "";
+   position: absolute;
+   left: 2px;
+   top: 46px;
+   width: 12px;
+   height: 12px;
+   border-radius: 3px;
+   background: var(--paradise-pink);
+   transform: rotate(14deg);
+}
+
+.pj-gain h3 {
+   font-family: "Staatliches Regular", serif;
+   font-size: clamp(24px, 2.2vw, 32px);
+   line-height: 1.1;
+   margin-bottom: 10px;
+}
+
+.pj-gain p {
+   font-family: "Comfortaa Regular", serif;
+   font-size: 15px;
+   line-height: 1.8;
+   color: rgba(47, 65, 87, 0.7);
+   max-width: 50ch;
 }
 
 .pj-link {
    display: inline-flex;
    align-items: center;
    gap: 10px;
-   margin-top: 36px;
    padding: 14px 32px;
    border: 2px solid var(--charcoal);
    border-radius: 50px;
@@ -592,10 +927,6 @@
    transform: translateX(6px);
 }
 
-.pj-link:active {
-   transform: translateY(1px);
-}
-
 /*
 |--------------------------------------------------------------------------
 | Page projet — projet suivant
@@ -608,7 +939,7 @@
 
 .pj-next__link {
    display: grid;
-   grid-template-columns: minmax(0, 1fr) 380px;
+   grid-template-columns: minmax(0, 1fr) 400px;
    align-items: center;
    gap: 60px;
    padding: 80px 0 120px;
@@ -653,17 +984,21 @@
 }
 
 .pj-next__media {
-   overflow: hidden;
+   display: block;
+   padding: 10px;
    border-radius: 24px;
-   border: 1px solid rgba(47, 65, 87, 0.1);
-   background: rgba(47, 65, 87, 0.06);
+   background: rgba(255, 255, 255, 0.6);
+   border: 1px solid rgba(255, 255, 255, 0.75);
+   box-shadow: 0 24px 60px rgba(47, 65, 87, 0.12);
+   overflow: hidden;
 }
 
 .pj-next__media img {
    display: block;
    width: 100%;
    height: auto;
-   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+   border-radius: 16px;
+   transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .pj-next__link:hover .pj-next__media img {
@@ -677,6 +1012,70 @@
 
 /*
 |--------------------------------------------------------------------------
+| Appel à l'action (page projet et index)
+|--------------------------------------------------------------------------
+| Bande charcoal, le grand carré bleu en haut à gauche et un cube flou rose
+| en bas à droite. Le seul bloc du site où le rose vif est posé sur du sombre :
+| il y reste lisible parce qu'il ne porte que le bouton.
+*/
+
+.pj-cta {
+   position: relative;
+   overflow: hidden;
+   padding: 150px 0 170px;
+   background: var(--charcoal);
+   color: var(--baby-powder);
+}
+
+.pj-cta .pj-square {
+   left: -14vw;
+   top: -32vw;
+   width: clamp(600px, 70vw, 1200px);
+   opacity: 0.85;
+}
+
+.pj-cta .pj-cube {
+   right: -4%;
+   bottom: -18%;
+   width: clamp(220px, 26vw, 420px);
+   opacity: 0.7;
+}
+
+.pj-cta__inner {
+   position: relative;
+   z-index: 1;
+   text-align: center;
+}
+
+.pj-cta__title {
+   font-family: "Staatliches Regular", serif;
+   font-size: clamp(40px, 6vw, 84px);
+   line-height: 1.02;
+   letter-spacing: -0.5px;
+   max-width: 16ch;
+   margin: 0 auto 22px;
+}
+
+.pj-cta__title em {
+   font-style: normal;
+   color: var(--cherry-blossom-pink);
+}
+
+.pj-cta__text {
+   font-family: "Comfortaa Regular", serif;
+   font-size: 16px;
+   line-height: 1.85;
+   color: rgba(255, 253, 249, 0.72);
+   max-width: 48ch;
+   margin: 0 auto 40px;
+}
+
+.pj-cta .pj-btn--primary:focus-visible {
+   outline-color: var(--baby-powder);
+}
+
+/*
+|--------------------------------------------------------------------------
 | Repli — tablette
 |--------------------------------------------------------------------------
 */
@@ -684,26 +1083,45 @@
 @media (max-width: 1024px) {
 
    .work__inner,
-   .pj__inner,
-   .pj-cover {
+   .pj__inner {
       padding-left: 40px;
       padding-right: 40px;
    }
 
+   .pj-hero__inner {
+      padding-left: 40px;
+      padding-right: 40px;
+      gap: 40px;
+   }
+
    .work-row__link {
-      grid-template-columns: 52px minmax(0, 1fr) 200px 32px;
+      grid-template-columns: 30px minmax(0, 1fr) 200px 32px;
       gap: 18px;
    }
 
    .pj-meta {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 26px;
+      gap: 24px;
+      padding: 26px 28px;
    }
 
-   .pj-prose,
-   .pj-detail .pj-prose {
+   .pj-idea__text {
       margin-left: 0;
-      margin-right: 0;
+   }
+
+   /* Deux colonnes : la carte principale prend une rangée entière, les quatre
+      autres se rangent deux par deux. 2 + 4 = 6 cellules pour 3 rangées de 2. */
+   .pj-bento {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+
+   .pj-card--lead {
+      grid-column: span 2;
+      grid-row: span 1;
+   }
+
+   .pj-gains__inner {
+      gap: 48px;
    }
 
    .pj-next__link {
@@ -714,29 +1132,85 @@
 
 /*
 |--------------------------------------------------------------------------
+| Repli — sous 900px (seuil de la barre de navigation)
+|--------------------------------------------------------------------------
+| Le hero passe en colonne, la galerie cesse de coller, la colonne épinglée
+| des bénéfices reprend sa place dans le flux (le script ne l'épingle plus).
+*/
+
+@media (max-width: 899.98px) {
+
+   .pj-hero__inner {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 40px;
+      padding-top: 130px;
+   }
+
+   .pj-hero__text {
+      padding-bottom: 0;
+   }
+
+   .pj-hero .pj-square {
+      right: -40vw;
+      bottom: -30vw;
+      width: 110vw;
+   }
+
+   .pj-hero__cube--2 {
+      display: none;
+   }
+
+   .pj-shot {
+      position: static;
+      width: 100%;
+   }
+
+   .pj-gains__inner {
+      grid-template-columns: minmax(0, 1fr);
+   }
+
+   .pj-gains__lead {
+      max-width: 52ch;
+   }
+}
+
+/*
+|--------------------------------------------------------------------------
 | Repli — mobile
 |--------------------------------------------------------------------------
-| Une seule colonne partout. Le visuel suiveur et la parallaxe sont retirés :
-| ni l'un ni l'autre n'a de sens sans souris, et les deux coûtent des images
-| par seconde là où elles sont les plus rares.
 */
 
 @media (max-width: 767.98px) {
 
    .work__inner,
-   .pj__inner,
-   .pj-cover {
+   .pj__inner {
+      padding-left: 22px;
+      padding-right: 22px;
+   }
+
+   .pj-hero__inner {
       padding-left: 22px;
       padding-right: 22px;
    }
 
    .work-hero__inner {
       padding-top: 130px;
-      padding-bottom: 70px;
+      padding-bottom: 44px;
    }
 
-   .work-hero__cubes {
+   .work-hero__cube--1,
+   .work-hero__cube--2,
+   .work-hero__cube--3,
+   .pj-hero__cube--1 {
       display: none;
+   }
+
+   .work-group {
+      padding-top: 36px;
+   }
+
+   .work-group__head {
+      margin-bottom: 22px;
    }
 
    .work-hero__title {
@@ -744,7 +1218,7 @@
    }
 
    .work-row__link {
-      grid-template-columns: 40px minmax(0, 1fr);
+      grid-template-columns: 26px minmax(0, 1fr);
       gap: 12px;
       padding: 26px 0;
    }
@@ -755,61 +1229,133 @@
       margin-top: 12px;
    }
 
-   .work-row__go {
-      display: none;
-   }
-
+   .work-row__go,
    .work-cursor {
       display: none;
    }
 
-   .work-outro {
-      padding-bottom: 90px;
+   .work-end {
+      height: 36px;
    }
 
-   .pj-hero__inner {
-      padding-top: 120px;
-      padding-bottom: 40px;
+   .pj-hero {
+      padding-bottom: 70px;
+   }
+
+   .pj-back {
+      margin-bottom: 30px;
+   }
+
+   .pj-title {
+      letter-spacing: -0.5px;
+   }
+
+   .pj-btn {
+      padding: 14px 28px;
+      font-size: 18px;
+   }
+
+   .pj-cover__frame {
+      padding: 8px;
+      border-radius: 20px;
+   }
+
+   .pj-cover__frame img {
+      border-radius: 14px;
+   }
+
+   .pj-meta-wrap {
+      margin-top: -36px;
    }
 
    .pj-meta {
       grid-template-columns: minmax(0, 1fr);
-      gap: 22px;
+      gap: 20px;
+      padding: 24px 22px;
    }
 
-   .pj-brief {
-      padding: 70px 0 60px;
+   .pj-marquee {
+      margin-top: 60px;
+      padding: 16px 0;
    }
 
-   .pj-facts {
+   .pj-marquee__track span {
+      font-size: 20px;
+      margin-right: 32px;
+   }
+
+   .pj-marquee__track span::after {
+      margin-left: 32px;
+   }
+
+   .pj-idea {
+      padding: 80px 0 70px;
+   }
+
+   .pj-keys {
+      padding: 70px 0 80px;
+   }
+
+   .pj-keys__cube {
+      display: none;
+   }
+
+   .pj-bento {
       grid-template-columns: minmax(0, 1fr);
-      gap: 28px;
-      padding-bottom: 70px;
+      grid-auto-rows: auto;
+      gap: 14px;
    }
 
-   .pj-shots-2 {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 24px;
+   .pj-card,
+   .pj-card--lead {
+      grid-column: span 1;
+      grid-row: span 1;
+      padding: 28px 24px;
    }
 
-   .pj-shot,
-   .pj-shots-2 .pj-shot {
+   .pj-gallery {
+      padding: 30px 0 60px;
+   }
+
+   .pj-shot {
       margin-bottom: 24px;
    }
 
-   .pj-shot--offset {
-      width: 100%;
-      margin-left: 0;
+   .pj-shot__frame {
+      padding: 8px;
+      border-radius: 20px;
    }
 
-   .pj-detail {
-      padding: 50px 0 70px;
+   .pj-shot__frame img {
+      border-radius: 14px;
+   }
+
+   .pj-gains {
+      padding: 60px 0 80px;
+   }
+
+   .pj-gain {
+      padding: 28px 0 28px 34px;
+   }
+
+   .pj-gain::before {
+      top: 38px;
    }
 
    .pj-next__link {
       grid-template-columns: minmax(0, 1fr);
       gap: 30px;
       padding: 50px 0 80px;
+   }
+
+   .pj-cta {
+      padding: 100px 0 110px;
+   }
+
+   .pj-cta .pj-square {
+      left: -60vw;
+      top: -60vw;
+      width: 150vw;
    }
 }
 
@@ -818,23 +1364,33 @@
 | Mouvement réduit
 |--------------------------------------------------------------------------
 | Le script coupe déjà ses propres animations ; ce bloc neutralise ce qui vit
-| en CSS pur, y compris sur les appareils sans souris qui n'ont jamais eu de
-| survol à afficher.
+| en CSS pur : le bandeau qui défile, les transitions et le survol des cartes.
 */
 
 @media (prefers-reduced-motion: reduce) {
 
+   .pj-marquee__track {
+      animation: none;
+   }
+
    .work-row__link::after,
-   .work-row__index,
+   .work-row__mark,
    .work-row__title,
    .work-row__go,
-   .work-outro__btn,
+   .pj-btn,
+   .pj-btn span,
    .pj-back span,
+   .pj-card,
    .pj-link,
    .pj-link span,
    .pj-next__title,
    .pj-next__media img {
       transition: none;
+   }
+
+   .pj-card:hover,
+   .pj-btn--primary:hover {
+      transform: none;
    }
 
    .pj-next__link:hover .pj-next__media img {

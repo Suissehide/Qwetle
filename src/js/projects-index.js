@@ -1,5 +1,5 @@
 /*!
- * Projects index 0.0.1
+ * Projects index 0.1.0
  *
  * @license Copyright 2021, Qwetle. All rights reserved.
  * @author: Léo
@@ -7,10 +7,11 @@
 
 (function () {
 
-    var list = document.querySelector('.work-list');
-    if (!list) return;
-
-    var rows = Array.prototype.slice.call(list.querySelectorAll('.work-row'));
+    // La page porte deux listes — « Projets » et « Lab ». On les traite comme une
+    // seule suite de lignes : le visuel suiveur n'a qu'une boîte, et la
+    // numérotation propre à chaque famille est déjà écrite dans le HTML.
+    var rows = Array.prototype.slice.call(document.querySelectorAll('.work-list .work-row'));
+    if (!rows.length) return;
 
     var survolPossible = window.matchMedia('(hover: hover)').matches;
     var animationsOk = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
@@ -91,31 +92,61 @@
         });
     }
 
+    if (!animationsOk || !window.gsap) return;
+
     /* ---------------------------------------------------------------------
-       Cubes du hero
-       Même dérive lente que sur la page d'accueil : c'est ce qui rattache ce
-       haut de page à celui du site, et la seule animation qui tourne en boucle
-       ici. Trois durées premières entre elles, pour qu'ils ne repassent jamais
-       ensemble par la même position.
+       Entrée du hero et décor
+       Le titre et le chapô montent au chargement. Les cubes dérivent en
+       boucle sur des durées premières entre elles ; le carré bleu remonte et
+       pivote pendant que le hero sort de l'écran.
        --------------------------------------------------------------------- */
 
-    if (animationsOk && window.gsap) {
-        [11, 13, 17].forEach(function (duree, i) {
-            gsap.to('.work-hero__cube--' + (i + 1), {
-                y: (i % 2 ? 1 : -1) * 26,
-                duration: duree,
-                repeat: -1,
-                yoyo: true,
-                ease: 'sine.inOut',
+    gsap.from('.work-hero__inner > *', {
+        y: 30,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: 'power3.out',
+    });
+
+    [11, 13, 17].forEach(function (duree, i) {
+        gsap.to('.work-hero__cube--' + (i + 1), {
+            y: (i % 2 ? 1 : -1) * 26,
+            duration: duree,
+            repeat: -1,
+            yoyo: true,
+            ease: 'sine.inOut',
+        });
+    });
+
+    if (window.ScrollTrigger) {
+
+        gsap.to('.work-hero .pj-square', {
+            yPercent: -16,
+            rotate: 6,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: '.work-hero',
+                start: 'top top',
+                end: 'bottom top',
+                scrub: 1,
+            },
+        });
+
+        /* -----------------------------------------------------------------
+           Révélations au défilement
+           ----------------------------------------------------------------- */
+
+        gsap.utils.toArray('.work-group__head').forEach(function (head) {
+            gsap.from(head.children, {
+                scrollTrigger: { trigger: head, start: 'top 88%' },
+                y: 20,
+                opacity: 0,
+                duration: 0.6,
+                stagger: 0.08,
+                ease: 'power3.out',
             });
         });
-    }
-
-    /* ---------------------------------------------------------------------
-       Révélations au défilement
-       --------------------------------------------------------------------- */
-
-    if (animationsOk && window.gsap && window.ScrollTrigger) {
 
         rows.forEach(function (row) {
             gsap.from(row, {
@@ -127,8 +158,8 @@
             });
         });
 
-        gsap.from('.work-outro__title, .work-outro__btn', {
-            scrollTrigger: { trigger: '.work-outro', start: 'top 85%' },
+        gsap.from('.pj-cta__title, .pj-cta__text, .pj-cta .pj-btn', {
+            scrollTrigger: { trigger: '.pj-cta', start: 'top 80%' },
             y: 26,
             opacity: 0,
             duration: 0.7,

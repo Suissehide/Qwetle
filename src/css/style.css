@@ -29,6 +29,26 @@ body {
    font-family: "Comfortaa Regular", serif;
 }
 
+/* Défilement lissé (js/smooth-scroll.js). Lenis pose ces classes sur <html> :
+   la hauteur reste celle du contenu, et le lissage natif est coupé pour ne
+   pas s'ajouter au sien. */
+html.lenis,
+html.lenis body {
+   height: auto;
+}
+
+.lenis.lenis-smooth {
+   scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+   overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+   overflow: hidden;
+}
+
 .nav {
    z-index: 10 !important;
    user-select: none;
@@ -526,19 +546,14 @@ body {
    line-height: 1.6;
 }
 
+/* Repères de progression : un segment par projet, l'actif allongé et opaque.
+   Pas de numéro à côté : le titre du projet affiché suffit. */
 .project__counter {
    display: flex;
    align-items: center;
-   gap: 14px;
-   font-family: "Staatliches Regular", serif;
-   font-size: 18px;
-   letter-spacing: 3px;
-   color: var(--cherry-blossom-pink);
    margin-bottom: 14px;
 }
 
-/* Repères de progression : un segment par projet, l'actif allongé et opaque.
-   Remplace le « — 04 », qui disait le total mais pas où l'on en était. */
 .project__counter-steps {
    display: flex;
    align-items: center;
@@ -630,10 +645,12 @@ body {
 
 .project__stack {
    position: relative;
-   width: 78%;
-   /* Le bouton ayant rejoint la colonne bleue, la colonne de droite n'a plus
-      que le visuel : il peut reprendre de la hauteur. */
-   height: 64vh;
+   /* Le cadre a le rapport des captures (1526 × 784) : le shader recadre en
+      « cover », donc tout écart entre cadre et image se paie en rognage. La
+      largeur est bornée par la hauteur disponible (64vh) pour que le cadre
+      entier tienne dans la colonne sur les fenêtres basses. */
+   width: min(78%, calc(64vh * 1.947));
+   aspect-ratio: 1526 / 784;
    /* `clip` et non `hidden` : une boîte en overflow:hidden reste défilable
       par programme, si bien qu'un Tab vers un visuel hors cadre faisait
       défiler la pile pour le révéler — décalage définitif de la séquence,
@@ -720,7 +737,7 @@ body {
 }
 
 .project__shot-media--4 {
-   background-image: url("../assets/projects/cctv/cover.webp"),
+   background-image: url("../assets/projects/shiva/cover.webp"),
                      linear-gradient(135deg, #E94767 10%, #2F4157 100%);
 }
 
@@ -1473,7 +1490,7 @@ footer {
       font-size: 30px;
    }
    .project__stack {
-      width: 86%;
+      width: min(86%, calc(64vh * 1.947));
    }
 }
 

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Jeu à deux en temps réel : salons, historique des coups, score et vote de revanche."/>
+    <meta name="description" content="Un morpion à deux, en direct : vous créez un salon, envoyez le code, et la partie démarre."/>
     <meta name="robots" content="index,follow"/>
 
     <meta property="og:title" content="Tic-Tac-Toe — Qwetle"/>
@@ -63,17 +63,41 @@
 <main class="project-page">
 
     <section class="pj-hero">
-        <div class="pj-hero__inner pj__inner">
 
-            <a class="pj-back" href="/projects/"><span aria-hidden="true">&larr;</span> Réalisations</a>
+        <div class="pj-hero__decor" aria-hidden="true">
+            <span class="pj-square"><img src="../../assets/background/grand-cube-bleu.svg" alt=""></span>
+            <span class="pj-cube pj-hero__cube--1"><img src="../../assets/logo/cube-flou_logo_GRAND.svg" alt=""></span>
+            <span class="pj-cube pj-hero__cube--2"><img src="../../assets/logo/cube-flou_logo_PETIT.svg" alt=""></span>
+        </div>
 
-            <h1 class="pj-title">Tic-Tac-Toe</h1>
-            <p class="pj-lead">Jeu à deux en temps réel&nbsp;: salons, historique des coups, score et vote de revanche.</p>
+        <div class="pj-hero__inner">
 
-            <dl class="pj-meta">
+            <div class="pj-hero__text">
+                <a class="pj-back" href="/projects/"><span aria-hidden="true">&larr;</span> Réalisations</a>
+                <p class="pj-kicker">Lab · Jeu multijoueur en temps réel</p>
+                <h1 class="pj-title">Tic-Tac-Toe</h1>
+                <p class="pj-tagline">Un morpion à deux, en direct : vous créez un salon, envoyez le code, et la partie démarre.</p>
+                <div class="pj-hero__actions">
+                    <a class="pj-btn pj-btn--primary" href="https://tictactoe.qwetle.fr" target="_blank" rel="noopener">Jouer au morpion <span aria-hidden="true">&rarr;</span></a>
+                    <a class="pj-btn pj-btn--ghost" href="/contact/">Un projet comme ça ?</a>
+                </div>
+            </div>
+
+            <figure class="pj-cover">
+                <div class="pj-cover__frame pj-glass">
+                    <img src="../../assets/projects/tic-tac-toe/cover.webp" alt="Écran d’accueil de Tic-Tac-Toe, création ou reprise d’un salon" width="1440" height="740" loading="eager" decoding="async">
+                </div>
+            </figure>
+
+        </div>
+
+    </section>
+
+    <div class="pj__inner pj-meta-wrap">
+        <dl class="pj-meta pj-glass">
                 <div>
                     <dt>Type</dt>
-                    <dd>Jeu multijoueur</dd>
+                    <dd>Jeu multijoueur, temps réel</dd>
                 </div>
                 <div>
                     <dt>Rôle</dt>
@@ -87,63 +111,93 @@
                     <dt>En ligne</dt>
                     <dd><a href="https://tictactoe.qwetle.fr" target="_blank" rel="noopener">tictactoe.qwetle.fr</a></dd>
                 </div>
-            </dl>
+        </dl>
+    </div>
 
-        </div>
+    <div class="pj-marquee" aria-hidden="true">
+        <div class="pj-marquee__track"><span>Salons privés</span><span>Code à 6 caractères</span><span>Temps réel</span><span>Reprise après coupure</span><span>Revanche</span><span>Score conservé</span><span>Salons privés</span><span>Code à 6 caractères</span><span>Temps réel</span><span>Reprise après coupure</span><span>Revanche</span><span>Score conservé</span></div>
+    </div>
 
-        <figure class="pj-cover">
-            <div class="pj-cover__frame">
-                <img src="../../assets/projects/tic-tac-toe/cover.webp" alt="Écran d’accueil de Tic-Tac-Toe, création ou reprise d’un salon" width="1440" height="740" loading="eager" decoding="async">
-            </div>
-        </figure>
-    </section>
-
-    <section class="pj-brief">
+    <section class="pj-idea">
         <div class="pj__inner">
-            <h2 class="pj-h2">Objectif</h2>
-            <div class="pj-prose">
-                <p>Un banc d’essai temps réel volontairement réduit&nbsp;: deux joueurs, un salon, un état de partie que le serveur arbitre seul.</p>
-                <p>Le jeu est simple pour que l’infrastructure soit lisible en entier&nbsp;: appariement, synchronisation, reprise après déconnexion, revanche.</p>
-            </div>
+            <h2 class="pj-h2">L’idée</h2>
+            <p class="pj-idea__text">Le jeu est volontairement minuscule. Ce qui nous intéressait, c’est tout le reste : trouver son adversaire, rester synchronisés au coup près, et ne pas perdre la partie quand le métro passe sous un tunnel.</p>
         </div>
     </section>
 
-    <section>
-        <div class="pj__inner">
-            <dl class="pj-facts">
-                    <div class="pj-fact">
-                        <dt>Salons</dt>
-                        <dd>Code à <em>6</em> caractères</dd>
+    <section class="pj-keys">
+        <div class="pj-keys__cube" aria-hidden="true">
+            <span class="skills__cube-face skills__cube-face--back"></span>
+            <span class="skills__cube-face skills__cube-face--front"></span>
+        </div>
+        <div class="pj__inner pj-keys__inner">
+            <h2 class="pj-h2">Ce qui fait la <em>différence</em></h2>
+            <div class="pj-bento">
+                <article class="pj-card pj-card--lead pj-glass">
+                    <p class="pj-card__label">La promesse</p>
+                    <div>
+                        <p class="pj-card__big">Le temps réel, sans la friction.</p>
+                        <p class="pj-card__text">Un salon, un code de six caractères, et deux écrans qui restent parfaitement synchronisés. Ce socle sert autant à un jeu qu’à un outil de travail à plusieurs.</p>
                     </div>
-                    <div class="pj-fact">
-                        <dt>Transport</dt>
-                        <dd>WebSocket, état arbitré côté serveur</dd>
-                    </div>
-                    <div class="pj-fact">
-                        <dt>Robustesse</dt>
-                        <dd>Reprise automatique après déconnexion</dd>
-                    </div>
-            </dl>
+                </article>
+                    <article class="pj-card pj-glass">
+                        <p class="pj-card__figure">6</p>
+                        <p class="pj-card__text">caractères : le code qui suffit à rejoindre un salon.</p>
+                    </article>
+                    <article class="pj-card pj-glass">
+                        <p class="pj-card__figure pj-card__figure--word">Synchro</p>
+                        <p class="pj-card__text">Chaque coup apparaît chez l’autre à l’instant où il est joué.</p>
+                    </article>
+                    <article class="pj-card pj-glass">
+                        <p class="pj-card__figure pj-card__figure--word">Coupure</p>
+                        <p class="pj-card__text">Un compte à rebours attend le joueur : la partie n’est pas perdue.</p>
+                    </article>
+                    <article class="pj-card pj-glass">
+                        <p class="pj-card__figure pj-card__figure--word">Revanche</p>
+                        <p class="pj-card__text">Les deux joueurs votent, et le score continue de courir.</p>
+                    </article>
+            </div>
         </div>
     </section>
 
     <section class="pj-gallery">
         <div class="pj__inner">
-                <div class="pj-shots-2">
-                <figure class="pj-shot"><img src="../../assets/projects/tic-tac-toe/01-salon.webp" alt="Salon de Tic-Tac-Toe en attente du second joueur" width="1440" height="740" loading="lazy" decoding="async"></figure>
-                <figure class="pj-shot"><img src="../../assets/projects/tic-tac-toe/02-fin.webp" alt="Fin de partie de Tic-Tac-Toe, score et bouton de revanche" width="1440" height="740" loading="lazy" decoding="async"></figure>
-                </div>
+            <div class="pj-gallery__stack">
+                <figure class="pj-shot">
+                    <div class="pj-shot__frame pj-glass">
+                        <img src="../../assets/projects/tic-tac-toe/01-salon.webp" alt="Salon de Tic-Tac-Toe en attente du second joueur" width="1440" height="740" loading="lazy" decoding="async">
+                    </div>
+                </figure>
+                <figure class="pj-shot">
+                    <div class="pj-shot__frame pj-glass">
+                        <img src="../../assets/projects/tic-tac-toe/02-fin.webp" alt="Fin de partie de Tic-Tac-Toe, score et bouton de revanche" width="1440" height="740" loading="lazy" decoding="async">
+                    </div>
+                </figure>
             </div>
+        </div>
     </section>
 
-    <section class="pj-detail">
-        <div class="pj__inner">
-            <h2 class="pj-h2">Architecture</h2>
-            <div class="pj-prose">
-                <p>Back Fastify sur un conteneur d’inversion de contrôle, jetons JWT pour l’inscription, la connexion et le rafraîchissement. Chaque message entrant est validé par un schéma avant d’atteindre la logique de jeu.</p>
-                <p>Front React, TanStack pour l’état serveur et Zustand pour l’état de partie. Une déconnexion ouvre un compte à rebours de reprise au lieu de perdre la partie.</p>
+    <section class="pj-gains">
+        <div class="pj__inner pj-gains__inner">
+            <div class="pj-gains__head">
+                <h2 class="pj-h2">Ce que ça <em>prouve</em></h2>
+                <p class="pj-gains__lead">Tic-Tac-Toe est notre banc d’essai pour tout ce qui se joue, ou se travaille, à plusieurs en direct.</p>
+                    <a class="pj-link" href="https://tictactoe.qwetle.fr" target="_blank" rel="noopener">Jouer au morpion <span aria-hidden="true">&rarr;</span></a>
             </div>
-                <a class="pj-link" href="https://tictactoe.qwetle.fr" target="_blank" rel="noopener">Jouer au morpion <span aria-hidden="true">&rarr;</span></a>
+            <ol class="pj-gains__list">
+                    <li class="pj-gain">
+                        <h3>Une connexion qui se rattrape</h3>
+                        <p>Le cas le moins visible et le plus travaillé : une coupure ne casse rien.</p>
+                    </li>
+                    <li class="pj-gain">
+                        <h3>Des salons prêts à l’emploi</h3>
+                        <p>Créer, partager le code, jouer : la mise en relation tient en trois gestes.</p>
+                    </li>
+                    <li class="pj-gain">
+                        <h3>Une base robuste</h3>
+                        <p>Chaque message est validé côté serveur avant d’être appliqué : la partie ne peut pas se corrompre.</p>
+                    </li>
+            </ol>
         </div>
     </section>
 
@@ -151,14 +205,24 @@
         <div class="pj__inner">
             <a class="pj-next__link" href="/projects/trianglify/">
                 <span class="pj-next__body">
-                    <span class="pj-next__label">Projet suivant</span>
+                    <span class="pj-next__label">Suivant dans le Lab</span>
                     <span class="pj-next__title">Trianglify</span>
-                    <span class="pj-next__summary">Générateur de fonds low-poly&nbsp;: réglages, palettes, export à la dimension voulue.</span>
+                    <span class="pj-next__summary">Un générateur de fonds géométriques : vous réglez, vous tirez au sort, vous téléchargez à la bonne taille.</span>
                 </span>
                 <span class="pj-next__media">
                     <img src="../../assets/projects/trianglify/thumb.webp" alt="Interface de Trianglify, réglages à gauche et aperçu du motif à droite" width="720" height="370" loading="lazy" decoding="async">
                 </span>
             </a>
+        </div>
+    </section>
+
+    <section class="pj-cta">
+        <span class="pj-square" aria-hidden="true"><img src="../../assets/background/grand-cube-bleu.svg" alt=""></span>
+        <span class="pj-cube" aria-hidden="true"><img src="../../assets/logo/cube-flou_logo_GRAND.svg" alt=""></span>
+        <div class="pj__inner pj-cta__inner">
+            <h2 class="pj-cta__title">Un projet du même <em>genre</em>&nbsp;?</h2>
+            <p class="pj-cta__text">Décrivez-le en quelques lignes. Nous répondons sous 48&nbsp;heures ouvrées, avec des questions, un délai et un ordre de prix.</p>
+            <a class="pj-btn pj-btn--primary" href="/contact/">Nous contacter <span aria-hidden="true">&rarr;</span></a>
         </div>
     </section>
 
@@ -210,6 +274,8 @@
 <script src="../../js/jquery.min.js"></script>
 <script src="../../js/gsap/gsap.min.js"></script>
 <script src="../../js/gsap/scrollTrigger.min.js"></script>
+<script src="../../js/lenis.min.js"></script>
+<script src="../../js/smooth-scroll.js"></script>
 
 <script src="../../js/script.js"></script>
 <script src="../../js/project-page.js"></script>

@@ -14,7 +14,6 @@
     var aside   = section.querySelector('.project__aside');
     var shots   = section.querySelectorAll('.project__shot');
     var texts   = section.querySelectorAll('.project__text');
-    var counter    = section.querySelector('.project__counter-current');
     var counterBox = section.querySelector('.project__counter');
 
     // Fraction de la largeur de la boîte du SVG réellement peinte à droite.
@@ -230,6 +229,20 @@
                 }
             });
 
+            // 0 → 80 : N - 1 transitions se partageant les 80 unités de la
+            // phase projets. Tout est déduit du DOM pour qu'ajouter un projet
+            // ne demande aucune retouche ici — voir les points restés manuels,
+            // listés dans style.css au-dessus de .project__stack-inner.
+            var N = texts.length;
+            var STEP = 80 / (N - 1);
+
+            // Points d'accrochage : un par projet, plus la fin de l'épinglage.
+            // Sans le dernier, un défilement arrêté dans le temps mort (80 → 100)
+            // serait ramené sur le dernier projet au lieu de pouvoir sortir.
+            var accroches = [];
+            for (var a = 0; a < N; a++) accroches.push(a * STEP / 100);
+            accroches.push(1);
+
             var tl = gsap.timeline({
                 scrollTrigger: {
                     trigger: section,
@@ -239,6 +252,14 @@
                     // Amorti plutôt que collé à la molette : l'animation rattrape
                     // le scroll en ~1s, ce qui lisse les transitions entre projets.
                     scrub: 1,
+                    // Dès que la molette s'arrête, on finit d'aller au projet le
+                    // plus proche : impossible de rester à cheval entre deux.
+                    snap: {
+                        snapTo: accroches,
+                        duration: { min: 0.25, max: 0.7 },
+                        delay: 0.12,
+                        ease: 'power1.inOut'
+                    },
                     invalidateOnRefresh: true
                 }
             });
@@ -255,13 +276,6 @@
             // les inactifs sortent aussi du parcours de tabulation.
             gsap.set(shots, { autoAlpha: 0 });
             gsap.set(shots[0], { autoAlpha: 1 });
-
-            // 0 → 80 : N - 1 transitions se partageant les 80 unités de la
-            // phase projets. Tout est déduit du DOM pour qu'ajouter un projet
-            // ne demande aucune retouche ici — voir les points restés manuels,
-            // listés dans style.css au-dessus de .project__stack-inner.
-            var N = texts.length;
-            var STEP = 80 / (N - 1);
 
             // Surface WebGL. Si elle n'est pas disponible (pas de contexte),
             // `gl` vaut null et le repli CSS reste à l'écran.
@@ -329,8 +343,8 @@
 
             // Repères de progression : un segment par projet, l'actif allongé.
             // Générés ici plutôt qu'écrits dans le balisage, pour qu'ajouter un
-            // projet n'oblige à rien tenir à jour. Ils sont purement visuels —
-            // le numéro à côté porte déjà l'information.
+            // projet n'oblige à rien tenir à jour. Purement visuels : le titre
+            // du projet affiché porte déjà l'information.
             var reperes = document.createElement('span');
             reperes.className = 'project__counter-steps';
             reperes.setAttribute('aria-hidden', 'true');
@@ -342,8 +356,8 @@
             // qu'au premier changement, donc au repos aucun segment ne serait actif.
             reperes.children[0].className = 'is-active';
 
-            // Compteur : un objet intermédiaire, pour que le scrub le rejoue
-            // proprement dans les deux sens.
+            // Position courante : un objet intermédiaire, pour que le scrub le
+            // rejoue proprement dans les deux sens.
             var count = { value: 1 };
             var dernierAffiche = 1;
 
@@ -355,7 +369,6 @@
                     var n = Math.round(count.value);
                     if (n === dernierAffiche) return;
                     dernierAffiche = n;
-                    counter.textContent = n < 10 ? '0' + n : String(n);
                     for (var j = 0; j < reperes.children.length; j++) {
                         reperes.children[j].className = (j === n - 1) ? 'is-active' : '';
                     }
@@ -375,9 +388,6 @@
                 gsap.set(cube, { clearProps: 'all' });
                 gsap.set(texts, { clearProps: 'all' });
                 gsap.set(shots, { clearProps: 'all' });
-                // clearProps ne sait pas restaurer du texte : sans ça, le
-                // compteur resterait figé sur la valeur atteinte au scroll.
-                counter.textContent = '01';
                 // Les repères sont créés par cette branche : elle les reprend
                 // en partant, sinon un aller-retour sous le seuil en empilerait
                 // un jeu de plus à chaque fois.
