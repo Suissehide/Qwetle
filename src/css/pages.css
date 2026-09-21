@@ -1,5 +1,5 @@
 /* PAGES
-   Styles des deux pages éditoriales : /about et /work. Chargé après
+   Styles des trois pages éditoriales : /about, /work et /contact. Chargé après
    projects.css, dont ces pages reprennent les primitives de marque :
    .pj-glass, .pj-btn, .pj-square, .pj-cube, .pj-bento, .pj-marquee et le
    bloc d'appel .pj-cta. Rien n'est redéfini ici de ce qui existe déjà : ce
@@ -11,7 +11,8 @@
 */
 
 .ab,
-.xp {
+.xp,
+.ct {
    background-color: var(--baby-powder);
    color: var(--charcoal);
    /* Les carrés et cubes de décor débordent volontairement du cadre. */
@@ -1482,5 +1483,691 @@
 @media (prefers-reduced-motion: reduce) {
    .ab-band__track {
       animation: none;
+   }
+}
+
+/*
+|--------------------------------------------------------------------------
+| /contact — en-tête asymétrique et formulaire de verre
+|--------------------------------------------------------------------------
+| La phrase à gauche, le formulaire à droite dans une carte de verre posée
+| sur le grand carré bleu. La carte part plus bas que le titre et déborde
+| sur la section suivante par une marge négative : c'est la liaison entre
+| les deux blocs, comme le bandeau incliné de /about.
+*/
+
+/* Le titre traverse les deux colonnes ; dessous, le chapô et les boutons à
+   gauche, la carte à droite. */
+.pg-hero--contact .pg-hero__inner {
+   display: grid;
+   grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+   grid-template-areas:
+      "title title"
+      "text  form";
+   gap: 0 60px;
+   align-items: start;
+   padding-bottom: 0;
+}
+
+.ct-hero__title {
+   grid-area: title;
+   font-size: clamp(40px, 5vw, 74px);
+   /* 30ch en Staatliches condensée sur toute la largeur : deux lignes. */
+   max-width: 30ch;
+   margin-bottom: 30px;
+}
+
+.ct-hero__text {
+   grid-area: text;
+   padding-top: 10px;
+}
+
+.ct-form {
+   grid-area: form;
+}
+
+/* La pilule dans le titre : le cube flou du logo, coupé en gélule rose.
+   Dimensionnée en em pour suivre le corps du titre à toutes les largeurs. */
+.ct-pill {
+   position: relative;
+   display: inline-block;
+   width: 1.55em;
+   height: 0.64em;
+   margin: 0 0.06em;
+   vertical-align: -0.04em;
+   border-radius: 999px;
+   overflow: hidden;
+   background: linear-gradient(135deg, #f7c4ce 0%, var(--paradise-pink) 100%);
+   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 10px 24px rgba(233, 71, 103, 0.28);
+}
+
+.ct-pill img {
+   position: absolute;
+   left: -18%;
+   top: -70%;
+   width: 136%;
+   height: auto;
+   will-change: transform;
+}
+
+/* Assez pâle pour rester une teinte sous le verre : à pleine opacité, les
+   intitulés du formulaire se perdaient sur la masse sombre. */
+.pg-hero--contact .pj-square {
+   right: -18vw;
+   top: 12%;
+   bottom: auto;
+   width: clamp(480px, 54vw, 900px);
+   opacity: 0.42;
+}
+
+.pg-hero--contact .pg-hero__cube--1 {
+   width: clamp(140px, 15vw, 220px);
+   top: 68%;
+   left: 3%;
+   right: auto;
+}
+
+.pg-hero--contact .pg-hero__cube--2 {
+   width: clamp(60px, 7vw, 100px);
+   top: 14%;
+   right: 8%;
+}
+
+.pg-hero--contact .pg-hero__cube--3 {
+   width: clamp(110px, 12vw, 180px);
+   top: 78%;
+   right: 40%;
+}
+
+.ct-form {
+   position: relative;
+   z-index: 2;
+   box-sizing: border-box;
+   /* Plus couvrant que le verre des cartes : un formulaire se lit. */
+   background: rgba(255, 253, 249, 0.72);
+   padding: 40px 38px 36px;
+   margin-top: 0;
+   /* Le débordement sur la section suivante, rattrapé par son padding. */
+   margin-bottom: -150px;
+   will-change: transform;
+}
+
+.ct-form__title {
+   font-family: "Staatliches Regular", serif;
+   font-size: clamp(26px, 2.4vw, 32px);
+   line-height: 1.1;
+   letter-spacing: 0.3px;
+   margin-bottom: 28px;
+}
+
+.ct-form__title em {
+   font-style: normal;
+   color: var(--paradise-pink);
+}
+
+.ct-row {
+   display: grid;
+   grid-template-columns: repeat(2, minmax(0, 1fr));
+   gap: 26px;
+}
+
+.ct-field {
+   margin-bottom: 26px;
+}
+
+.ct-field label {
+   display: block;
+   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+   font-size: 11px;
+   letter-spacing: 2px;
+   text-transform: uppercase;
+   color: rgba(47, 65, 87, 0.5);
+   margin-bottom: 10px;
+}
+
+.ct-field label span {
+   text-transform: none;
+   letter-spacing: 0;
+   color: rgba(47, 65, 87, 0.32);
+}
+
+/* reset.css ne pose ni box-sizing ni `font: inherit` sur les contrôles de
+   formulaire : les deux se déclarent ici, sinon la police système reprend
+   la main et un padding fait déborder les champs de leur colonne. */
+.ct-field input,
+.ct-field select,
+.ct-field textarea {
+   box-sizing: border-box;
+   display: block;
+   width: 100%;
+   padding: 11px 2px;
+   font-family: "Comfortaa Regular", serif;
+   font-size: 15px;
+   line-height: 1.5;
+   color: var(--charcoal);
+   background: transparent;
+   border: none;
+   border-bottom: 1px solid rgba(47, 65, 87, 0.28);
+   border-radius: 0;
+   transition: border-color 0.25s ease;
+}
+
+.ct-field textarea {
+   resize: vertical;
+   min-height: 120px;
+}
+
+/* Le select natif garde sa flèche mais perd le fond gris et les coins
+   arrondis des styles d'agent utilisateur. */
+.ct-field select {
+   -webkit-appearance: none;
+   appearance: none;
+   padding-right: 28px;
+   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%232F4157' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+   background-repeat: no-repeat;
+   background-position: right 2px center;
+}
+
+.ct-field input:hover,
+.ct-field select:hover,
+.ct-field textarea:hover {
+   border-bottom-color: rgba(47, 65, 87, 0.5);
+}
+
+/* reset.css coupe `outline` sur :focus pour toute la page : il faut le
+   rendre ici, sinon le clavier traverse le formulaire à l'aveugle. */
+.ct-field input:focus-visible,
+.ct-field select:focus-visible,
+.ct-field textarea:focus-visible {
+   outline: 2px solid var(--paradise-pink);
+   outline-offset: 4px;
+   border-bottom-color: var(--paradise-pink);
+}
+
+.ct-field__help {
+   font-family: "Comfortaa Regular", serif;
+   font-size: 12px;
+   line-height: 1.6;
+   color: rgba(47, 65, 87, 0.45);
+   margin-top: 8px;
+}
+
+/* Le bouton reprend .pj-btn, pensé pour des liens : on retire ce que
+   l'agent utilisateur pose sur un <button>. */
+.ct-form__submit {
+   margin-top: 4px;
+   border: 0;
+   cursor: pointer;
+   -webkit-appearance: none;
+   appearance: none;
+}
+
+.ct-form__note {
+   font-family: "Comfortaa Regular", serif;
+   font-size: 12px;
+   line-height: 1.8;
+   color: rgba(47, 65, 87, 0.45);
+   max-width: 46ch;
+   margin-top: 22px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| /contact — après le message, en tranches horizontales
+|--------------------------------------------------------------------------
+| Trois tranches côte à côte. Celle qui est ouverte prend trois fois la
+| place des autres et passe au charcoal ; son corps se découvre une fois la
+| largeur posée. Dans les tranches fermées, le titre s'écrit à la verticale
+| et se lit de bas en haut. Le padding haut rattrape le débordement du
+| formulaire.
+*/
+
+.ct-after {
+   padding: 250px 0 140px;
+}
+
+.ct-slices {
+   display: flex;
+   gap: 16px;
+   height: 410px;
+   list-style: none;
+}
+
+.ct-slice {
+   position: relative;
+   flex: 1 1 0;
+   min-width: 0;
+   box-sizing: border-box;
+   border-radius: 26px;
+   overflow: hidden;
+   background: rgba(255, 255, 255, 0.5);
+   border: 1px solid rgba(255, 255, 255, 0.85);
+   box-shadow: 0 20px 50px rgba(47, 65, 87, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+   color: var(--charcoal);
+   cursor: pointer;
+   transition: flex 0.8s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.5s ease, color 0.5s ease, box-shadow 0.5s ease;
+}
+
+.ct-slice.is-open {
+   flex: 3.1 1 0;
+   background: var(--charcoal);
+   border-color: rgba(255, 255, 255, 0.18);
+   color: var(--baby-powder);
+   box-shadow: 0 30px 70px rgba(47, 65, 87, 0.22);
+   cursor: default;
+}
+
+/* Rappel du carré bleu dans le coin de la tranche ouverte. */
+.ct-slice::after {
+   content: "";
+   position: absolute;
+   right: -70px;
+   top: -70px;
+   width: 200px;
+   height: 200px;
+   border-radius: 44px;
+   background: rgba(245, 172, 186, 0.22);
+   transform: rotate(14deg);
+   opacity: 0;
+   transition: opacity 0.5s ease;
+   pointer-events: none;
+}
+
+.ct-slice.is-open::after {
+   opacity: 1;
+}
+
+.ct-slice__head {
+   position: absolute;
+   left: 30px;
+   bottom: 30px;
+   display: flex;
+   align-items: center;
+   gap: 16px;
+   padding: 0;
+   background: none;
+   border: 0;
+   color: inherit;
+   text-align: left;
+   cursor: inherit;
+   -webkit-appearance: none;
+   appearance: none;
+   writing-mode: vertical-rl;
+   transform: rotate(180deg);
+}
+
+.ct-slice__head:focus-visible {
+   outline: 2px solid var(--paradise-pink);
+   outline-offset: 6px;
+}
+
+.ct-slice.is-open .ct-slice__head {
+   position: static;
+   writing-mode: horizontal-tb;
+   transform: none;
+   margin: 34px 34px 22px;
+}
+
+.ct-slice__head .pg-mark {
+   flex: 0 0 auto;
+   background: var(--cherry-blossom-pink);
+   transition: background-color 0.3s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ct-slice.is-open .pg-mark {
+   background: var(--paradise-pink);
+   transform: rotate(104deg) scale(1.3);
+}
+
+.ct-slice__title {
+   font-family: "Staatliches Regular", serif;
+   font-size: clamp(24px, 2.4vw, 34px);
+   line-height: 1.05;
+   letter-spacing: 0.4px;
+   white-space: nowrap;
+   transition: font-size 0.4s ease;
+}
+
+/* Fermée, la tranche fait moins de 200px de large et 430px de haut : le
+   titre vertical doit tenir dans cette hauteur, avec le marqueur. */
+.ct-slice:not(.is-open) .ct-slice__title {
+   font-size: 23px;
+}
+
+.ct-slice__body {
+   position: relative;
+   z-index: 1;
+   padding: 0 34px 34px;
+   opacity: 0;
+   visibility: hidden;
+   transition: opacity 0.4s ease, visibility 0s linear 0.4s;
+}
+
+.ct-slice.is-open .ct-slice__body {
+   opacity: 1;
+   visibility: visible;
+   transition: opacity 0.5s ease 0.3s, visibility 0s linear 0.3s;
+}
+
+.ct-slice__text {
+   font-family: "Comfortaa Regular", serif;
+   font-size: 15px;
+   line-height: 1.85;
+   color: rgba(255, 253, 249, 0.76);
+   max-width: 46ch;
+   margin-bottom: 24px;
+}
+
+.ct-slice__gains {
+   border-top: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.ct-slice__gains li {
+   position: relative;
+   padding: 12px 0 12px 26px;
+   border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+   font-family: "Comfortaa Regular", serif;
+   font-size: 13px;
+   line-height: 1.7;
+   color: rgba(255, 253, 249, 0.86);
+}
+
+.ct-slice__gains li::before {
+   content: "";
+   position: absolute;
+   left: 2px;
+   top: 18px;
+   width: 9px;
+   height: 9px;
+   border-radius: 2px;
+   background: var(--cherry-blossom-pink);
+   transform: rotate(14deg);
+}
+
+/*
+|--------------------------------------------------------------------------
+| /contact — bandeau, promesse et autres canaux
+|--------------------------------------------------------------------------
+| Le bandeau vient de projects.css ; il perd sa marge haute, la section
+| au-dessus en porte déjà une. La promesse est révélée mot à mot par le
+| script. Le bento reprend .pj-bento et .pj-card ; seule la carte large
+| (2×1) est propre à cette page.
+*/
+
+.ct-marquee {
+   margin-top: 0;
+}
+
+.ct-idea {
+   padding: 150px 0 130px;
+}
+
+.ct-idea__text {
+   font-family: "Comfortaa Regular", serif;
+   font-size: clamp(21px, 2.5vw, 34px);
+   line-height: 1.5;
+   color: var(--charcoal);
+   max-width: 1000px;
+   margin-left: 10%;
+}
+
+.ct-ways {
+   position: relative;
+   padding: 60px 0 200px;
+   background:
+      radial-gradient(55% 42% at 4% 30%, rgba(245, 172, 186, 0.5), transparent 70%),
+      radial-gradient(50% 48% at 96% 78%, rgba(112, 163, 188, 0.34), transparent 70%),
+      linear-gradient(180deg, rgba(253, 240, 242, 0) 0%, #fdf0f2 40%, rgba(253, 240, 242, 0) 100%);
+}
+
+.ct-ways__inner {
+   position: relative;
+   z-index: 1;
+}
+
+.ct-ways__decor {
+   position: absolute;
+   inset: -100px 0 0;
+   z-index: 0;
+   pointer-events: none;
+}
+
+.ct-ways__cube {
+   position: absolute;
+   will-change: transform;
+}
+
+.ct-ways__cube img {
+   display: block;
+   width: 100%;
+   height: auto;
+}
+
+.ct-ways__cube--big {
+   top: 0;
+   right: 3%;
+   width: clamp(200px, 20vw, 320px);
+   opacity: 0.9;
+}
+
+.ct-ways__cube--small {
+   top: 220px;
+   right: 26%;
+   width: clamp(60px, 6vw, 100px);
+   opacity: 0.8;
+}
+
+.ct-card--wide {
+   grid-column: span 2;
+}
+
+.ct-mail {
+   color: inherit;
+   border-bottom: 2px solid rgba(245, 172, 186, 0.5);
+   transition: color 0.25s ease, border-color 0.25s ease;
+}
+
+.ct-mail:hover {
+   color: var(--cherry-blossom-pink);
+   border-color: var(--cherry-blossom-pink);
+}
+
+.ct-card--link {
+   position: relative;
+   color: inherit;
+}
+
+.ct-card--link .pj-card__figure {
+   transition: color 0.25s ease;
+}
+
+.ct-card--link:hover .pj-card__figure {
+   color: var(--charcoal);
+}
+
+.ct-card__go {
+   position: absolute;
+   right: 28px;
+   top: 26px;
+   font-family: "Staatliches Regular", serif;
+   font-size: 28px;
+   line-height: 1;
+   color: var(--paradise-pink);
+   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ct-card--link:hover .ct-card__go {
+   transform: translate(6px, -6px);
+}
+
+.ct-card--link:focus-visible {
+   outline: 2px solid var(--paradise-pink);
+   outline-offset: 4px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Repli — /contact
+|--------------------------------------------------------------------------
+| Sous 900px, la carte passe sous le texte et déborde moins, et les tranches
+| se déplient en colonne, toutes ouvertes : il n'y a plus rien à survoler.
+*/
+
+@media (max-width: 1024px) {
+   .pg-hero--contact .pg-hero__inner {
+      gap: 36px;
+   }
+
+   .ct-form {
+      padding: 32px 28px 30px;
+   }
+
+   .ct-slice.is-open .ct-slice__head {
+      margin: 28px 28px 18px;
+   }
+
+   .ct-slice__body {
+      padding: 0 28px 28px;
+   }
+}
+
+@media (max-width: 899.98px) {
+   .pg-hero--contact .pg-hero__inner {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0;
+      padding-bottom: 0;
+   }
+
+   .ct-hero__text {
+      padding-top: 0;
+   }
+
+   .ct-hero__title {
+      max-width: none;
+   }
+
+   .ct-form {
+      margin-top: 24px;
+      margin-bottom: -90px;
+   }
+
+   .pg-hero--contact .pg-hero__inner {
+      grid-template-areas:
+         "title"
+         "text"
+         "form";
+   }
+
+   .ct-hero__title {
+      margin-bottom: 26px;
+   }
+
+   .ct-slice:not(.is-open) .ct-slice__title {
+      font-size: clamp(24px, 2.4vw, 34px);
+   }
+
+   .pg-hero--contact .pj-square {
+      top: 40%;
+      right: -30vw;
+      width: 110vw;
+      opacity: 0.6;
+   }
+
+   .ct-after {
+      padding: 170px 0 90px;
+   }
+
+   .ct-slices {
+      flex-direction: column;
+      height: auto;
+      gap: 14px;
+   }
+
+   .ct-slice,
+   .ct-slice.is-open {
+      flex: none;
+      cursor: default;
+      background: var(--charcoal);
+      border-color: rgba(255, 255, 255, 0.18);
+      color: var(--baby-powder);
+   }
+
+   .ct-slice::after {
+      opacity: 1;
+   }
+
+   .ct-slice__head,
+   .ct-slice.is-open .ct-slice__head {
+      position: static;
+      writing-mode: horizontal-tb;
+      transform: none;
+      margin: 28px 26px 16px;
+      pointer-events: none;
+   }
+
+   .ct-slice__title {
+      white-space: normal;
+   }
+
+   .ct-slice .pg-mark {
+      background: var(--paradise-pink);
+   }
+
+   .ct-slice__body,
+   .ct-slice.is-open .ct-slice__body {
+      opacity: 1;
+      visibility: visible;
+      transition: none;
+      padding: 0 26px 26px;
+   }
+
+   .ct-idea {
+      padding: 100px 0 90px;
+   }
+
+   .ct-idea__text {
+      margin-left: 0;
+   }
+
+   .ct-ways {
+      padding: 40px 0 140px;
+   }
+}
+
+@media (max-width: 767.98px) {
+   .ct-form {
+      padding: 28px 22px 26px;
+      margin-bottom: -60px;
+   }
+
+   .ct-row {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0;
+   }
+
+   .ct-after {
+      padding: 120px 0 70px;
+   }
+
+   .ct-ways__decor {
+      display: none;
+   }
+
+   .ct-card--wide {
+      grid-column: span 1;
+   }
+
+   .ct-ways {
+      padding: 20px 0 110px;
+   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+   .ct-slice,
+   .ct-slice__body,
+   .ct-slice__head .pg-mark,
+   .ct-card__go,
+   .ct-mail {
+      transition: none;
    }
 }

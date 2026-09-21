@@ -857,8 +857,8 @@ html.lenis body {
    le fond clair (illisible), et le rose vif à 1,8:1 sur le bleu du carré. Les
    deux se contredisent, aucune valeur unique ne passe les 3:1 exigés par un
    grand titre. C'est donc le rôle « accent » qui est commun, pas le code hexa :
-   rose vif sur clair (.about__statement, .skills__statement,
-   .contact__statement), rose pâle sur bleu (.section-title). */
+   rose vif sur clair (.about__statement, .skills__statement, et
+   .pg-hero__title dans pages.css), rose pâle sur bleu (.section-title). */
 .about__statement em {
    font-style: normal;
    color: var(--paradise-pink);
@@ -1131,261 +1131,6 @@ html.lenis body {
 
 /*
 |--------------------------------------------------------------------------
-| Contact (page /contact/)
-|--------------------------------------------------------------------------
-| Même grammaire que la section Compétences : accroche à gauche, contenu à
-| droite, filets fins et intitulés en monospace. La page n'a pas de fond
-| dégradé — le pied de page en porte déjà un, et le formulaire a besoin d'un
-| fond franc pour rester lisible.
-*/
-
-.contact {
-   background-color: var(--baby-powder);
-   color: var(--charcoal);
-   /* La page est courte : sans hauteur plancher, le pied de page remonterait
-      au milieu de l'écran sur les grands moniteurs. */
-   min-height: 100vh;
-}
-
-.contact__inner {
-   max-width: 1180px;
-   margin: 0 auto;
-   /* 170px en haut : les 70px de barre fixe, plus la même respiration que le
-      reste du site au-dessus d'un premier bloc. */
-   padding: 170px 60px 140px;
-}
-
-.contact__statement {
-   font-family: "Staatliches Regular", serif;
-   font-size: clamp(38px, 5.4vw, 82px);
-   line-height: 1.06;
-   letter-spacing: -0.5px;
-   max-width: 18ch;
-   margin-bottom: 44px;
-}
-
-.contact__statement em {
-   font-style: normal;
-   color: var(--paradise-pink);
-}
-
-.contact__lead {
-   padding-bottom: 90px;
-   border-bottom: 1px solid rgba(47, 65, 87, 0.16);
-}
-
-.contact__lead p {
-   font-family: "Comfortaa Regular", serif;
-   font-size: 16px;
-   line-height: 1.85;
-   color: rgba(47, 65, 87, 0.72);
-   max-width: 52ch;
-}
-
-.contact__layout {
-   display: grid;
-   grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-   gap: 90px;
-   align-items: start;
-   padding-top: 80px;
-}
-
-.contact__aside {
-   position: sticky;
-   top: 110px;
-}
-
-/* Cube décoratif : reprend les deux faces du cube des compétences, mais dans
-   le flux — la colonne est courte, il n'y a pas de hauteur de collage à
-   préserver ici. */
-.contact__cube {
-   position: relative;
-   width: clamp(140px, 13vw, 180px);
-   aspect-ratio: 1;
-   margin-bottom: 64px;
-   pointer-events: none;
-}
-
-.contact__fact {
-   padding: 20px 0;
-   border-bottom: 1px solid rgba(47, 65, 87, 0.16);
-}
-
-.contact__fact:first-child {
-   border-top: 1px solid rgba(47, 65, 87, 0.16);
-}
-
-.contact__fact dt {
-   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
-   font-size: 12px;
-   letter-spacing: 2px;
-   text-transform: uppercase;
-   color: rgba(47, 65, 87, 0.45);
-   margin-bottom: 10px;
-}
-
-.contact__fact dd {
-   font-family: "Comfortaa Regular", serif;
-   font-size: 15px;
-   line-height: 1.6;
-   color: rgba(47, 65, 87, 0.72);
-}
-
-.contact__email {
-   font-family: "Staatliches Regular", serif;
-   font-size: 26px;
-   letter-spacing: 1px;
-   color: var(--charcoal);
-   transition: color 0.25s ease;
-}
-
-.contact__email:hover {
-   color: var(--paradise-pink);
-}
-
-.contact__socials {
-   margin-top: 32px;
-}
-
-/* Formulaire */
-.contact__row {
-   display: grid;
-   grid-template-columns: repeat(2, minmax(0, 1fr));
-   gap: 34px;
-}
-
-.contact__field {
-   margin-bottom: 34px;
-}
-
-.contact__field label {
-   display: block;
-   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
-   font-size: 12px;
-   letter-spacing: 2px;
-   text-transform: uppercase;
-   color: rgba(47, 65, 87, 0.45);
-   margin-bottom: 12px;
-}
-
-.contact__field label span {
-   text-transform: none;
-   letter-spacing: 0;
-   color: rgba(47, 65, 87, 0.3);
-}
-
-/* reset.css ne pose ni box-sizing global ni `font: inherit` sur les contrôles
-   de formulaire (input, select et textarea ne figurent pas dans sa liste) :
-   les deux se déclarent donc ici, sinon la police système reprend la main et
-   un padding fait déborder les champs de leur colonne. */
-.contact__field input,
-.contact__field select,
-.contact__field textarea {
-   box-sizing: border-box;
-   display: block;
-   width: 100%;
-   padding: 12px 2px;
-   font-family: "Comfortaa Regular", serif;
-   font-size: 16px;
-   line-height: 1.5;
-   color: var(--charcoal);
-   background: transparent;
-   border: none;
-   border-bottom: 1px solid rgba(47, 65, 87, 0.28);
-   border-radius: 0;
-   transition: border-color 0.25s ease;
-}
-
-.contact__field textarea {
-   resize: vertical;
-   min-height: 140px;
-}
-
-/* Le select natif garde sa flèche mais perd le fond gris et les coins arrondis
-   des styles d'agent utilisateur, qui trancheraient au milieu de champs
-   soulignés. */
-.contact__field select {
-   -webkit-appearance: none;
-   appearance: none;
-   padding-right: 28px;
-   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%232F4157' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
-   background-repeat: no-repeat;
-   background-position: right 2px center;
-}
-
-.contact__field input:hover,
-.contact__field select:hover,
-.contact__field textarea:hover {
-   border-bottom-color: rgba(47, 65, 87, 0.5);
-}
-
-/* reset.css coupe `outline` sur :focus pour toute la page. Il faut donc le
-   rendre explicitement ici, sans quoi la navigation au clavier traverse le
-   formulaire à l'aveugle. Le rose vif et non le rose pâle : à 3,7:1 sur le
-   fond clair, c'est le seul des deux qui se voie. */
-.contact__field input:focus-visible,
-.contact__field select:focus-visible,
-.contact__field textarea:focus-visible {
-   outline: 2px solid var(--paradise-pink);
-   outline-offset: 4px;
-   border-bottom-color: var(--paradise-pink);
-}
-
-.contact__help {
-   font-family: "Comfortaa Regular", serif;
-   font-size: 12px;
-   line-height: 1.6;
-   color: rgba(47, 65, 87, 0.45);
-   margin-top: 10px;
-}
-
-.contact__submit {
-   display: inline-flex;
-   align-items: center;
-   gap: 12px;
-   margin-top: 10px;
-   padding: 18px 44px;
-   background: var(--paradise-pink);
-   color: #fff;
-   font-family: "Staatliches Regular", serif;
-   font-size: 24px;
-   letter-spacing: 2px;
-   border: none;
-   border-radius: 50px;
-   cursor: pointer;
-   box-shadow: 0 12px 32px rgba(233, 71, 103, 0.28);
-   transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.contact__submit span {
-   transition: transform 0.35s cubic-bezier(.694, .048, .335, 1);
-}
-
-.contact__submit:hover {
-   transform: translateY(-3px);
-   box-shadow: 0 18px 44px rgba(233, 71, 103, 0.38);
-}
-
-.contact__submit:hover span {
-   transform: translateX(6px);
-}
-
-.contact__submit:focus-visible {
-   outline: 2px solid var(--charcoal);
-   outline-offset: 4px;
-}
-
-.contact__note {
-   font-family: "Comfortaa Regular", serif;
-   font-size: 12px;
-   line-height: 1.8;
-   color: rgba(47, 65, 87, 0.45);
-   max-width: 46ch;
-   margin-top: 28px;
-}
-
-/*
-|--------------------------------------------------------------------------
 | Footer
 |--------------------------------------------------------------------------
 | Pied de page plein écran, fixé sous la page. Un espace vide de 100vh
@@ -1638,31 +1383,6 @@ html.footer-reveal .footer {
    transform: rotate(14deg);
    margin: 0 0.06em 0.16em 0;
    flex: 0 0 auto;
-}
-
-/* Pastilles rondes d'icônes : utilisées par la page contact. */
-.footer-socials {
-   display: flex;
-   gap: 10px;
-}
-
-.footer-socials a {
-   width: 42px;
-   height: 42px;
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   border-radius: 50%;
-   background: rgba(47, 65, 87, 0.1);
-   color: var(--charcoal);
-   transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
-   cursor: pointer;
-}
-
-.footer-socials a:hover {
-   background: var(--paradise-pink);
-   color: #fff;
-   transform: translateY(-3px);
 }
 
 @media (max-width: 768px) {
@@ -1920,31 +1640,6 @@ html.footer-reveal .footer {
       padding-left: 46px;
    }
 
-   .contact__inner {
-      padding: 130px 24px 100px;
-   }
-   .contact__lead {
-      padding-bottom: 60px;
-   }
-   .contact__layout {
-      grid-template-columns: 1fr;
-      gap: 56px;
-      padding-top: 56px;
-   }
-   .contact__aside {
-      position: static;
-   }
-   /* Le cube passe avant le formulaire une fois la page en une colonne : 180px
-      de décoration à faire défiler avant d'atteindre le premier champ. */
-   .contact__cube {
-      display: none;
-   }
-   /* Les deux champs de la première ligne s'empilent ; la gouttière tombe à
-      zéro, la marge basse de .contact__field assure déjà l'écart. */
-   .contact__row {
-      grid-template-columns: 1fr;
-      gap: 0;
-   }
 }
 
 @media (max-width: 768px) {
@@ -1961,10 +1656,6 @@ html.footer-reveal .footer {
       mais les gouttières se resserrent pour tenir plus de noms par ligne. */
    .skills__list ul {
       gap: 6px 18px;
-   }
-   .contact__submit {
-      padding: 16px 32px;
-      font-size: 20px;
    }
 }
 
