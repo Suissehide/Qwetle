@@ -184,10 +184,11 @@
 
     /* ---------------------------------------------------------------------
        Révélations au défilement
-       Les intertitres montent en apparaissant. Les tranches et les cartes
-       arrivent un peu plus petites et grandissent jusqu'à leur taille au fil
-       du défilement, puis s'estompent quand elles quittent l'écran par le
-       haut : le regard reste sur ce qui est sous les yeux.
+       Même grammaire que le reste du site : chaque bloc monte de quelques
+       pixels en apparaissant, une seule fois. Les tranches et les cartes
+       arrivent en plus un peu plus petites. Un seul tween par bloc : deux
+       tweens scrubbés sur la même opacité se disputaient l'élément et le
+       faisaient disparaître au défilement.
        --------------------------------------------------------------------- */
 
     gsap.utils.toArray(['.pg-head__title', '.pg-head__lead']).forEach(function (bloc) {
@@ -201,27 +202,13 @@
     });
 
     gsap.utils.toArray(['.ct-slices', '.pj-card']).forEach(function (bloc) {
-        gsap.fromTo(bloc, { scale: 0.9, opacity: 0 }, {
-            scale: 1,
-            opacity: 1,
-            ease: 'power2.out',
-            scrollTrigger: {
-                trigger: bloc,
-                start: 'top 92%',
-                end: 'top 55%',
-                scrub: 0.6,
-            },
-        });
-
-        gsap.to(bloc, {
-            opacity: 0.2,
-            ease: 'none',
-            scrollTrigger: {
-                trigger: bloc,
-                start: 'bottom 28%',
-                end: 'bottom 4%',
-                scrub: true,
-            },
+        gsap.from(bloc, {
+            scrollTrigger: { trigger: bloc, start: 'top 88%' },
+            y: 30,
+            scale: 0.96,
+            opacity: 0,
+            duration: 0.8,
+            ease: 'power3.out',
         });
     });
 
