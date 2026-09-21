@@ -194,19 +194,6 @@
    pointer-events: none;
 }
 
-/* Fondu vers le fond de page sur le tiers bas du hero des pages projet. */
-.pj-hero__decor::after {
-   content: "";
-   position: absolute;
-   left: 0;
-   right: 0;
-   /* Déborde d'un pixel et atteint l'opaque à 90 % : sans ça, la dernière
-      ligne de pixels laissait deviner le bord du carré. */
-   bottom: -1px;
-   height: 42%;
-   background: linear-gradient(to bottom, rgba(255, 253, 249, 0) 0%, var(--baby-powder) 90%, var(--baby-powder) 100%);
-}
-
 /* Le carré bleu ancré à droite, à cheval sur la frontière : son bas se
    dissout par un masque, si bien qu'il s'efface sous les premières lignes
    au lieu d'être tranché. Assez pâle pour passer derrière le texte. */
@@ -492,27 +479,45 @@
 
 .pj-hero {
    position: relative;
-   background: linear-gradient(165deg, #fffdf9 0%, #fff3f5 40%, #f7cbd4 100%);
+   z-index: 0;
+   /* Un seul halo rose, elliptique, ancré sur la capture : il s'éteint de
+      lui-même dans le fond de page avant le bas de la section. Un dégradé
+      linéaire finissait plein rose sur la frontière avec la barre méta, et
+      l'œil y lisait une ligne. */
+   background:
+      radial-gradient(ellipse 72% 58% at 78% 36%,
+         #f7cbd4 0%,
+         rgba(247, 203, 212, 0.7) 30%,
+         rgba(247, 203, 212, 0.3) 60%,
+         rgba(247, 203, 212, 0) 100%),
+      var(--baby-powder);
    padding-bottom: 90px;
 }
 
+/* Le décor déborde sous le hero : le carré bleu passe sous la barre méta et
+   se dissout avant le bandeau, au lieu d'être tranché au bas de la section.
+   Le rognage n'est que latéral, porté par <main>. */
 .pj-hero__decor {
    position: absolute;
-   inset: 0;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: -40vh;
    z-index: 0;
-   overflow: hidden;
    pointer-events: none;
 }
 
 .pj-hero .pj-square {
    right: -14vw;
-   bottom: -22vw;
+   top: 34%;
    width: clamp(560px, 64vw, 1100px);
+   -webkit-mask-image: linear-gradient(to bottom, #000 22%, rgba(0, 0, 0, 0) 58%);
+   mask-image: linear-gradient(to bottom, #000 22%, rgba(0, 0, 0, 0) 58%);
 }
 
 .pj-hero__cube--1 {
    width: clamp(140px, 16vw, 260px);
-   top: 10%;
+   top: 15%;
    right: 40%;
 }
 
@@ -598,16 +603,20 @@
    transform-origin: center bottom;
 }
 
+/* L'image remplit le cadre : il n'en reste que le liseré et l'ombre. Une
+   marge blanche de douze pixels faisait une grosse bordure autour de chaque
+   capture. */
 .pj-cover__frame {
-   padding: 12px;
-   border-radius: 28px;
+   padding: 0;
+   border-radius: 24px;
+   overflow: hidden;
 }
 
 .pj-cover__frame img {
    display: block;
    width: 100%;
    height: auto;
-   border-radius: 18px;
+   border-radius: inherit;
 }
 
 /* Barre méta : à cheval sur le bas du hero. */
@@ -658,6 +667,9 @@
 */
 
 .pj-marquee {
+   /* Au-dessus du carré bleu du hero, qui déborde jusqu'ici en se dissolvant. */
+   position: relative;
+   z-index: 1;
    overflow: hidden;
    background: var(--charcoal);
    padding: 22px 0;
@@ -706,6 +718,8 @@
 */
 
 .pj-idea {
+   position: relative;
+   z-index: 1;
    padding: 140px 0 120px;
 }
 
@@ -733,12 +747,32 @@
 
 .pj-keys {
    position: relative;
-   overflow: hidden;
+   z-index: 0;
    padding: 120px 0 140px;
+}
+
+/* Deux halos, rose en haut à gauche et bleu en bas à droite, portés par un
+   calque qui dépasse la section en haut et en bas. Chaque ellipse tient
+   entièrement dans le calque et atteint zéro sur son propre bord : rien n'est
+   tranché à l'entrée ni à la sortie de la section. */
+.pj-keys::before {
+   content: "";
+   position: absolute;
+   left: 0;
+   right: 0;
+   top: -220px;
+   bottom: -220px;
+   z-index: -1;
+   pointer-events: none;
    background:
-      radial-gradient(60% 55% at 8% 0%, rgba(245, 172, 186, 0.6), transparent 70%),
-      radial-gradient(50% 60% at 96% 100%, rgba(112, 163, 188, 0.4), transparent 70%),
-      linear-gradient(180deg, #fffdf9 0%, #fdf0f2 100%);
+      radial-gradient(ellipse 62% 30% at 8% 30%,
+         rgba(245, 172, 186, 0.55) 0%,
+         rgba(245, 172, 186, 0.22) 45%,
+         rgba(245, 172, 186, 0) 100%),
+      radial-gradient(ellipse 54% 28% at 94% 72%,
+         rgba(112, 163, 188, 0.38) 0%,
+         rgba(112, 163, 188, 0.14) 45%,
+         rgba(112, 163, 188, 0) 100%);
 }
 
 .pj-keys__inner {
@@ -756,6 +790,14 @@
    aspect-ratio: 1;
    pointer-events: none;
    z-index: 0;
+}
+
+/* Les deux faces sont pleines : un carré rose derrière, un carré bleu
+   translucide devant, comme le grand carré bleu du décor. Le contour seul
+   de l'accueil lisait comme un cadre vide. */
+.pj-keys__cube .skills__cube-face--front {
+   border: 0;
+   background: rgba(112, 163, 188, 0.42);
 }
 
 .pj-bento {
@@ -815,16 +857,18 @@
    color: var(--baby-powder);
 }
 
+/* Un halo rose dans l'angle haut droit, qui s'éteint avant les bords de la
+   carte : un carré posé à cheval sur l'angle se faisait trancher par le
+   rognage de la carte. */
 .pj-card--lead::after {
    content: "";
    position: absolute;
-   right: -36px;
-   top: -36px;
-   width: 150px;
-   height: 150px;
-   border-radius: 34px;
-   background: rgba(245, 172, 186, 0.28);
-   transform: rotate(14deg);
+   right: -120px;
+   top: -120px;
+   width: 380px;
+   height: 380px;
+   border-radius: 50%;
+   background: radial-gradient(circle, rgba(245, 172, 186, 0.42) 0%, rgba(245, 172, 186, 0.14) 32%, rgba(245, 172, 186, 0) 55%);
    pointer-events: none;
 }
 
@@ -876,8 +920,9 @@
 }
 
 .pj-shot__frame {
-   padding: 12px;
-   border-radius: 28px;
+   padding: 0;
+   border-radius: 24px;
+   overflow: hidden;
    background: rgba(255, 255, 255, 0.6);
 }
 
@@ -885,7 +930,7 @@
    display: block;
    width: 100%;
    height: auto;
-   border-radius: 18px;
+   border-radius: inherit;
 }
 
 /*
@@ -989,7 +1034,9 @@
 */
 
 .pj-next {
-   border-top: 1px solid rgba(47, 65, 87, 0.16);
+   /* Au-dessus du carré bleu de l'appel à l'action, qui remonte sous ce bloc. */
+   position: relative;
+   z-index: 1;
 }
 
 .pj-next__link {
@@ -1038,10 +1085,44 @@
    max-width: 44ch;
 }
 
+/* Le bouton qui dit que le bloc entier se clique : un titre et une vignette
+   seuls se lisaient comme une simple mention. Plein, dans la couleur du
+   bandeau ; la flèche part au survol de tout le bloc. */
+.pj-next__go {
+   display: inline-flex;
+   align-items: center;
+   gap: 10px;
+   margin-top: 28px;
+   padding: 14px 30px;
+   border-radius: 50px;
+   font-family: "Staatliches Regular", serif;
+   font-size: 17px;
+   letter-spacing: 1.6px;
+   white-space: nowrap;
+   background: var(--charcoal);
+   color: var(--baby-powder);
+   box-shadow: 0 12px 30px rgba(47, 65, 87, 0.18);
+   transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pj-next__go span {
+   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pj-next__link:hover .pj-next__go {
+   background: var(--paradise-pink);
+   transform: translateY(-2px);
+   box-shadow: 0 16px 36px rgba(233, 71, 103, 0.3);
+}
+
+.pj-next__link:hover .pj-next__go span {
+   transform: translateX(6px);
+}
+
 .pj-next__media {
    display: block;
-   padding: 10px;
-   border-radius: 24px;
+   padding: 0;
+   border-radius: 20px;
    background: rgba(255, 255, 255, 0.6);
    border: 1px solid rgba(255, 255, 255, 0.75);
    box-shadow: 0 24px 60px rgba(47, 65, 87, 0.12);
@@ -1052,7 +1133,7 @@
    display: block;
    width: 100%;
    height: auto;
-   border-radius: 16px;
+   border-radius: inherit;
    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -1230,9 +1311,11 @@
       padding-bottom: 0;
    }
 
+   /* Sous la capture, pas sous les boutons : la colonne de texte est bien
+      plus haute une fois le hero passé en colonne. */
    .pj-hero .pj-square {
       right: -40vw;
-      bottom: -30vw;
+      top: 74%;
       width: 110vw;
    }
 
@@ -1340,12 +1423,7 @@
    }
 
    .pj-cover__frame {
-      padding: 8px;
-      border-radius: 20px;
-   }
-
-   .pj-cover__frame img {
-      border-radius: 14px;
+      border-radius: 18px;
    }
 
    .pj-meta-wrap {
@@ -1406,12 +1484,7 @@
    }
 
    .pj-shot__frame {
-      padding: 8px;
-      border-radius: 20px;
-   }
-
-   .pj-shot__frame img {
-      border-radius: 14px;
+      border-radius: 18px;
    }
 
    .pj-gains {
@@ -1442,6 +1515,12 @@
       width: 120vw;
       opacity: 0.3;
    }
+
+   /* Même repli pour les pages projet, dont la règle est plus spécifique. */
+   .project-page .pj-cta .pj-square {
+      left: -62vw;
+      top: -52vw;
+   }
 }
 
 /*
@@ -1469,8 +1548,14 @@
    .pj-link,
    .pj-link span,
    .pj-next__title,
+   .pj-next__go,
+   .pj-next__go span,
    .pj-next__media img {
       transition: none;
+   }
+
+   .pj-next__link:hover .pj-next__go {
+      transform: none;
    }
 
    .pj-card:hover,
