@@ -1350,92 +1350,247 @@ html.lenis body {
 |--------------------------------------------------------------------------
 | Footer
 |--------------------------------------------------------------------------
+| Pied de page plein écran, fixé sous la page. Un espace vide de 100vh
+| (.footer-space) donne la course : au fil du défilement, le rideau charcoal
+| monte (clip-path piloté par script.js), les lettres du mot-marque sortent de
+| leur masque et les liens se dévoilent. Sans GSAP, ou sous mouvement réduit,
+| <html> ne reçoit pas la classe footer-reveal : le pied de page reste alors
+| un bloc ordinaire en fin de flux, complet et lisible.
 */
 
-footer {
-   position: relative;
-   overflow: hidden;
-   background: linear-gradient(to bottom, #ffffff, #F5ACBA);
-   padding: 60px 60px 36px;
+.footer-space {
+   display: none;
 }
 
-.footer-cubes {
+.footer {
+   position: relative;
+   overflow: hidden;
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+   min-height: 100vh;
+   min-height: 100svh;
+   background: var(--charcoal);
+   color: var(--baby-powder);
+}
+
+html.footer-reveal .footer-space {
+   display: block;
+   height: 100vh;
+   pointer-events: none;
+}
+
+html.footer-reveal .footer {
+   position: fixed;
+   inset: 0;
+   min-height: 0;
+   /* Au-dessus de la barre de navigation (10) et des aperçus qui suivent le
+      curseur (50, .cursor-label et .work-preview) : le rideau recouvre tout. */
+   z-index: 60;
+   visibility: hidden;
+   clip-path: inset(100% 0 0 0);
+   will-change: clip-path;
+}
+
+/* Deux halos, rose en bas à gauche et bleu en haut à droite, pour que le
+   charcoal ne soit pas un aplat. */
+.footer__glow {
    position: absolute;
    inset: 0;
    pointer-events: none;
-   z-index: 0;
+   background:
+      radial-gradient(ellipse 55% 45% at 12% 100%, rgba(233, 71, 103, 0.28), transparent 70%),
+      radial-gradient(ellipse 45% 55% at 88% 10%, rgba(112, 163, 188, 0.22), transparent 70%);
 }
 
-.footer-glass {
+/* Motifs de marque : le grand carré bleu et les cubes flous roses. Le
+   conteneur est déplacé par le défilement, l'image par la souris. */
+.footer__motifs {
+   position: absolute;
+   inset: 0;
+   overflow: hidden;
+   pointer-events: none;
+}
+
+.footer__motif {
+   position: absolute;
+   will-change: transform;
+}
+
+.footer__motif img {
+   display: block;
+   width: 100%;
+   height: auto;
+   will-change: transform;
+}
+
+.footer__motif--pink {
+   left: -8vw;
+   top: 22%;
+   width: clamp(240px, 34vw, 560px);
+   opacity: 0.9;
+}
+
+.footer__motif--small {
+   left: 41%;
+   top: 30%;
+   width: clamp(70px, 9vw, 150px);
+   opacity: 0.75;
+}
+
+.footer__motif--blue {
+   right: -14vw;
+   top: -10%;
+   width: clamp(260px, 34vw, 560px);
+   opacity: 0.38;
+}
+
+.footer__motif--blue img {
+   transform: rotate(14deg);
+}
+
+/* Rangée du haut : contact, réseaux, pages. */
+.footer__top {
    position: relative;
-   z-index: 1;
-   background: rgba(255, 255, 255, 0.48);
-   backdrop-filter: blur(4px);
-   border-top: 1px solid rgba(255, 255, 255, 0.65);
-   padding: 40px 40px 24px;
-   border-radius: 20px;
-   max-width: 1280px;
-   margin: 0 auto;
-}
-
-.footer-top {
+   z-index: 2;
    display: flex;
    justify-content: space-between;
-   align-items: center;
+   align-items: flex-start;
    gap: 40px;
-   padding-bottom: 40px;
-   border-bottom: 1px solid rgba(47, 65, 87, 0.15);
+   padding: 44px 48px 0;
 }
 
-.footer-brand img {
-   width: 80px;
-   margin-bottom: 12px;
-   filter: brightness(0);
-   display: block;
-}
-
-.footer-brand p {
-   font-family: "Comfortaa Regular", serif;
-   font-size: 12px;
-   color: rgba(47, 65, 87, 0.6);
-}
-
-.footer-nav {
-   display: flex;
-   gap: 40px;
-}
-
-.footer-nav a {
-   font-family: "Staatliches Regular", serif;
-   font-size: 24px;
-   color: var(--charcoal);
-   transition: color 0.2s ease;
-   cursor: pointer;
-}
-
-.footer-nav a:hover {
-   color: var(--paradise-pink);
-}
-
-.footer-contact {
+.footer__col {
    display: flex;
    flex-direction: column;
+   align-items: flex-start;
+   gap: 4px;
+}
+
+.footer__col--pages {
    align-items: flex-end;
-   gap: 14px;
 }
 
-.footer-email {
+.footer__note,
+.footer__copy {
+   font-family: "Comfortaa Regular", serif;
+   font-size: 12px;
+   line-height: 1.8;
+   color: rgba(255, 253, 249, 0.55);
+}
+
+.footer__note {
+   margin-top: 6px;
+}
+
+/* Liens à lettres roulantes : chaque caractère est doublé dans un masque,
+   le survol fait monter le premier et entrer le second, rose, avec un léger
+   décalage lettre à lettre. Construit par script.js depuis data-roll. */
+.footer__roll {
+   display: inline-flex;
    font-family: "Staatliches Regular", serif;
-   font-size: 28px;
-   color: var(--charcoal);
-   transition: color 0.2s ease;
+   font-size: 22px;
+   letter-spacing: 0.04em;
+   /* Assez haut pour loger l'accent du À : la copie rose en attente sous le
+      masque le laissait sinon dépasser dans la ligne visible. */
+   line-height: 1.4;
+   color: var(--baby-powder);
+   text-decoration: none;
    cursor: pointer;
+   white-space: nowrap;
 }
 
-.footer-email:hover {
-   color: var(--paradise-pink);
+.footer__mail {
+   font-size: 26px;
 }
 
+.footer__roll .ch-wrap {
+   position: relative;
+   display: inline-block;
+   overflow: hidden;
+}
+
+.footer__roll .ch-top,
+.footer__roll .ch-bot {
+   display: block;
+   transition: transform 0.6s cubic-bezier(0.87, 0, 0.13, 1);
+   transition-delay: calc(var(--i) * 18ms);
+}
+
+.footer__roll .ch-bot {
+   position: absolute;
+   top: 100%;
+   left: 0;
+   color: var(--cherry-blossom-pink);
+}
+
+.footer__roll .ch-space {
+   display: inline-block;
+   width: 0.3em;
+}
+
+.footer__roll:hover .ch-top,
+.footer__roll:hover .ch-bot,
+.footer__roll:focus-visible .ch-top,
+.footer__roll:focus-visible .ch-bot {
+   transform: translateY(-100%);
+}
+
+.footer__roll:focus-visible {
+   outline: 2px solid var(--cherry-blossom-pink);
+   outline-offset: 4px;
+}
+
+/* Mot-marque : six lettres réparties d'un bord à l'autre, et le carré rose
+   du logo en guise de point final. Chaque lettre a son masque ; le remplissage
+   négatif laisse dépasser la queue du Q sans qu'elle soit coupée. */
+.footer__name {
+   position: relative;
+   z-index: 1;
+   display: flex;
+   justify-content: space-between;
+   align-items: flex-end;
+   /* Le remplissage bas laisse la place à la queue du Q sous la ligne de
+      base : sans lui, elle passe sous le bord de l'écran. */
+   padding: 0 2vw 0.09em;
+   margin-top: auto;
+   /* Comfortaa, comme le logo : le nom se lit en bas de page exactement comme
+      en haut de la barre de navigation. La fonte est large là où Staatliches
+      était condensée, d'où une taille très inférieure pour que les six
+      lettres et le carré tiennent sur une seule ligne. */
+   font-family: "Comfortaa Bold", serif;
+   font-size: clamp(54px, 12.5vw, 230px);
+   letter-spacing: -0.02em;
+   line-height: 0.82;
+   color: var(--baby-powder);
+   white-space: nowrap;
+   user-select: none;
+}
+
+.footer__letter {
+   display: inline-block;
+   overflow: hidden;
+   padding: 0.08em 0.04em 0.16em;
+   margin: -0.08em -0.04em -0.16em;
+}
+
+.footer__letter > span {
+   display: inline-block;
+   will-change: transform;
+}
+
+.footer__square {
+   display: block;
+   width: 0.26em;
+   height: 0.26em;
+   border-radius: 0.05em;
+   background: var(--paradise-pink);
+   transform: rotate(14deg);
+   margin: 0 0.06em 0.16em 0;
+   flex: 0 0 auto;
+}
+
+/* Pastilles rondes d'icônes : utilisées par la page contact. */
 .footer-socials {
    display: flex;
    gap: 10px;
@@ -1460,17 +1615,48 @@ footer {
    transform: translateY(-3px);
 }
 
-.footer-bottom {
-   padding-top: 28px;
-   display: flex;
-   justify-content: space-between;
-   align-items: center;
+@media (max-width: 768px) {
+   .footer__top {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 36px 20px;
+      padding: 36px 20px 0;
+   }
+   /* Les pages à gauche, les réseaux à droite, le contact dessous en pleine
+      largeur : l'ordre visuel suit ce qu'on cherche d'abord sur téléphone. */
+   .footer__col--pages {
+      order: -1;
+      align-items: flex-start;
+   }
+   .footer__col--social {
+      align-items: flex-end;
+   }
+   .footer__col--contact {
+      order: 1;
+      grid-column: 1 / -1;
+   }
+   .footer__roll {
+      font-size: 20px;
+   }
+   .footer__mail {
+      font-size: 22px;
+   }
+   .footer__motif--small {
+      display: none;
+   }
+   .footer__motif--pink {
+      top: 44%;
+   }
+   .footer__name {
+      padding: 0 16px 0.16em;
+   }
 }
 
-.footer-bottom span {
-   font-family: "Comfortaa Regular", serif;
-   font-size: 12px;
-   color: rgba(47, 65, 87, 0.45);
+@media (prefers-reduced-motion: reduce) {
+   .footer__roll .ch-top,
+   .footer__roll .ch-bot {
+      transition: none;
+   }
 }
 
 /*
@@ -1700,19 +1886,6 @@ footer {
    .section-title {
       font-size: 46px;
    }
-   .footer-top {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 32px;
-   }
-   .footer-contact {
-      align-items: flex-start;
-   }
-   .footer-bottom {
-      flex-direction: column;
-      gap: 8px;
-      align-items: flex-start;
-   }
 }
 
 @media (max-width: 480px) {
@@ -1727,13 +1900,6 @@ footer {
    .contact__submit {
       padding: 16px 32px;
       font-size: 20px;
-   }
-   .footer-wrapper {
-      padding: 48px 24px 28px;
-   }
-   .footer-nav {
-      flex-wrap: wrap;
-      gap: 20px;
    }
 }
 

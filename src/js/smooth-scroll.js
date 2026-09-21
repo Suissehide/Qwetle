@@ -36,6 +36,13 @@
     // arrière-plan d'un coup, ce qui ferait sauter la page au retour.
     if (window.gsap && window.ScrollTrigger) {
         lenis.on('scroll', ScrollTrigger.update);
+        // Les épinglages insèrent leurs espaceurs après la première mesure de
+        // Lenis : on lui fait relire la hauteur de page à chaque recalcul de
+        // ScrollTrigger, sinon sa butée basse reste celle d'avant et le bas de
+        // page devient inaccessible à la molette.
+        ScrollTrigger.addEventListener('refresh', function () {
+            lenis.resize();
+        });
         gsap.ticker.add(function (time) {
             lenis.raf(time * 1000);
         });

@@ -115,66 +115,122 @@ gsap.utils.toArray([".about__eyebrow", ".about__statement", ".about__lead", ".pr
 }());
 
 
-// Footer — cubes animés en arrière-plan (GSAP DOM)
+// Pied de page — rideau plein écran qui monte en fin de défilement
 (function () {
-    var container = document.querySelector('.footer-cubes');
-    if (!container) return;
+    var footer = document.querySelector('.footer');
+    if (!footer) return;
 
-    var COLORS = [
-        'rgba(233,71,103)',   // paradise-pink
-        'rgba(245,172,186)',  // cherry-blossom
-        'rgba(47,65,87)',     // charcoal
-    ];
-
-    var W = window.innerWidth;
-
-    function run(el, size, dur, spin) {
-        gsap.to(el, {
-            x: W + size * 2,
-            rotate: '+=' + spin,
-            duration: dur,
-            ease: 'none',
-            onComplete: function () {
-                gsap.set(el, { x: -size * 2 });
-                run(el, size, dur, spin);
+    // Liens à lettres roulantes : le texte de data-roll est découpé en
+    // caractères doublés (.ch-top visible, .ch-bot en attente sous le masque).
+    // Le lien porte déjà un aria-label, les lettres générées sont donc
+    // masquées aux lecteurs d'écran pour ne pas être épelées deux fois.
+    footer.querySelectorAll('.footer__roll[data-roll]').forEach(function (el) {
+        var text = el.getAttribute('data-roll');
+        el.removeAttribute('data-roll');
+        Array.from(text).forEach(function (ch, i) {
+            if (ch === ' ') {
+                var space = document.createElement('span');
+                space.className = 'ch-space';
+                space.innerHTML = '&nbsp;';
+                el.appendChild(space);
+                return;
             }
+            var wrap = document.createElement('span');
+            wrap.className = 'ch-wrap';
+            wrap.setAttribute('aria-hidden', 'true');
+            wrap.style.setProperty('--i', i);
+            wrap.innerHTML = '<span class="ch-top">' + ch + '</span><span class="ch-bot">' + ch + '</span>';
+            el.appendChild(wrap);
         });
+    });
+
+    // Sans GSAP, ou sous mouvement réduit, on s'arrête là : le pied de page
+    // reste un bloc ordinaire (voir .footer dans style.css).
+    if (!window.gsap || !window.ScrollTrigger) return;
+    if (!window.matchMedia('(prefers-reduced-motion: no-preference)').matches) return;
+
+    var space = document.querySelector('.footer-space');
+    if (!space) return;
+
+    // La classe bascule le pied de page en position fixe et donne à l'espace
+    // vide sa hauteur : c'est lui que le défilement traverse.
+    document.documentElement.classList.add('footer-reveal');
+
+    var letters  = footer.querySelectorAll('.footer__letter > span');
+    var tops     = footer.querySelectorAll('.footer__top .ch-top');
+    var left     = footer.querySelectorAll('.footer__motif[data-side="left"]');
+    var right    = footer.querySelectorAll('.footer__motif[data-side="right"]');
+    var pictures = footer.querySelectorAll('.footer__motif img');
+
+    // Parallaxe souris sur les motifs, amortie, uniquement pendant que le pied
+    // de page est à l'écran : une boucle rAF qui s'éteint dès qu'il disparaît.
+    var mx = 0, my = 0, sx = 0, sy = 0, visible = false;
+    document.addEventListener('mousemove', function (e) {
+        mx = (e.clientX / window.innerWidth - 0.5) * 2;
+        my = (e.clientY / window.innerHeight - 0.5) * 2;
+    });
+    function parallaxe() {
+        if (!visible) return;
+        sx += (mx - sx) * 0.05;
+        sy += (my - sy) * 0.05;
+        pictures.forEach(function (img, i) {
+            var depth = 14 + i * 8;
+            img.style.translate = (sx * -depth) + 'px ' + (sy * -depth) + 'px';
+        });
+        requestAnimationFrame(parallaxe);
+    }
+    function montrer() {
+        footer.style.visibility = 'visible';
+        if (!visible) { visible = true; parallaxe(); }
+    }
+    function cacher() {
+        footer.style.visibility = 'hidden';
+        visible = false;
     }
 
-    for (var i = 0; i < 20; i++) {
-        var size = Math.random() * 90 + 20;
-        var dur  = Math.random() * 14 + 8;
-        var spin = (Math.random() > 0.5 ? 1 : -1) * (Math.random() * 270 + 90);
-        var col  = COLORS[Math.floor(Math.random() * COLORS.length)];
-        var fill = Math.random() > 0.5;
-        var top  = (Math.random() * 110 - 5).toFixed(1);
+    // États de départ posés par gsap.set plutôt qu'en CSS : sans script, rien
+    // n'est caché.
+    gsap.set(letters, { yPercent: 110 });
+    gsap.set(tops, { clipPath: 'inset(100% 0 0 0)' });
+    gsap.set(left, { xPercent: -120 });
+    gsap.set(right, { xPercent: 120 });
 
-        var el = document.createElement('div');
-        el.style.cssText =
-            'position:absolute;' +
-            'width:'         + size.toFixed(0)         + 'px;' +
-            'height:'        + size.toFixed(0)         + 'px;' +
-            'border-radius:' + (size * 0.2).toFixed(0) + 'px;' +
-            'top:'           + top                     + '%;' +
-            (fill ? 'background:' + col + ';'
-                  : 'border:2.5px solid ' + col + ';');
+    // Une seule timeline scrubée sur la traversée de l'espace vide. Le rideau
+    // et les motifs suivent la molette au pixel ; les lettres et les liens
+    // partent un peu plus tard avec un amorti, pour finir avec la page.
+    var tl = gsap.timeline({
+        scrollTrigger: {
+            trigger: space,
+            start: 'top bottom',
+            end: 'bottom bottom',
+            scrub: true,
+            invalidateOnRefresh: true,
+            // Recalculé après les épinglages créés plus tard par portfolio.js et
+            // project-page.js : ScrollTrigger relit les déclencheurs dans l'ordre
+            // de création, et sans cette priorité basse les bornes seraient
+            // mesurées avant l'insertion de leurs espaceurs.
+            refreshPriority: -1,
+            onEnter: montrer,
+            onEnterBack: montrer,
+            onLeaveBack: cacher
+        }
+    });
 
-        container.appendChild(el);
-
-        // Position initiale aléatoire sur l'écran pour éviter le départ groupé
-        gsap.set(el, { x: Math.random() * W, rotate: Math.random() * 360 });
-        run(el, size, dur, spin);
-    }
+    tl.fromTo(footer,
+        { clipPath: 'inset(100% 0 0 0)' },
+        { clipPath: 'inset(0% 0 0 0)', ease: 'none', duration: 1 }, 0);
+    tl.to(left,  { xPercent: 0, ease: 'none', duration: 1 }, 0);
+    tl.to(right, { xPercent: 0, ease: 'none', duration: 1 }, 0);
+    tl.to(letters, {
+        yPercent: 0,
+        ease: 'power3.out',
+        duration: 0.6,
+        stagger: { each: 0.05, from: 'start' }
+    }, 0.3);
+    tl.to(tops, {
+        clipPath: 'inset(0% 0 0 0)',
+        ease: 'power3.out',
+        duration: 0.4,
+        stagger: { each: 0.006, from: 'start' }
+    }, 0.5);
 }());
-
-gsap.from(".footer-brand, .footer-nav, .footer-contact", {
-    scrollTrigger: {
-        trigger: "footer",
-        start: "top 95%",
-    },
-    y: 30,
-    opacity: 0,
-    duration: 0.6,
-    stagger: 0.15,
-    ease: "power3.out",
-});
