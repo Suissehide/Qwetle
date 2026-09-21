@@ -159,11 +159,19 @@
 .work-hero {
    position: relative;
    z-index: 0;
-   /* Deux couches : le fondu vers le fond de page par-dessus, le dégradé
-      rose en dessous. La section n'a donc pas de bord bas visible. */
+   /* Un seul halo rose, elliptique, ancré à droite : il s'éteint de lui-même
+      sur tous ses bords, dans le fond de page. Un dégradé linéaire recouvert
+      d'un fondu vertical ramenait le rose à son maximum puis le rabattait au
+      blanc : l'œil y lisait une ligne. */
    background:
-      linear-gradient(to bottom, rgba(255, 253, 249, 0) 50%, var(--baby-powder) 100%),
-      linear-gradient(165deg, #fffdf9 0%, #fff4f6 45%, #f9d6dd 100%);
+      /* Rayon vertical réglé pour que le halo atteigne zéro avant le bas de
+         la section : rien n'est tranché à la frontière. */
+      radial-gradient(ellipse 78% 54% at 82% 42%,
+         #f9d6dd 0%,
+         rgba(249, 214, 221, 0.72) 28%,
+         rgba(249, 214, 221, 0.32) 56%,
+         rgba(249, 214, 221, 0) 100%),
+      var(--baby-powder);
 }
 
 .work-hero__inner {
