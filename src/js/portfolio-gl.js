@@ -116,10 +116,10 @@ var QwetlePortfolioGL = (function () {
     // empilé sans WebGL. Quand les vrais visuels arriveront, les deux
     // pointeront sur les mêmes fichiers et ce doublon disparaîtra.
     var DEGRADES = [
-        [['#E94767', 0], ['#F5ACBA', 1]],
         [['#2F4157', 0], ['#1a2735', 1]],
-        [['#F5ACBA', 0], ['#e8d5da', 1]],
-        [['#E94767', 0.1], ['#2F4157', 1]]
+        [['#E94767', 0.1], ['#2F4157', 1]],
+        [['#E94767', 0], ['#F5ACBA', 1]],
+        [['#F5ACBA', 0], ['#e8d5da', 1]]
     ];
 
     function textureDeDegrade(arrets, largeur, hauteur, graine) {
