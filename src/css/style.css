@@ -1383,7 +1383,9 @@ html.footer-reveal .footer {
    border-radius: 0.05em;
    background: var(--paradise-pink);
    transform: rotate(14deg);
-   margin: 0 0.06em 0.16em 0;
+   /* Un léger écart à gauche : collé au e, le carré se lisait comme une
+      lettre de plus. */
+   margin: 0 0.06em 0.16em 0.08em;
    flex: 0 0 auto;
 }
 
