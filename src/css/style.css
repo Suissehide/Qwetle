@@ -363,7 +363,9 @@ html.lenis body {
    user-select: none;
    margin: 0;
    top: 50%;
-   left: 250px;
+   /* 250px sur grand écran, soit 14,5 % d'une fenêtre de 1728px. En fixe, ce
+      retrait poussait le hero vers la droite sur tablette et petit portable. */
+   left: clamp(48px, 14.5vw, 250px);
    transform: translateY(-50%);
 }
 
@@ -406,8 +408,10 @@ html.lenis body {
    user-select: none;
    margin: 0;
    bottom: 125px;
-   left: 250px;
-   font-size: 32px;
+   left: clamp(48px, 14.5vw, 250px);
+   /* Réduite avec la fenêtre pour tenir sur la bande bleue, qui rétrécit
+      avec elle : à 32px l'accroche en sortait dès 1280px. */
+   font-size: clamp(24px, 1.85vw, 32px);
    color: #fff;
    font-family: "Staatliches Regular", serif;
 }
@@ -464,6 +468,57 @@ html.lenis body {
    }
    100% {
       transform: scale(1.5) rotate(360deg);
+   }
+}
+
+/* Hero sur téléphone.
+   Les 250px de retrait et le grand cube flou calé à -450px à droite
+   poussaient le logo hors de l'écran et élargissaient la page à 700px.
+   L'accroche blanche doit rester sur la bande bleue du cube de la section
+   projets, qui ne couvre ici que les 240px du bas et les deux tiers gauches. */
+@media (max-width: 899.98px) {
+
+   .heading {
+      overflow-x: clip;
+   }
+
+   .heading-container {
+      left: 24px;
+      right: 24px;
+      top: 42%;
+   }
+
+   .heading-container .blursed-cube:first-of-type {
+      top: -190px;
+      right: 0;
+      height: 110px;
+      width: 110px;
+   }
+
+   .heading-container .blursed-cube:last-of-type {
+      top: -96px;
+      left: 0;
+      height: 44px;
+      width: 44px;
+   }
+
+   .title-container .logo {
+      height: 72px;
+      max-width: 100%;
+      margin-bottom: 14px;
+   }
+
+   .title-container .title {
+      font-size: 16px;
+      line-height: 1.4;
+   }
+
+   .heading--intro {
+      left: 24px;
+      bottom: 95px;
+      max-width: min(210px, 50vw);
+      font-size: 26px;
+      line-height: 1.05;
    }
 }
 
