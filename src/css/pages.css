@@ -30,9 +30,9 @@
 */
 
 /* Trois pages, trois en-têtes. Le socle est commun : dégradé, décor, colonne
-   de texte. Chaque page pose ensuite sa variante : centrée pour /about, en
-   deux colonnes avec le jeu de cartes pour /work (l'index des projets a la
-   sienne dans projects.css). Le rognage est porté par le décor et non par la
+   de texte. Chaque page pose ensuite sa variante : centrée pour /about,
+   texte seul pour /work (l'index des projets a la sienne dans
+   projects.css). Le rognage est porté par le décor et non par la
    section, pour que les éléments de liaison puissent déborder sur la suite. */
 .pg-hero {
    position: relative;
@@ -221,110 +221,213 @@
 
 /*
 |--------------------------------------------------------------------------
-| /work — en-tête en deux colonnes et jeu de cartes
+| /work — en-tête
 |--------------------------------------------------------------------------
-| Le texte à gauche ; à droite, les quatre terrains en éventail, coque claire
-| et cœur opaque, pivotés autour d'un point situé sous la carte pour que
-| l'ouverture ressemble à une main de cartes. Le jeu déborde sur la pile qui
-| suit : c'est la liaison. js/expertise.js l'ouvre davantage au défilement.
+| Le texte seul, le grand carré bleu à droite et les cubes flous. Les quatre
+| domaines viennent juste après, sur le cube.
 */
 
-.pg-hero--split .pg-hero__inner {
-   display: grid;
-   /* La colonne de texte garde la place des deux boutons sur une ligne. */
-   grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
-   gap: 30px;
-   align-items: center;
-   padding-bottom: 40px;
+.pg-hero--xp .pg-hero__inner {
+   padding-bottom: 120px;
 }
 
-.pg-hero--split .pg-hero__title {
-   font-size: clamp(38px, 4.9vw, 68px);
-   max-width: 18ch;
-}
-
-.pg-hero--split .pj-square {
-   right: -22vw;
-   bottom: -26vw;
+/* Le carré s'éteint par un masque avant le bas du hero : il ne rencontre
+   jamais le bord du décor, qui le trancherait net. */
+.pg-hero--xp .pj-square {
+   right: -24vw;
+   top: 22%;
    width: clamp(420px, 50vw, 860px);
    opacity: 0.8;
+   -webkit-mask-image: linear-gradient(to bottom, #000 30%, rgba(0, 0, 0, 0) 72%);
+   mask-image: linear-gradient(to bottom, #000 30%, rgba(0, 0, 0, 0) 72%);
 }
 
-.pg-hero--split .pg-hero__cube--1 {
-   top: 8%;
-   right: 4%;
-}
-
-.pg-hero--split .pg-hero__cube--2 {
-   top: 80%;
-   right: 46%;
-}
-
-.pg-hero--split .pg-hero__cube--3 {
-   top: 84%;
+.pg-hero--xp .pg-hero__cube--1 {
+   top: 12%;
    right: 6%;
 }
 
-.xp-deck {
+.pg-hero--xp .pg-hero__cube--2 {
+   top: 20%;
+   right: 32%;
+}
+
+.pg-hero--xp .pg-hero__cube--3 {
+   top: 86%;
+   right: 4%;
+}
+
+/*
+|--------------------------------------------------------------------------
+| /work — les quatre domaines sur un cube
+|--------------------------------------------------------------------------
+| Par défaut, les faces sont des cartes rangées en grille : c'est le repli
+| sans script, sous 900px et en mouvement réduit. Quand js/expertise.js pose
+| `is-3d`, le cube est dessiné en WebGL : charcoal uni, arêtes arrondies
+| comme les carrés du site, texte des faces peint dessus. Le défilement le
+| fait rouler : à gauche, vers le haut, puis à gauche.
+*/
+
+.xp-cube {
    position: relative;
-   height: 470px;
-   margin: 20px 0 -150px;
+   padding: 20px 0 120px;
+}
+
+.xp-cube__inner {
+   display: grid;
+   grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+   gap: 60px;
+   align-items: center;
+}
+
+.xp-cube__head .pg-head {
+   margin-bottom: 36px;
+}
+
+.xp-cube__nav {
    list-style: none;
+   border-top: 1px solid rgba(47, 65, 87, 0.14);
 }
 
-.xp-deck__card {
-   position: absolute;
-   left: 50%;
-   top: 50%;
-   width: 224px;
-   height: 296px;
-   margin: -160px 0 0 -112px;
-   padding: 7px;
-   border-radius: 26px;
-   background: rgba(255, 255, 255, 0.5);
-   border: 1px solid rgba(255, 255, 255, 0.8);
-   box-shadow: 0 30px 70px rgba(47, 65, 87, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-   -webkit-backdrop-filter: blur(18px) saturate(1.4);
-   backdrop-filter: blur(18px) saturate(1.4);
-   transform-origin: 50% 135%;
-   transform: rotate(var(--r));
-   will-change: transform;
-}
-
-.xp-deck__card:nth-child(1) { z-index: 1; }
-.xp-deck__card:nth-child(2) { z-index: 2; }
-.xp-deck__card:nth-child(3) { z-index: 3; }
-.xp-deck__card:nth-child(4) { z-index: 4; }
-
-.xp-deck__core {
-   height: 100%;
+.xp-cube__link {
    display: flex;
-   flex-direction: column;
-   justify-content: flex-end;
-   gap: 12px;
-   padding: 22px 20px;
-   border-radius: 19px;
-   background: rgba(255, 253, 249, 0.84);
-   box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.9);
-}
-
-.xp-deck__core .pg-mark {
-   margin-bottom: auto;
-}
-
-.xp-deck__title {
+   align-items: center;
+   gap: 16px;
+   width: 100%;
+   padding: 16px 0;
+   border: 0;
+   border-bottom: 1px solid rgba(47, 65, 87, 0.14);
+   background: none;
    font-family: "Staatliches Regular", serif;
-   font-size: 24px;
-   line-height: 1.1;
-   letter-spacing: 0.5px;
+   font-size: clamp(20px, 1.8vw, 26px);
+   letter-spacing: 0.4px;
+   text-align: left;
+   color: rgba(47, 65, 87, 0.42);
+   cursor: pointer;
+   transition: color 0.4s ease;
+}
+
+.xp-cube__link .pg-mark {
+   flex: 0 0 auto;
+   background: var(--cherry-blossom-pink);
+   transition: background-color 0.4s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.xp-cube__link:hover,
+.xp-cube__link.is-active {
    color: var(--charcoal);
 }
 
-.xp-deck__line {
+.xp-cube__link.is-active .pg-mark {
+   background: var(--paradise-pink);
+   transform: rotate(104deg);
+}
+
+.xp-cube__link:focus-visible {
+   outline: 2px solid var(--paradise-pink);
+   outline-offset: 4px;
+}
+
+/* Les noms ne servent qu'à piloter le cube : dans la grille de repli, les
+   cartes portent déjà leur titre. */
+.xp-cube:not(.is-3d) .xp-cube__nav {
+   display: none;
+}
+
+/* Repli : les faces en grille de cartes, déjà dans la couleur du cube. */
+.xp-cube__body {
+   display: grid;
+   grid-template-columns: repeat(2, minmax(0, 1fr));
+   gap: 16px;
+}
+
+.xp-face {
+   position: relative;
+   box-sizing: border-box;
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   gap: 12px;
+   padding: 26px 24px;
+   border-radius: 22px;
+   background: var(--charcoal);
+   box-shadow: 0 24px 60px rgba(47, 65, 87, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.xp-face .pg-mark {
+   margin-bottom: 14px;
+}
+
+.xp-face__title {
+   font-family: "Staatliches Regular", serif;
+   font-size: clamp(22px, 2.2vw, 32px);
+   line-height: 1.06;
+   letter-spacing: 0.3px;
+   color: var(--baby-powder);
+}
+
+.xp-face__text {
    font-family: "Comfortaa Regular", serif;
-   font-size: 12px;
-   line-height: 1.7;
-   color: rgba(47, 65, 87, 0.62);
+   font-size: 14px;
+   line-height: 1.75;
+   color: rgba(255, 253, 249, 0.72);
+}
+
+/* Le cube. La section est épinglée par le script et tient dans la fenêtre.
+   --s est le côté du cube à l'écran, à peu près. */
+.xp-cube.is-3d {
+   --s: clamp(320px, 30vw, 440px);
+   box-sizing: border-box;
+   min-height: 100vh;
+   min-height: 100svh;
+   display: flex;
+   align-items: center;
+   padding: 90px 0 40px;
+}
+
+.xp-cube.is-3d .xp-cube__inner {
+   width: 100%;
+}
+
+.xp-cube.is-3d .xp-cube__scene {
+   position: relative;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   height: calc(var(--s) * 1.6);
+}
+
+/* Halo rose derrière le cube, éteint bien avant les bords de la scène. */
+.xp-cube.is-3d .xp-cube__scene::before {
+   content: "";
+   position: absolute;
+   left: 50%;
+   top: 50%;
+   width: calc(var(--s) * 2.1);
+   height: calc(var(--s) * 2.1);
+   transform: translate(-50%, -50%);
+   background: radial-gradient(closest-side, rgba(245, 172, 186, 0.5), rgba(245, 172, 186, 0) 100%);
+   pointer-events: none;
+}
+
+/* Le cube est dessiné en WebGL (js/expertise.js), sur une toile qui couvre
+   la scène. Les faces HTML restent lisibles par les lecteurs d'écran, mais
+   sortent de l'affichage. */
+.xp-cube.is-3d .xp-cube__gl {
+   position: absolute;
+   inset: 0;
+   width: 100%;
+   height: 100%;
+}
+
+.xp-cube.is-3d .xp-cube__body {
+   position: absolute;
+   width: 1px;
+   height: 1px;
+   overflow: hidden;
+   clip: rect(0 0 0 0);
+   clip-path: inset(50%);
+   white-space: nowrap;
 }
 
 /*
@@ -616,199 +719,10 @@
    top: -16vw;
 }
 
-/*
-|--------------------------------------------------------------------------
-| /work — les domaines, cartes empilées
-|--------------------------------------------------------------------------
-| Chaque carte est collée sous la barre de navigation et se fait recouvrir
-| par la suivante. Le script rétrécit et assombrit celle du dessous à mesure
-| que la suivante arrive : la pile se lit comme un jeu de cartes posé.
-*/
-
-.xp-stack {
-   padding: 130px 0 60px;
-}
-
-.xp-card {
-   position: sticky;
-   top: 100px;
-   display: grid;
-   grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
-   gap: 54px;
-   align-items: center;
-   padding: 48px;
-   border-radius: 28px;
-   margin-bottom: 40px;
-   background: linear-gradient(150deg, #fffdf9 0%, #fdeef1 100%);
-   border: 1px solid rgba(255, 255, 255, 0.85);
-   box-shadow: 0 30px 70px rgba(47, 65, 87, 0.14);
-   transform-origin: center top;
-   overflow: hidden;
-}
-
-/* Une carte sur deux renverse le sens de lecture : la pile ne donne pas
-   quatre fois la même page. */
-.xp-card:nth-child(even) .xp-card__body {
-   order: 2;
-}
-
-.xp-card:last-child {
-   margin-bottom: 0;
-}
-
-/* Rappel du carré bleu, hors cadre dans le coin de la carte. */
-.xp-card::after {
-   content: "";
-   position: absolute;
-   right: -70px;
-   top: -70px;
-   width: 210px;
-   height: 210px;
-   border-radius: 46px;
-   background: rgba(112, 163, 188, 0.16);
-   transform: rotate(14deg);
-   pointer-events: none;
-}
-
-.xp-card__kicker {
-   display: flex;
-   align-items: center;
-   gap: 14px;
-   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
-   font-size: 12px;
-   letter-spacing: 1.6px;
-   text-transform: uppercase;
-   color: rgba(47, 65, 87, 0.45);
-   margin-bottom: 20px;
-}
-
-.xp-card__title {
-   font-family: "Staatliches Regular", serif;
-   font-size: clamp(30px, 3.4vw, 46px);
-   line-height: 1.05;
-   letter-spacing: -0.3px;
-   margin-bottom: 16px;
-}
-
-.xp-card__text {
-   font-family: "Comfortaa Regular", serif;
-   font-size: 15px;
-   line-height: 1.8;
-   color: rgba(47, 65, 87, 0.72);
-   max-width: 46ch;
-   margin-bottom: 28px;
-}
-
-.xp-card__gains {
-   border-top: 1px solid rgba(47, 65, 87, 0.14);
-}
-
-.xp-card__gains li {
-   position: relative;
-   padding: 14px 0 14px 28px;
-   border-bottom: 1px solid rgba(47, 65, 87, 0.14);
-   font-family: "Comfortaa Regular", serif;
-   font-size: 14px;
-   line-height: 1.7;
-   color: rgba(47, 65, 87, 0.78);
-}
-
-.xp-card__gains li::before {
-   content: "";
-   position: absolute;
-   left: 2px;
-   top: 20px;
-   width: 10px;
-   height: 10px;
-   border-radius: 3px;
-   background: var(--paradise-pink);
-   transform: rotate(14deg);
-}
-
-.xp-card__media {
-   position: relative;
-   z-index: 1;
-   margin: 0;
-   padding: 10px;
-   border-radius: 24px;
-   overflow: hidden;
-}
-
-.xp-card__media img {
-   display: block;
-   width: 100%;
-   height: auto;
-   border-radius: 16px;
-}
-
-/*
-|--------------------------------------------------------------------------
-| /work — la boîte à outils
-|--------------------------------------------------------------------------
-| Titre épinglé à gauche, familles d'outils défilant à droite. Chaque
-| famille porte le carré rose, jamais un numéro.
-*/
-
-.xp-tools {
-   padding: 130px 0 140px;
-}
-
-.xp-tools__inner {
-   display: grid;
-   grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-   gap: 80px;
-   align-items: start;
-}
-
-.xp-tools__list {
-   border-top: 1px solid rgba(47, 65, 87, 0.16);
-}
-
-.xp-family {
-   padding: 30px 0 32px;
-   border-bottom: 1px solid rgba(47, 65, 87, 0.16);
-}
-
-.xp-family:last-child {
-   border-bottom: none;
-}
-
-.xp-family__head {
-   display: flex;
-   align-items: center;
-   gap: 16px;
-   margin-bottom: 18px;
-}
-
-.xp-family__head .pg-mark {
-   flex: 0 0 auto;
-   background: var(--cherry-blossom-pink);
-   transition: background-color 0.25s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.xp-family:hover .pg-mark {
-   background: var(--paradise-pink);
-   transform: rotate(104deg);
-}
-
-.xp-family__label {
-   font-family: "Staatliches Regular", serif;
-   font-size: clamp(24px, 2.4vw, 34px);
-   line-height: 1;
-   letter-spacing: 0.5px;
-}
-
-.xp-family__items {
-   display: flex;
-   flex-wrap: wrap;
-   gap: 8px 24px;
-   padding-left: 28px;
-}
-
-.xp-family__items li {
-   font-family: "Comfortaa Regular", serif;
-   font-size: 14px;
-   color: rgba(47, 65, 87, 0.66);
+/* /work : le carré remonte moins haut sur les questions et reste derrière
+   le titre de l'appel. */
+.xp .pj-cta .pj-square {
+   top: -24vw;
 }
 
 /*
@@ -1083,13 +997,8 @@
 
 
 
-   .xp-tools__inner {
-      gap: 48px;
-   }
-
-   .xp-card {
-      padding: 36px;
-      gap: 36px;
+   .xp-cube__inner {
+      gap: 40px;
    }
 
    .xp-step {
@@ -1125,22 +1034,6 @@
 
 
 
-
-   .xp-tools__inner {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 40px;
-   }
-
-
-   .xp-card {
-      position: static;
-      grid-template-columns: minmax(0, 1fr);
-      gap: 30px;
-   }
-
-   .xp-card:nth-child(even) .xp-card__body {
-      order: 0;
-   }
 
    .xp-steps__track {
       flex-direction: column;
@@ -1202,27 +1095,8 @@
 
 
 
-   .xp-stack {
-      padding: 70px 0 20px;
-   }
-
-   .xp-card {
-      padding: 28px 24px 30px;
-      border-radius: 22px;
-      margin-bottom: 20px;
-   }
-
-   .xp-card::after {
-      display: none;
-   }
-
-   .xp-tools,
    .xp-faq {
       padding: 70px 0 80px;
-   }
-
-   .xp-family__items {
-      padding-left: 0;
    }
 
    .xp-steps {
@@ -1276,21 +1150,16 @@
       padding-bottom: 130px;
    }
 
-   .pg-hero--split .pg-hero__inner {
+   .pg-hero--xp .pg-hero__inner {
+      padding-bottom: 60px;
+   }
+
+   .xp-cube__inner {
       grid-template-columns: minmax(0, 1fr);
-      gap: 0;
-      padding-bottom: 30px;
    }
 
-   .xp-deck {
-      height: 400px;
-      margin: 10px 0 -120px;
-   }
-
-   .xp-deck__card {
-      width: 196px;
-      height: 260px;
-      margin: -140px 0 0 -98px;
+   .xp-cube {
+      padding-bottom: 80px;
    }
 }
 
@@ -1316,37 +1185,15 @@
    }
 }
 
-/* Sous 600px, plus d'éventail : les cartes se rangent en grille, droites,
-   et le jeu rentre dans le flux. `!important` pour passer devant la
-   transformation qu'expertise.js pose en ligne au-dessus de ce seuil. */
+/* Sous 600px, les faces se rangent en une colonne. */
 @media (max-width: 599.98px) {
-   .xp-deck {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+   .xp-cube__body {
+      grid-template-columns: minmax(0, 1fr);
       gap: 12px;
-      height: auto;
-      margin: 36px 0 -50px;
    }
 
-   .xp-deck__card {
-      position: static;
-      width: auto;
-      height: auto;
-      margin: 0;
-      transform: none !important;
-   }
-
-   .xp-deck__core {
-      gap: 10px;
-      padding: 18px 16px;
-   }
-
-   .xp-deck__core .pg-mark {
-      margin-bottom: 8px;
-   }
-
-   .xp-deck__title {
-      font-size: 20px;
+   .xp-face {
+      padding: 22px 20px;
    }
 }
 

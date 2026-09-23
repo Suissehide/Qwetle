@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Sites sur-mesure, applications métier, expériences 3D, reprise et sécurité : ce que Qwetle sait faire, avec quels outils et selon quel déroulé."/>
+    <meta name="description" content="Sites sur-mesure, applications métier, expériences 3D, reprise et sécurité : ce que Qwetle sait faire et selon quel déroulé."/>
     <meta name="robots" content="index,follow"/>
 
     <meta property="og:title" content="Expertise — Qwetle"/>
@@ -67,7 +67,7 @@
 
 <main class="xp">
 
-    <section class="pg-hero pg-hero--split">
+    <section class="pg-hero pg-hero--xp">
 
         <div class="pg-hero__decor" aria-hidden="true">
             <span class="pj-square"><img src="../assets/background/grand-cube-bleu.svg" alt=""></span>
@@ -79,138 +79,66 @@
         <div class="pj__inner pg-hero__inner">
             <div class="pg-hero__copy">
                 <h1 class="pg-hero__title">Ce que nous savons faire, <em>et ce que ça vous rapporte</em>.</h1>
-                <p class="pg-hero__lead">Quatre terrains sur lesquels nous intervenons, une boîte à outils
-                    choisie pour ce qu'elle règle, et un déroulé qui tient du premier échange jusqu'au
-                    suivi, des mois après la mise en ligne.</p>
+                <p class="pg-hero__lead">Quatre domaines sur lesquels nous intervenons, et un déroulé
+                    clair du premier échange jusqu'au suivi, des mois après la mise en ligne.</p>
                 <div class="pg-hero__actions">
                     <a class="pj-btn pj-btn--primary" href="/contact/">Demander un devis <span aria-hidden="true">&rarr;</span></a>
                     <a class="pj-btn pj-btn--ghost" href="/projects/">Voir les réalisations <span aria-hidden="true">&rarr;</span></a>
                 </div>
             </div>
 
-            <!-- Les quatre terrains en éventail. Le jeu déborde sur la pile qui
-                 suit et s'ouvre au défilement (js/expertise.js) : c'est lui qui
-                 fait la liaison entre l'en-tête et la suite. -->
-            <ul class="xp-deck" aria-label="Nos quatre terrains">
-                <li class="xp-deck__card" style="--r: -15deg">
-                    <div class="xp-deck__core">
-                        <span class="pg-mark" aria-hidden="true"></span>
-                        <p class="xp-deck__title">Sites vitrines &amp; institutionnels</p>
-                        <p class="xp-deck__line">Un site qui vous vend quand vous dormez.</p>
-                    </div>
-                </li>
-                <li class="xp-deck__card" style="--r: -5deg">
-                    <div class="xp-deck__core">
-                        <span class="pg-mark" aria-hidden="true"></span>
-                        <p class="xp-deck__title">Applications métier</p>
-                        <p class="xp-deck__line">L'outil que votre équipe ouvre tous les matins.</p>
-                    </div>
-                </li>
-                <li class="xp-deck__card" style="--r: 5deg">
-                    <div class="xp-deck__core">
-                        <span class="pg-mark" aria-hidden="true"></span>
-                        <p class="xp-deck__title">Expériences interactives &amp; 3D</p>
-                        <p class="xp-deck__line">La page dont on parle à la machine à café.</p>
-                    </div>
-                </li>
-                <li class="xp-deck__card" style="--r: 15deg">
-                    <div class="xp-deck__core">
-                        <span class="pg-mark" aria-hidden="true"></span>
-                        <p class="xp-deck__title">Reprise, performance &amp; sécurité</p>
-                        <p class="xp-deck__line">Votre site existe déjà. On le remet d'aplomb.</p>
-                    </div>
-                </li>
-            </ul>
         </div>
 
     </section>
 
-    <!-- Les quatre domaines, en pile collante : chaque carte se fait recouvrir
-         par la suivante, et js/expertise.js rétrécit celle du dessous. -->
-    <section class="xp-stack">
-        <div class="pj__inner">
+    <!-- Les quatre domaines sur les faces d'un cube. Sans script (ou sous
+         900px, en mouvement réduit ou sans WebGL), les faces se rangent en
+         grille ; au-dessus, js/expertise.js dessine le cube en WebGL avec le
+         texte de ces faces, pose `is-3d`, épingle la section et fait rouler
+         le cube au défilement : à gauche, vers le haut, puis à gauche. Les
+         faces HTML restent dans la page pour les lecteurs d'écran. -->
+    <section class="xp-cube" aria-label="Nos quatre domaines">
+        <div class="pj__inner xp-cube__inner">
 
-            <div class="pg-head">
-                <h2 class="pg-head__title">Quatre terrains, <em>un seul atelier</em>.</h2>
-                <p class="pg-head__lead">Nous ne faisons pas tout. Nous faisons ces quatre choses-là,
-                    depuis le début, et c'est pour ça qu'elles sortent finies.</p>
+            <div class="xp-cube__head">
+                <div class="pg-head">
+                    <h2 class="pg-head__title">Quatre domaines, <em>une même exigence</em>.</h2>
+                    <p class="pg-head__lead">Du site qui présente votre offre à l'outil que votre équipe
+                        ouvre chaque matin, nous prenons en charge ces quatre besoins de bout en bout.</p>
+                </div>
+                <ul class="xp-cube__nav">
+                        <li><button class="xp-cube__link" type="button" data-face="0"><span class="pg-mark" aria-hidden="true"></span>Sites vitrines &amp; institutionnels</button></li>
+                        <li><button class="xp-cube__link" type="button" data-face="1"><span class="pg-mark" aria-hidden="true"></span>Applications métier</button></li>
+                        <li><button class="xp-cube__link" type="button" data-face="2"><span class="pg-mark" aria-hidden="true"></span>Expériences interactives &amp; 3D</button></li>
+                        <li><button class="xp-cube__link" type="button" data-face="3"><span class="pg-mark" aria-hidden="true"></span>Reprise, performance &amp; sécurité</button></li>
+                </ul>
             </div>
 
-            <div class="xp-stack__inner">
-
-                <article class="xp-card">
-                    <div class="xp-card__body">
-                        <p class="xp-card__kicker"><span class="pg-mark" aria-hidden="true"></span>Sites vitrines &amp; institutionnels</p>
-                        <h3 class="xp-card__title">Un site qui vous vend<br>quand vous dormez.</h3>
-                        <p class="xp-card__text">Votre premier commercial est une page web. Nous la
-                            construisons sur-mesure, autour de ce que vous vendez et de ceux à qui vous
-                            le vendez, pas autour d'un gabarit acheté sur étagère.</p>
-                        <ul class="xp-card__gains">
-                            <li>Des pages qui s'affichent avant qu'on ait le temps de s'impatienter</li>
-                            <li>Un référencement propre dès le premier jour, pas six mois plus tard</li>
-                            <li>Des textes et des images que vous changez vous-même</li>
-                        </ul>
-                    </div>
-                    <figure class="xp-card__media pj-glass">
-                        <img src="../assets/projects/shiva/cover.webp" alt="La page d'accueil du site Shiva" loading="lazy" decoding="async">
-                    </figure>
-                </article>
-
-                <article class="xp-card">
-                    <div class="xp-card__body">
-                        <p class="xp-card__kicker"><span class="pg-mark" aria-hidden="true"></span>Applications métier</p>
-                        <h3 class="xp-card__title">L'outil que votre équipe<br>ouvre tous les matins.</h3>
-                        <p class="xp-card__text">Quand le tableur ne suit plus et que le logiciel du
-                            marché ne fait pas ce qu'il faut, on écrit celui qui correspond vraiment à
-                            votre façon de travailler. Planning, dossiers, suivi, droits par rôle.</p>
-                        <ul class="xp-card__gains">
-                            <li>Des écrans dessinés autour de votre métier, pas l'inverse</li>
-                            <li>Chacun voit ce qui le concerne, et rien d'autre</li>
-                            <li>Une prise en main sans trois jours de formation</li>
-                        </ul>
-                    </div>
-                    <figure class="xp-card__media pj-glass">
-                        <img src="../assets/projects/medisync/cover.webp" alt="Le planning partagé de MediSync" loading="lazy" decoding="async">
-                    </figure>
-                </article>
-
-                <article class="xp-card">
-                    <div class="xp-card__body">
-                        <p class="xp-card__kicker"><span class="pg-mark" aria-hidden="true"></span>Expériences interactives &amp; 3D</p>
-                        <h3 class="xp-card__title">La page dont on parle<br>à la machine à café.</h3>
-                        <p class="xp-card__text">De la 3D temps réel, des animations au défilement, des
-                            configurateurs jouables. Pas pour la démonstration&nbsp;: pour qu'on reste
-                            sur votre page au lieu de retourner sur celle d'à côté.</p>
-                        <ul class="xp-card__gains">
-                            <li>Du WebGL qui tourne aussi sur un portable de 2018</li>
-                            <li>Un contenu qu'on manipule, pas une vidéo qu'on subit</li>
-                            <li>Une version simple servie d'office aux appareils modestes</li>
-                        </ul>
-                    </div>
-                    <figure class="xp-card__media pj-glass">
-                        <img src="../assets/projects/gachapon/cover.webp" alt="La machine à capsules en 3D de Gachapon" loading="lazy" decoding="async">
-                    </figure>
-                </article>
-
-                <article class="xp-card">
-                    <div class="xp-card__body">
-                        <p class="xp-card__kicker"><span class="pg-mark" aria-hidden="true"></span>Reprise, performance &amp; sécurité</p>
-                        <h3 class="xp-card__title">Votre site existe déjà.<br>On le remet d'aplomb.</h3>
-                        <p class="xp-card__text">Tout jeter n'est presque jamais la bonne réponse. On
-                            reprend l'existant, on mesure, on corrige ce qui coûte&nbsp;: la lenteur, les
-                            failles, les pages que personne ne trouve.</p>
-                        <ul class="xp-card__gains">
-                            <li>Un diagnostic chiffré avant de toucher à quoi que ce soit</li>
-                            <li>Des temps de chargement divisés, mesure à l'appui</li>
-                            <li>Mises à jour, sauvegardes et veille de sécurité assurées</li>
-                        </ul>
-                    </div>
-                    <figure class="xp-card__media pj-glass">
-                        <img src="../assets/projects/horus/cover.webp" alt="Le suivi des mesures dans Horus" loading="lazy" decoding="async">
-                    </figure>
-                </article>
-
+            <div class="xp-cube__scene">
+                <div class="xp-cube__body">
+                        <article class="xp-face" style="--i: 0">
+                            <span class="pg-mark" aria-hidden="true"></span>
+                            <h3 class="xp-face__title">Sites vitrines &amp; institutionnels</h3>
+                            <p class="xp-face__text">Un site sur-mesure qui présente votre offre et convainc vos visiteurs, rapide et bien référencé dès le premier jour.</p>
+                        </article>
+                        <article class="xp-face" style="--i: 1">
+                            <span class="pg-mark" aria-hidden="true"></span>
+                            <h3 class="xp-face__title">Applications métier</h3>
+                            <p class="xp-face__text">Un outil pensé autour de votre façon de travailler&nbsp;: planning, dossiers, suivi et droits par rôle.</p>
+                        </article>
+                        <article class="xp-face" style="--i: 2">
+                            <span class="pg-mark" aria-hidden="true"></span>
+                            <h3 class="xp-face__title">Expériences interactives &amp; 3D</h3>
+                            <p class="xp-face__text">De la 3D temps réel et des animations qui retiennent vos visiteurs, fluides même sur un appareil modeste.</p>
+                        </article>
+                        <article class="xp-face" style="--i: 3">
+                            <span class="pg-mark" aria-hidden="true"></span>
+                            <h3 class="xp-face__title">Reprise, performance &amp; sécurité</h3>
+                            <p class="xp-face__text">Votre site existe déjà&nbsp;: nous le mesurons, l'accélérons et le sécurisons, sans repartir de zéro.</p>
+                        </article>
+                </div>
             </div>
+
         </div>
     </section>
 
@@ -232,122 +160,6 @@
             <span>Maintenance</span>
         </div>
     </div>
-
-    <section class="xp-tools">
-        <div class="pj__inner xp-tools__inner">
-
-            <div class="xp-tools__head">
-                <div class="pg-head">
-                    <h2 class="pg-head__title">Des outils choisis pour ce qu'ils règlent, <em>pas pour leur nom</em>.</h2>
-                    <p class="pg-head__lead">Vous n'avez pas à les connaître. Vous devez juste savoir
-                        que rien n'est posé au hasard, et que rien ne vous enferme chez un éditeur.</p>
-                </div>
-                <a class="pj-link" href="/contact/">Nous contacter <span aria-hidden="true">&rarr;</span></a>
-            </div>
-
-            <div class="xp-tools__list">
-                <div class="xp-family">
-                    <div class="xp-family__head">
-                        <span class="pg-mark" aria-hidden="true"></span>
-                        <h3 class="xp-family__label">Frontend</h3>
-                    </div>
-                    <ul class="xp-family__items">
-                        <li>HTML</li>
-                        <li>CSS</li>
-                        <li>JavaScript</li>
-                        <li>TypeScript</li>
-                        <li>React</li>
-                        <li>Next.js</li>
-                        <li>Tailwind</li>
-                        <li>Bootstrap</li>
-                        <li>Electron</li>
-                    </ul>
-                </div>
-                <div class="xp-family">
-                    <div class="xp-family__head">
-                        <span class="pg-mark" aria-hidden="true"></span>
-                        <h3 class="xp-family__label">Animation &amp; 3D</h3>
-                    </div>
-                    <ul class="xp-family__items">
-                        <li>GSAP</li>
-                        <li>Lenis</li>
-                        <li>Barba.js</li>
-                        <li>Three.js</li>
-                        <li>WebGL</li>
-                        <li>Blender</li>
-                    </ul>
-                </div>
-                <div class="xp-family">
-                    <div class="xp-family__head">
-                        <span class="pg-mark" aria-hidden="true"></span>
-                        <h3 class="xp-family__label">Backend</h3>
-                    </div>
-                    <ul class="xp-family__items">
-                        <li>Node.js</li>
-                        <li>Express.js</li>
-                        <li>Python</li>
-                        <li>Java</li>
-                        <li>PHP</li>
-                        <li>Netlify</li>
-                    </ul>
-                </div>
-                <div class="xp-family">
-                    <div class="xp-family__head">
-                        <span class="pg-mark" aria-hidden="true"></span>
-                        <h3 class="xp-family__label">Bases de données</h3>
-                    </div>
-                    <ul class="xp-family__items">
-                        <li>MySQL</li>
-                        <li>PostgreSQL</li>
-                        <li>MongoDB</li>
-                        <li>Supabase</li>
-                    </ul>
-                </div>
-                <div class="xp-family">
-                    <div class="xp-family__head">
-                        <span class="pg-mark" aria-hidden="true"></span>
-                        <h3 class="xp-family__label">DevOps &amp; Outils</h3>
-                    </div>
-                    <ul class="xp-family__items">
-                        <li>Docker</li>
-                        <li>Vercel</li>
-                        <li>Git</li>
-                        <li>GitHub</li>
-                        <li>GitLab</li>
-                        <li>Cloudflare</li>
-                    </ul>
-                </div>
-                <div class="xp-family">
-                    <div class="xp-family__head">
-                        <span class="pg-mark" aria-hidden="true"></span>
-                        <h3 class="xp-family__label">Système &amp; Sécurité</h3>
-                    </div>
-                    <ul class="xp-family__items">
-                        <li>Linux</li>
-                        <li>Bash</li>
-                        <li>Shell</li>
-                        <li>Owasp</li>
-                        <li>Metasploit</li>
-                        <li>Nmap</li>
-                        <li>OpenVAS</li>
-                        <li>Ossec</li>
-                    </ul>
-                </div>
-                <div class="xp-family">
-                    <div class="xp-family__head">
-                        <span class="pg-mark" aria-hidden="true"></span>
-                        <h3 class="xp-family__label">Design</h3>
-                    </div>
-                    <ul class="xp-family__items">
-                        <li>Photoshop</li>
-                        <li>Canva</li>
-                        <li>Figma</li>
-                    </ul>
-                </div>
-            </div>
-
-        </div>
-    </section>
 
     <!-- Déroulé : épinglé et défilant à l'horizontale sur desktop
          (js/expertise.js), simple colonne sous 900px. -->
@@ -591,6 +403,7 @@
 <script src="../js/smooth-scroll.js"></script>
 
 <script src="../js/script.js"></script>
+<script src="../js/three.js"></script>
 <script src="../js/expertise.js"></script>
 </body>
 
